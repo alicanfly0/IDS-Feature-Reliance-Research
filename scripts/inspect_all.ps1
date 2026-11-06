@@ -25,6 +25,14 @@ $Jobs = @(
     @{ name = "unsw_full_4"; path = "unsw_nb15\UNSW-NB15_4.csv"; args = @("--label", "Label", "--names-from", $UnswNames) },
     @{ name = "nf_v2";       path = "nf_unsw_nb15_v2\extracted\fe6cb615d161452c_MOHANAD_A4706\data\NF-UNSW-NB15-v2.csv"; args = @("--label", "Label") }
 )
+# Engelen WTMC2021 corrected CICIDS2017: one report per day file.
+$EngDir = Join-Path $Raw "cicids2017_engelen_wtmc2021\extracted"
+if (Test-Path $EngDir) {
+    foreach ($f in Get-ChildItem $EngDir -Filter *.csv | Sort-Object Name) {
+        $short = ($f.BaseName -replace "-WorkingHours", "").ToLower()
+        $Jobs += @{ name = "engelen_$short"; path = $f.FullName.Substring($Raw.Length + 1); args = @("--label", "Label") }
+    }
+}
 # CIC-IDS2017 original: one report per capture-day file, for both CSV releases
 # (MachineLearningCVE = no identifiers; TrafficLabelling = with Flow ID/IPs/ports/timestamp).
 foreach ($pair in @(@("MachineLearningCVE", "cic2017_"), @("TrafficLabelling", "cic2017_glf_"))) {

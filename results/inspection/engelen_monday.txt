@@ -1,0 +1,121 @@
+﻿file: C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation\data\raw\cicids2017_engelen_wtmc2021\extracted\Monday-WorkingHours.csv  (encoding utf-8-sig, nrows limit None)
+column names from: header
+shape: 371749 rows x 84 columns
+
+schema (column: dtype / inferred type)
+  Flow ID: object / categorical
+  Src IP: object / categorical
+  Src Port: int64 / integer
+  Dst IP: object / categorical
+  Dst Port: int64 / integer
+  Protocol: int64 / integer
+  Timestamp: object / categorical
+  Flow Duration: int64 / integer
+  Total Fwd Packet: int64 / integer
+  Total Bwd packets: int64 / integer
+  Total Length of Fwd Packet: float64 / float
+  Total Length of Bwd Packet: float64 / float
+  Fwd Packet Length Max: float64 / float
+  Fwd Packet Length Min: float64 / float
+  Fwd Packet Length Mean: float64 / float
+  Fwd Packet Length Std: float64 / float
+  Bwd Packet Length Max: float64 / float
+  Bwd Packet Length Min: float64 / float
+  Bwd Packet Length Mean: float64 / float
+  Bwd Packet Length Std: float64 / float
+  Flow Bytes/s: float64 / float
+  Flow Packets/s: float64 / float
+  Flow IAT Mean: float64 / float
+  Flow IAT Std: float64 / float
+  Flow IAT Max: float64 / float
+  Flow IAT Min: float64 / float
+  Fwd IAT Total: float64 / float
+  Fwd IAT Mean: float64 / float
+  Fwd IAT Std: float64 / float
+  Fwd IAT Max: float64 / float
+  Fwd IAT Min: float64 / float
+  Bwd IAT Total: float64 / float
+  Bwd IAT Mean: float64 / float
+  Bwd IAT Std: float64 / float
+  Bwd IAT Max: float64 / float
+  Bwd IAT Min: float64 / float
+  Fwd PSH Flags: int64 / integer
+  Bwd PSH Flags: int64 / integer
+  Fwd URG Flags: int64 / integer
+  Bwd URG Flags: int64 / integer
+  Fwd Header Length: int64 / integer
+  Bwd Header Length: int64 / integer
+  Fwd Packets/s: float64 / float
+  Bwd Packets/s: float64 / float
+  Packet Length Min: float64 / float
+  Packet Length Max: float64 / float
+  Packet Length Mean: float64 / float
+  Packet Length Std: float64 / float
+  Packet Length Variance: float64 / float
+  FIN Flag Count: int64 / integer
+  SYN Flag Count: int64 / integer
+  RST Flag Count: int64 / integer
+  PSH Flag Count: int64 / integer
+  ACK Flag Count: int64 / integer
+  URG Flag Count: int64 / integer
+  CWR Flag Count: int64 / integer
+  ECE Flag Count: int64 / integer
+  Down/Up Ratio: float64 / float
+  Average Packet Size: float64 / float
+  Fwd Segment Size Avg: float64 / float
+  Bwd Segment Size Avg: float64 / float
+  Fwd Bytes/Bulk Avg: int64 / integer
+  Fwd Packet/Bulk Avg: int64 / integer
+  Fwd Bulk Rate Avg: int64 / integer
+  Bwd Bytes/Bulk Avg: int64 / integer
+  Bwd Packet/Bulk Avg: int64 / integer
+  Bwd Bulk Rate Avg: int64 / integer
+  Subflow Fwd Packets: int64 / integer
+  Subflow Fwd Bytes: int64 / integer
+  Subflow Bwd Packets: int64 / integer
+  Subflow Bwd Bytes: int64 / integer
+  FWD Init Win Bytes: int64 / integer
+  Bwd Init Win Bytes: int64 / integer
+  Fwd Act Data Pkts: int64 / integer
+  Fwd Seg Size Min: int64 / integer
+  Active Mean: float64 / float
+  Active Std: float64 / float
+  Active Max: float64 / float
+  Active Min: float64 / float
+  Idle Mean: float64 / float
+  Idle Std: float64 / float
+  Idle Max: float64 / float
+  Idle Min: float64 / float
+  Label: object / categorical
+
+label counts (Label)
+  BENIGN: 371749 (100.0000%)
+
+missing values: 188 in 4 columns
+  Flow IAT Mean: 47
+  Flow IAT Std: 47
+  Flow IAT Max: 47
+  Flow IAT Min: 47
+
+infinite values: 120 in 2 columns
+  Flow Bytes/s: 60
+  Flow Packets/s: 60
+
+negative values: 517 in 1 columns
+  Flow IAT Min: 517
+
+duplicate rows (all columns): 0
+duplicate feature vectors (label columns excluded): 0
+duplicate flow contents (labels and identifiers ['Flow ID', 'Src IP', 'Src Port', 'Dst IP', 'Dst Port', 'Timestamp'] excluded): 21214
+flow contents with conflicting labels: 0
+
+candidate leakage fields (heuristic, review manually)
+  Flow ID: name matches flow_id
+  Src IP: name matches ip_address
+  Src Port: name matches port
+  Dst IP: name matches ip_address
+  Dst Port: name matches port
+  Timestamp: name matches timestamp
+  Fwd URG Flags: constant column
+  Bwd URG Flags: constant column
+  URG Flag Count: constant column

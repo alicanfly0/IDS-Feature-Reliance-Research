@@ -22,8 +22,9 @@ The planned baselines are:
 provenance and acquisition, inspection, train-only preprocessing and split
 utilities.
 
-- **Data:** CICIDS2017 (original), UNSW-NB15 and NF-UNSW-NB15-v2 are
-  downloaded and verified. Engelen's corrected CICIDS2017 is in progress.
+- **Data:** all four datasets are downloaded from their official sources and
+  verified: CICIDS2017 (original), Engelen's corrected CICIDS2017
+  (WTMC2021), UNSW-NB15 and NF-UNSW-NB15-v2.
 - **Inspection:** reports for every downloaded file are in
   `results/inspection/`. They describe the data only.
 - **Not yet done:** no model has been trained and no experimental result

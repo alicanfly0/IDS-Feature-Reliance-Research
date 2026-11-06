@@ -90,7 +90,7 @@ Status values: OPEN · DECIDED · SUPERSEDED.
 - The WTMC2021 page (update dated 18/11/2022) points to a newer release at `.../CNS2022/index.html` as "the most recent version".
 - Lanvin et al. [11] built further fixes on Engelen's extractor, at `gitlab.inria.fr/mlanvin/crisis2022`.
 
-**Manifest status:** the manifest lists only WTMC2021. Adopting CNS2022 or Lanvin's version would be a substitution and needs a decision here first.
+**Manifest status:** the manifest lists only WTMC2021, and that is what was downloaded and verified on 2026-11-07. CNS2022 was not downloaded. Adopting CNS2022 or Lanvin's version would be a substitution and needs a decision here first.
 
 **Decision required:** which corrected version, or more than one as separate, labelled experiments.
 
@@ -116,13 +116,28 @@ Status values: OPEN · DECIDED · SUPERSEDED.
 
 **Decision required:** the `Attempted` policy, the column alignment rule, and whether R4a also retrains on corrected data.
 
+**Measured (2026-11-07, `results/inspection/engelen_*`)**
+
+- **Size and counts:**
+  - 2,100,814 rows over 5 day files, 25.8% fewer than the original 2,830,743. Engelen reports 25.9% TCP appendices.
+  - 25 labels, 10 of them `- Attempted` (9,144 rows).
+  - Measured counts minus the 793 rows containing Infinity/NaN equal the landing-page table exactly, class by class.
+- **Column alignment needs a hand-checked map.** Engelen's file has 84 columns with no duplicated `Fwd Header Length`, and many columns are renamed relative to the original release, e.g.:
+  - `Source IP` → `Src IP`
+  - `Total Fwd Packets` → `Total Fwd Packet`
+  - `Init_Win_bytes_forward` → `FWD Init Win Bytes`
+  - `min_seg_size_forward` → `Fwd Seg Size Min`
+
+  So the "column alignment rule" needs an explicit, hand-checked name map (77 shared features expected), not a positional match.
+- **Possible linking key.** Both the corrected files and the original `TrafficLabelling` files carry Flow ID / IPs / ports / Timestamp. Flow-tuple + time matching between the two releases is therefore possible in principle. It is still not a row key, because flows were re-segmented.
+
 ## D-006 Incompatible cross-dataset schemas — OPEN
 
 The four datasets use three different feature definitions:
 
 | Dataset | Feature definition |
 |---|---|
-| CICIDS2017 (original and Engelen) | CICFlowMeter, roughly 78–80 features |
+| CICIDS2017 (original and Engelen) | CICFlowMeter: 78 features (original MachineLearningCVE) vs 77 renamed features + 6 identifiers (Engelen) |
 | UNSW-NB15 | Argus/Bro, 49 columns including labels |
 | NF-UNSW-NB15-v2 | NetFlow v2, 43 features |
 
@@ -179,6 +194,7 @@ The four datasets use three different feature definitions:
 | UNSW-NB15 testing-set (`id` ignored) | 34.5% |
 | UNSW-NB15 full CSVs, per file | 9.3–33.9% |
 | CICIDS2017 MachineLearningCVE, per day | 2.0% (Friday DDoS) to 58.3% (Friday PortScan) |
+| Engelen corrected CICIDS2017, per day | 3.9% (Wednesday) to 32.4% (Friday; 596 conflicting-label groups) |
 
 - **Official UNSW-NB15 partition:** 10.4% of testing-set rows have an exact training twin.
 - **Consequence:** a random row split (Wardana's 70/30, Phase II's 70/15/15) will place identical rows in train and test, especially on NF-UNSW-NB15-v2. Any random-split protocol needs either deduplication before splitting or a reported cross-split duplicate rate (`cross_split_duplicates`).

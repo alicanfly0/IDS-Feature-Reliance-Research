@@ -30,9 +30,9 @@ Last run: 2026-11-07, Python 3.11.9 (python.org build in the project venv, see D
 | P4 | CICIDS2017 original downloaded (MachineLearningCSV.zip, GeneratedLabelledFlows.zip) | PASS | Sizes, sha256 recorded; **publisher MD5 verified** for both |
 | P5 | UNSW-NB15 downloaded (9 CSVs from the official SharePoint) | PASS | Sizes match the server, sha256 recorded |
 | P6 | NF-UNSW-NB15-v2 downloaded (UQ RDM) | PASS | Size, sha256 recorded; **publisher BagIt SHA-1 verified** |
-| P7 | Engelen WTMC2021 `dataset.zip` downloaded | TODO | In progress (slow server); verify with `src.data.acquire verify` |
+| P7 | Engelen WTMC2021 `dataset.zip` downloaded | PASS | Exact server size, sha256 recorded, every zip member CRC verified. A first attempt was corrupted by two overlapping downloads and replaced |
 | P8 | All files re-verifiable without assistance | PASS | `.\run.cmd -m src.data.acquire verify all` |
-| P9 | License terms | PASS (3) / BLOCKED (1) | CIC: cite paper; UNSW: academic use granted; UQ: "Permitted Re-Use with Commercial Use Restriction"; Engelen: no licence text on the page |
+| P9 | License terms | PASS (3) / BLOCKED (1) | CIC: cite paper; UNSW: academic use granted; UQ: "Permitted Re-Use with Commercial Use Restriction"; Engelen: no licence text on the pages or in the zip (cite the paper, do not re-host; ask the authors if redistribution is ever needed) |
 
 ## Data tooling
 
@@ -50,8 +50,9 @@ Last run: 2026-11-07, Python 3.11.9 (python.org build in the project venv, see D
 
 | # | Check | Status | Result |
 |---|---|---|---|
-| B1 | Inspection reports saved for every downloaded file | PASS (3 of 4 datasets) | 30 reports in `results/inspection/`; Engelen pending |
-| B2 | Column names, label columns, feature counts confirmed | PASS (3 of 4) | See below and manifest `measured` blocks; Engelen pending |
+| B1 | Inspection reports saved for every downloaded file | PASS | 28 file reports (×2: `.txt` + `.json`) in `results/inspection/` |
+| B2 | Column names, label columns, feature counts confirmed | PASS | See below and the manifest's measured blocks |
+| B6 | Engelen counts reconcile with the publisher's table | PASS | Measured minus the 793 Inf/NaN rows = landing-page table, class by class (D-005) |
 | B3 | Duplicate rates; official-split cross-duplicates | PASS | D-007 table |
 | B4 | Paper 1 subset = Friday DDoS file; Fang counts = official partition | PASS | D-008, D-009 |
 | B5 | Constant columns, infinities, negatives measured | PASS | D-011 |
@@ -71,6 +72,9 @@ Last run: 2026-11-07, Python 3.11.9 (python.org build in the project venv, see D
   - UNSW-NB15 training/testing sets: 42.4% / 34.5% duplicated once `id` is ignored.
   - 10.4% of the official UNSW test rows have an exact training twin.
 - **Phase II constant-column claim (D-011):** `Fwd URG Flags` is not constant in CICIDS2017; 8 other columns are constant in every day file.
+- **Engelen corrected CICIDS2017 (D-005):**
+  - 2,100,814 rows (25.8% fewer than the original) and 25 labels including 10 "Attempted" classes.
+  - Many columns are renamed relative to the original release, so a hand-checked column map is required.
 
 ## Decisions required before Milestone 1
 

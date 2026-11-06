@@ -1,16 +1,12 @@
-# Create (or update) the project environment and run the test suite.
+# Create (or update) the project environment in .venv and run the test suite.
 #
 #   powershell -ExecutionPolicy Bypass -File scripts\setup_env.ps1
-#   powershell -ExecutionPolicy Bypass -File scripts\setup_env.ps1 -VenvDir D:\envs\cnet
 #
-# The venv lives outside the repository by default because the repository sits
-# in a OneDrive-synced folder. If you change -VenvDir, set CNET_VENV to the same
-# path so run.cmd can find it.
-param(
-    [string]$VenvDir = $(if ($env:CNET_VENV) { $env:CNET_VENV } else { Join-Path $HOME ".venvs\cnet-xai-audit" })
-)
+# Safe to re-run: an existing .venv is reused and brought up to date with
+# requirements.txt.
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
+$VenvDir = Join-Path $Root ".venv"
 
 function Find-Python311 {
     $py = Get-Command py -ErrorAction SilentlyContinue

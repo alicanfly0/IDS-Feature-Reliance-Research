@@ -227,12 +227,12 @@ The four datasets use three different feature definitions:
 **Decision.** Requirement: the team must be able to run everything without assistance. So:
 
 - Install standard python.org CPython 3.11.9 per-user (`winget install --id Python.Python.3.11 --scope user`). This needs no admin rights.
-- Create a dedicated venv at `%USERPROFILE%\.venvs\cnet-xai-audit` using `scripts/setup_env.ps1`. That script installs `requirements.txt`, installs the package in editable mode, and runs the tests.
-- Run commands through `run.cmd`, which calls the venv Python directly.
+- Create the venv at `.venv` inside the project folder using `scripts/setup_env.ps1`. That script installs `requirements.txt`, installs the package in editable mode, and runs the tests.
+- Run commands through `run.cmd`, which calls `.venv\Scripts\python.exe` directly.
 
 **Rationale**
 
-- **Venv outside the repository.** The repository is in a OneDrive-synced folder, and a venv is thousands of small files (GBs once torch is added) that OneDrive would sync and can lock mid-install.
+- **Venv inside the project folder.** The user asked for everything to live in this folder (see D-015). A first version placed the venv in `%USERPROFILE%\.venvs`; it was removed.
 - **No activation needed.** `run.cmd` avoids activation, because the default PowerShell policy blocks `Activate.ps1` and changing it is left to the user.
 - **Python 3.11** keeps the versions already validated in `requirements.txt`.
 - The embeddable Python is left untouched.
@@ -243,15 +243,14 @@ The four datasets use three different feature definitions:
 - The CLIs run through `run.cmd`.
 - A missing venv gives an actionable error.
 
-## D-015 Dataset storage location (OneDrive) — OPEN
+## D-015 Storage location — DECIDED (2026-11-07)
 
-- `data/raw/` is inside a OneDrive-synced folder.
-- The planned datasets run to several GB for CICIDS2017 CSVs alone, more for UNSW-NB15. The full NetFlow v2 set for MES-DNN is far larger.
-- Storing them here would upload them to OneDrive, use cloud quota, and risk files being made "online-only" while being read.
+**Decision (user).** Everything stays local, inside the project folder:
 
-**Options**
+- datasets in `data/raw/<dataset id>/`, matching `local_dir` in `configs/datasets.yaml`;
+- prepared data in `data/processed/`;
+- the environment in `.venv/`.
 
-- **(a)** Move the whole repository out of OneDrive (e.g. `C:\Users\aliwa\projects\cnet-xai-audit`) and use Git and a remote for backup. This is recommended.
-- **(b)** Keep the repository here, but point the raw-data root at a non-synced folder. This needs a small code change: a data-root setting in `configs/base.yaml` used by the manifest.
+All three are Git-ignored. No cloud storage is used.
 
-**Decision required** before the first download.
+**Note.** The folder's path is under `OneDrive\Desktop`. Whether OneDrive syncs it depends on the user's OneDrive settings, which are outside this repository.

@@ -17,7 +17,7 @@ Last run: 2026-11-07, Python 3.11.9 (python.org build in the project venv, see D
 | R2 | Layout matches the agreed structure (`configs/ data/ src/{data,models,audit,evaluation} tests/ results/ paper/`) plus `docs/` | PASS | `ls -R` |
 | R3 | Raw/processed data, CSV/PCAP/ZIP, model weights Git-ignored | PASS | `git check-ignore` on sample paths (see commit) |
 | R4 | Dependencies pinned to validated versions | PASS | `requirements.txt`; Milestone 1 packages listed but not pinned |
-| R5 | Isolated environment | PASS | D-014: python.org CPython 3.11.9 + venv at `%USERPROFILE%\.venvs\cnet-xai-audit` via `scripts/setup_env.ps1` |
+| R5 | Isolated environment | PASS | D-014: python.org CPython 3.11.9 + venv at `.venv` in the project folder via `scripts/setup_env.ps1` |
 
 ## Provenance
 
@@ -27,7 +27,8 @@ Last run: 2026-11-07, Python 3.11.9 (python.org build in the project venv, see D
 | P2 | No mirror listed as a source | PASS | `test_no_mirror_used_as_source` |
 | P3 | Official pages checked; unconfirmed facts marked UNCONFIRMED/null | PASS | `configs/datasets.yaml`, checked 2026-11-07 |
 | P4 | File sizes and sha256 recorded | BLOCKED | No publisher checksums; compute with `src.data.manifest --hash` after download |
-| P5 | Download destinations confirmed | BLOCKED | `local_dir` proposed per dataset; storage location open (D-015); awaiting approval and manual download (registration form for CICIDS2017; browser-only links for UNSW and UQ) |
+| P5 | Download destinations confirmed | PASS | D-015: `data/raw/<dataset id>/` in the project folder (`local_dir` in the manifest) |
+| P7 | Datasets downloaded | BLOCKED | Manual download needed: registration form for CICIDS2017; browser-only links for UNSW and UQ |
 | P6 | License/redistribution terms confirmed for Engelen and NF-UNSW-NB15-v2 | BLOCKED | Not stated on the official pages |
 
 ## Data tooling (synthetic tests only)
@@ -60,6 +61,6 @@ Last run: 2026-11-07, Python 3.11.9 (python.org build in the project venv, see D
 
 ## Decisions required before Milestone 1
 
-D-001, D-002, D-004, D-005, D-007, D-008, D-009, D-010 and D-015 (see
+D-001, D-002, D-004, D-005, D-007, D-008, D-009 and D-010 (see
 `docs/decision_log.md`). D-003, D-006, D-011, D-012 and D-013 can be decided
 during Milestone 1, but before the experiments that depend on them.

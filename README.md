@@ -28,6 +28,7 @@ contains no results.
 ```
 configs/      base.yaml (paths, seed, split/preprocessing policy)
               datasets.yaml (acquisition manifest)
+.venv/        Python environment, created by scripts/setup_env.ps1 (Git-ignored)
 data/raw/     original datasets, one folder per manifest id (Git-ignored)
 data/processed/
 src/data/     manifest.py, load.py, inspection.py, preprocess.py, split.py
@@ -56,14 +57,17 @@ paper/        IEEE LaTeX manuscript
    powershell -ExecutionPolicy Bypass -File scripts\setup_env.ps1
    ```
 
-**Where the environment lives.** The venv is created at
-`%USERPROFILE%\.venvs\cnet-xai-audit`, outside the repository. The repository
-sits in a OneDrive-synced folder, and a venv is thousands of small files.
+**Where things live.** Everything stays inside the project folder:
 
-- To use a different location, pass `-VenvDir <path>` and set the `CNET_VENV`
-  environment variable to the same path.
-- Re-run the setup script whenever `requirements.txt` changes. It reuses the
-  existing venv.
+- the environment in `.venv\`
+- datasets in `data\raw\<dataset id>\`
+- prepared data in `data\processed\`
+
+All three are Git-ignored. The only thing outside the folder is the Python
+3.11 installation itself, which `.venv` is built from.
+
+Re-run the setup script whenever `requirements.txt` changes. It reuses the
+existing `.venv`.
 
 `-ExecutionPolicy Bypass` applies to that one command only. It does not change
 your system policy.
@@ -85,13 +89,13 @@ activation is needed, and it works in both PowerShell and cmd:
   values, duplicates and leakage candidates. The label column name in the
   example is unconfirmed.
 
-**VS Code / Jupyter.** Select the interpreter
-`%USERPROFILE%\.venvs\cnet-xai-audit\Scripts\python.exe`
-(Command Palette → "Python: Select Interpreter" → "Enter interpreter path").
+**VS Code / Jupyter.** VS Code detects `.venv` automatically. If it does not,
+select `.venv\Scripts\python.exe` (Command Palette → "Python: Select
+Interpreter").
 
 **Activating the venv in a terminal.**
 
-- In cmd, run `%USERPROFILE%\.venvs\cnet-xai-audit\Scripts\activate.bat`.
+- In cmd, run `.venv\Scripts\activate.bat`.
 - In PowerShell, `Activate.ps1` is blocked by the default script policy unless
   you choose to allow it yourself with
   `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`. `run.cmd` avoids the

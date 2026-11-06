@@ -7,7 +7,7 @@ result exists.**
 Status values: PASS (checked, with the command) · BLOCKED (needs data or a
 decision) · TODO.
 
-Last run: 2026-11-07, Python 3.11.9 (embeddable build, see D-014).
+Last run: 2026-11-07, Python 3.11.9 (python.org build in the project venv, see D-014).
 
 ## Repository
 
@@ -17,7 +17,7 @@ Last run: 2026-11-07, Python 3.11.9 (embeddable build, see D-014).
 | R2 | Layout matches the agreed structure (`configs/ data/ src/{data,models,audit,evaluation} tests/ results/ paper/`) plus `docs/` | PASS | `ls -R` |
 | R3 | Raw/processed data, CSV/PCAP/ZIP, model weights Git-ignored | PASS | `git check-ignore` on sample paths (see commit) |
 | R4 | Dependencies pinned to validated versions | PASS | `requirements.txt`; Milestone 1 packages listed but not pinned |
-| R5 | Isolated environment (`.venv`) | BLOCKED | D-014: embedded Python has no `venv` |
+| R5 | Isolated environment | PASS | D-014: python.org CPython 3.11.9 + venv at `%USERPROFILE%\.venvs\cnet-xai-audit` via `scripts/setup_env.ps1` |
 
 ## Provenance
 
@@ -27,7 +27,7 @@ Last run: 2026-11-07, Python 3.11.9 (embeddable build, see D-014).
 | P2 | No mirror listed as a source | PASS | `test_no_mirror_used_as_source` |
 | P3 | Official pages checked; unconfirmed facts marked UNCONFIRMED/null | PASS | `configs/datasets.yaml`, checked 2026-11-07 |
 | P4 | File sizes and sha256 recorded | BLOCKED | No publisher checksums; compute with `src.data.manifest --hash` after download |
-| P5 | Download destinations confirmed | BLOCKED | `local_dir` proposed per dataset; awaiting approval and manual download (registration form for CICIDS2017; browser-only links for UNSW and UQ) |
+| P5 | Download destinations confirmed | BLOCKED | `local_dir` proposed per dataset; storage location open (D-015); awaiting approval and manual download (registration form for CICIDS2017; browser-only links for UNSW and UQ) |
 | P6 | License/redistribution terms confirmed for Engelen and NF-UNSW-NB15-v2 | BLOCKED | Not stated on the official pages |
 
 ## Data tooling (synthetic tests only)
@@ -44,8 +44,9 @@ Last run: 2026-11-07, Python 3.11.9 (embeddable build, see D-014).
 | T8 | Group / temporal / predefined splits available; random split shown to leak groups | PASS | `test_random_split_leaks_groups_that_group_split_does_not` |
 | T9 | Cross-split duplicate feature vectors detectable | PASS | `test_cross_split_duplicates_detects_identical_vectors` |
 | T10 | Saved splits carry a fingerprint; tampering detected | PASS | `test_save_load_roundtrip_and_tamper_detection` |
-| T11 | Full suite | PASS | `python -m pytest`: 32 passed |
-| T12 | CLIs run end to end | PASS (with workaround) | Ran via `sys.path.insert(0, '.')` because of D-014; manifest lists all files as missing; inspection on a synthetic CSV |
+| T11 | Full suite | PASS | `.\run.cmd -m pytest`: 32 passed in the venv (also passed under the embedded Python) |
+| T12 | CLIs run end to end | PASS | `.\run.cmd -m src.data.manifest` (all files reported missing, as expected) and `src.data.inspection` on a synthetic CSV, run from the repository and from another directory |
+| T13 | Setup reproducible without assistance | PASS | `powershell -ExecutionPolicy Bypass -File scripts\setup_env.ps1` creates the venv, installs pinned deps, runs tests; missing venv gives an actionable message |
 
 ## Blocked until data is present
 
@@ -59,6 +60,6 @@ Last run: 2026-11-07, Python 3.11.9 (embeddable build, see D-014).
 
 ## Decisions required before Milestone 1
 
-D-001, D-002, D-004, D-005, D-007, D-008, D-009, D-010 and D-014 (see
+D-001, D-002, D-004, D-005, D-007, D-008, D-009, D-010 and D-015 (see
 `docs/decision_log.md`). D-003, D-006, D-011, D-012 and D-013 can be decided
 during Milestone 1, but before the experiments that depend on them.

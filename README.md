@@ -40,25 +40,62 @@ results/      figures, tables, run metadata
 paper/        IEEE LaTeX manuscript
 ```
 
-## Setup
+## Setup (Windows, one time)
 
-```bash
-python -m pip install -r requirements.txt
-python -m pip install -e .
-python -m pytest
-```
+1. Install Python 3.11 from python.org. You can skip this step if it is
+   already installed.
 
-The editable install (`pip install -e .`) is needed for the `python -m src...`
-commands when the interpreter does not put the working directory on `sys.path`.
-That applies to the embeddable Python on the development machine (decision log
-D-014).
+   ```powershell
+   winget install --id Python.Python.3.11 --exact --scope user
+   ```
+
+2. From the repository folder, create the environment, install the pinned
+   dependencies and run the tests:
+
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File scripts\setup_env.ps1
+   ```
+
+**Where the environment lives.** The venv is created at
+`%USERPROFILE%\.venvs\cnet-xai-audit`, outside the repository. The repository
+sits in a OneDrive-synced folder, and a venv is thousands of small files.
+
+- To use a different location, pass `-VenvDir <path>` and set the `CNET_VENV`
+  environment variable to the same path.
+- Re-run the setup script whenever `requirements.txt` changes. It reuses the
+  existing venv.
+
+`-ExecutionPolicy Bypass` applies to that one command only. It does not change
+your system policy.
 
 ## Usage
 
-```bash
-python -m src.data.manifest --hash
-python -m src.data.inspection data/raw/unsw_nb15/UNSW_NB15_training-set.csv --label label --json results/inspection/unsw_train.json
+Run everything through `run.cmd`, which calls the venv's Python directly. No
+activation is needed, and it works in both PowerShell and cmd:
+
+```powershell
+.\run.cmd -m pytest
+.\run.cmd -m src.data.manifest --hash
+.\run.cmd -m src.data.inspection data\raw\unsw_nb15\UNSW_NB15_training-set.csv --label label --json results\inspection\unsw_train.json
 ```
+
+- `manifest` checks the manifest and lists which files are on disk. With
+  `--hash` it also computes sha256 checksums.
+- `inspection` reports a dataset's schema, label counts, missing/infinite
+  values, duplicates and leakage candidates. The label column name in the
+  example is unconfirmed.
+
+**VS Code / Jupyter.** Select the interpreter
+`%USERPROFILE%\.venvs\cnet-xai-audit\Scripts\python.exe`
+(Command Palette → "Python: Select Interpreter" → "Enter interpreter path").
+
+**Activating the venv in a terminal.**
+
+- In cmd, run `%USERPROFILE%\.venvs\cnet-xai-audit\Scripts\activate.bat`.
+- In PowerShell, `Activate.ps1` is blocked by the default script policy unless
+  you choose to allow it yourself with
+  `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`. `run.cmd` avoids the
+  need.
 
 - `manifest` checks the manifest and lists which files are on disk. With
   `--hash` it also computes sha256 checksums.

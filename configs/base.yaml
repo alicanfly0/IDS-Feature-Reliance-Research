@@ -1,0 +1,23 @@
+# Project-wide settings. Dataset provenance lives in configs/datasets.yaml.
+# No model hyperparameters are defined here yet: they are added per baseline in
+# Milestone 1, each value traced to its source paper or marked as our own choice.
+
+paths:
+  raw: data/raw
+  processed: data/processed
+  results: results
+
+seed: 42  # global default; experiments must also record their own seed list
+
+split:
+  # Strategy is chosen per dataset (see datasets.yaml -> split_policy and
+  # docs/decision_log.md D-007). "stratified_random" is NOT a universal default.
+  fractions: {train: 0.70, val: 0.15, test: 0.15}  # Phase II proposal, pending D-007
+
+preprocessing:
+  # All fitted statistics come from the training partition only.
+  inf_as_missing: true
+  impute: median
+  scale: minmax
+  drop_constant_on_train: true
+  one_hot_unknown: ignore   # unseen categories encode as all-zeros

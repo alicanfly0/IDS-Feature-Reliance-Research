@@ -1,0 +1,15 @@
+# Milestone 0 core: data loading, inspection, preprocessing, splitting, tests.
+# Pinned to the versions this repository was validated against (Python 3.11.9).
+numpy==1.26.4
+pandas==2.3.3
+scikit-learn==1.9.0
+PyYAML==6.0.3
+pytest==9.1.1
+
+# Milestone 1+ (not yet installed or validated; pin when first used):
+# xgboost        - AE-XGBoost baseline (Nezhadsistani et al. 2026)
+# lightgbm       - SHAP feature selector for SHAP-DCNN (Fang et al. 2026)
+# torch          - autoencoder, MES-DNN, DCNN + self-attention
+# shap           - TreeExplainer / DeepExplainer / KernelExplainer
+# scipy          - paired statistical tests
+# matplotlib     - figures

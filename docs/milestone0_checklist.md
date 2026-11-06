@@ -1,8 +1,9 @@
 # Milestone 0 validation checklist
 
-Milestone 0 covers the repository, provenance and data tooling only. **No
-dataset has been downloaded, no model has been trained, and no experimental
-result exists.**
+Milestone 0 covers the repository, provenance, data acquisition and data
+tooling. **No model has been trained and no experimental result exists.** The
+numbers below are descriptive facts about the released files, measured by
+`src.data.inspection`. Reports are in `results/inspection/`.
 
 Status values: PASS (checked, with the command) · BLOCKED (needs data or a
 decision) · TODO.
@@ -14,53 +15,66 @@ Last run: 2026-11-07, Python 3.11.9 (python.org build in the project venv, see D
 | # | Check | Status | Evidence |
 |---|---|---|---|
 | R1 | Working directory inspected before changes; existing files preserved | PASS | Directory was empty at start; no files overwritten |
-| R2 | Layout matches the agreed structure (`configs/ data/ src/{data,models,audit,evaluation} tests/ results/ paper/`) plus `docs/` | PASS | `ls -R` |
-| R3 | Raw/processed data, CSV/PCAP/ZIP, model weights Git-ignored | PASS | `git check-ignore` on sample paths (see commit) |
+| R2 | Layout matches the agreed structure (`configs/ data/ src/{data,models,audit,evaluation} tests/ results/ paper/`) plus `docs/`, `scripts/` | PASS | `ls -R` |
+| R3 | Raw/processed data, CSV/PCAP/ZIP, model weights Git-ignored | PASS | `git check-ignore`; `git status` shows no data files |
 | R4 | Dependencies pinned to validated versions | PASS | `requirements.txt`; Milestone 1 packages listed but not pinned |
-| R5 | Isolated environment | PASS | D-014: python.org CPython 3.11.9 + venv at `.venv` in the project folder via `scripts/setup_env.ps1` |
+| R5 | Isolated environment | PASS | D-014: python.org CPython 3.11.9 + `.venv` in the project folder via `scripts/setup_env.ps1` |
 
-## Provenance
+## Provenance and acquisition
 
 | # | Check | Status | Evidence |
 |---|---|---|---|
 | P1 | Manifest covers the 4 datasets with official source, version, files, license, citation, schema, labels, experiments | PASS | `tests/test_manifest.py` |
-| P2 | No mirror listed as a source | PASS | `test_no_mirror_used_as_source` |
-| P3 | Official pages checked; unconfirmed facts marked UNCONFIRMED/null | PASS | `configs/datasets.yaml`, checked 2026-11-07 |
-| P4 | File sizes and sha256 recorded | BLOCKED | No publisher checksums; compute with `src.data.manifest --hash` after download |
-| P5 | Download destinations confirmed | PASS | D-015: `data/raw/<dataset id>/` in the project folder (`local_dir` in the manifest) |
-| P7 | Datasets downloaded | BLOCKED | Manual download needed: registration form for CICIDS2017; browser-only links for UNSW and UQ |
-| P6 | License/redistribution terms confirmed for Engelen and NF-UNSW-NB15-v2 | BLOCKED | Not stated on the official pages |
+| P2 | No mirror used; every download from the official host | PASS | `test_no_mirror_used_as_source`; URLs in `configs/datasets.yaml` |
+| P3 | Download destinations confirmed | PASS | D-015: `data/raw/<dataset id>/` |
+| P4 | CICIDS2017 original downloaded (MachineLearningCSV.zip, GeneratedLabelledFlows.zip) | PASS | Sizes, sha256 recorded; **publisher MD5 verified** for both |
+| P5 | UNSW-NB15 downloaded (9 CSVs from the official SharePoint) | PASS | Sizes match the server, sha256 recorded |
+| P6 | NF-UNSW-NB15-v2 downloaded (UQ RDM) | PASS | Size, sha256 recorded; **publisher BagIt SHA-1 verified** |
+| P7 | Engelen WTMC2021 `dataset.zip` downloaded | TODO | In progress (slow server); verify with `src.data.acquire verify` |
+| P8 | All files re-verifiable without assistance | PASS | `.\run.cmd -m src.data.acquire verify all` |
+| P9 | License terms | PASS (3) / BLOCKED (1) | CIC: cite paper; UNSW: academic use granted; UQ: "Permitted Re-Use with Commercial Use Restriction"; Engelen: no licence text on the page |
 
-## Data tooling (synthetic tests only)
+## Data tooling
 
 | # | Check | Status | Evidence |
 |---|---|---|---|
-| T1 | Inspection reports schema, shape, labels, missing/inf/negative, duplicates, conflicting-label duplicates, types, leakage candidates | PASS | `tests/test_inspection.py` |
-| T2 | Reader handles stripped/duplicated column names, `Infinity`, cp1252 label bytes | PASS | `test_reader_handles_cicids_style_quirks` |
-| T3 | Preprocessing statistics come from the training partition only | PASS | `test_statistics_come_from_train_only`, `test_test_set_extremes_do_not_change_fit` |
-| T4 | Source frames are never mutated | PASS | `test_source_frame_is_not_mutated` |
-| T5 | Unseen test categories do not create columns | PASS | `test_unseen_category_encodes_as_zeros` |
-| T6 | Row-validity rules report, never drop silently | PASS | `test_invalid_row_mask_reports_without_dropping` |
-| T7 | Splits are deterministic per seed, disjoint and complete | PASS | `tests/test_split.py` |
-| T8 | Group / temporal / predefined splits available; random split shown to leak groups | PASS | `test_random_split_leaks_groups_that_group_split_does_not` |
-| T9 | Cross-split duplicate feature vectors detectable | PASS | `test_cross_split_duplicates_detects_identical_vectors` |
-| T10 | Saved splits carry a fingerprint; tampering detected | PASS | `test_save_load_roundtrip_and_tamper_detection` |
-| T11 | Full suite | PASS | `.\run.cmd -m pytest`: 32 passed in the venv (also passed under the embedded Python) |
-| T12 | CLIs run end to end | PASS | `.\run.cmd -m src.data.manifest` (all files reported missing, as expected) and `src.data.inspection` on a synthetic CSV, run from the repository and from another directory |
-| T13 | Setup reproducible without assistance | PASS | `powershell -ExecutionPolicy Bypass -File scripts\setup_env.ps1` creates the venv, installs pinned deps, runs tests; missing venv gives an actionable message |
+| T1 | Inspection: schema, shape, labels, missing/inf/negative, duplicates (incl. identifier-free content duplicates), conflicting labels, types, leakage candidates | PASS | `tests/test_inspection.py` |
+| T2 | Reader handles real release quirks: whitespace and repeated column names, `Infinity`, cp1252 and U+FFFD labels, UTF-8 BOM, header-less files with a names file | PASS | inspection tests + real runs |
+| T3 | Preprocessing statistics from the training partition only; source never mutated; unseen categories safe; row rules report only | PASS | `tests/test_preprocess.py` |
+| T4 | Splits deterministic, disjoint, complete; group / temporal / predefined; cross-split duplicate and group-overlap checks; fingerprinted save/load | PASS | `tests/test_split.py` |
+| T5 | Download/verify/extract: size, sha256 and publisher MD5 checks; zip path-traversal refused; Windows-unsafe names (trailing spaces) sanitized and logged | PASS | `tests/test_acquire.py` |
+| T6 | Full suite | PASS | `.\run.cmd -m pytest`: 54 passed |
+| T7 | Setup and every step reproducible without assistance | PASS | `scripts\setup_env.ps1`, `run.cmd`, `src.data.acquire`, `scripts\inspect_all.ps1` |
 
-## Blocked until data is present
+## Checks on the real data
 
-| # | Check | Status |
-|---|---|---|
-| B1 | Run inspection on every dataset; save JSON reports under `results/inspection/` | BLOCKED |
-| B2 | Confirm column names, label columns, feature counts (D-001, D-006) | BLOCKED |
-| B3 | Measure duplicate and cross-split duplicate rates per split strategy (D-007) | BLOCKED |
-| B4 | Confirm Paper 1 DDoS subset = Friday-afternoon file (D-008); Fang counts = official partition (D-009) | BLOCKED |
-| B5 | Confirm which columns are constant on train (D-011) | BLOCKED |
+| # | Check | Status | Result |
+|---|---|---|---|
+| B1 | Inspection reports saved for every downloaded file | PASS (3 of 4 datasets) | 30 reports in `results/inspection/`; Engelen pending |
+| B2 | Column names, label columns, feature counts confirmed | PASS (3 of 4) | See below and manifest `measured` blocks; Engelen pending |
+| B3 | Duplicate rates; official-split cross-duplicates | PASS | D-007 table |
+| B4 | Paper 1 subset = Friday DDoS file; Fang counts = official partition | PASS | D-008, D-009 |
+| B5 | Constant columns, infinities, negatives measured | PASS | D-011 |
+
+**What the data confirmed or corrected:**
+
+- **NF-UNSW-NB15-v2 (D-001):**
+  - 45 columns: 43 features + Label + Attack; 2,390,275 rows.
+  - Wardana's 39 inputs = the 43 features minus the 4 IP/port fields (exact match).
+- **CICIDS2017 (D-008):**
+  - The full release has 2,830,743 rows and 15 labels.
+  - MachineLearningCVE has 78 features + Label.
+  - The Friday-afternoon DDoS file has exactly Paper 1's 225,745 rows.
+- **Fang's split (D-009):** the official UNSW-NB15 partition contains Fang's DoS counts (12,264 / 4,089) and test Normal count (37,000) exactly. Train Normal is 56,000 vs Fang's 55,998.
+- **Duplication (D-007):**
+  - NF-UNSW-NB15-v2: 90.1% of rows repeat another row on Wardana's 39 inputs.
+  - UNSW-NB15 training/testing sets: 42.4% / 34.5% duplicated once `id` is ignored.
+  - 10.4% of the official UNSW test rows have an exact training twin.
+- **Phase II constant-column claim (D-011):** `Fwd URG Flags` is not constant in CICIDS2017; 8 other columns are constant in every day file.
 
 ## Decisions required before Milestone 1
 
-D-001, D-002, D-004, D-005, D-007, D-008, D-009 and D-010 (see
-`docs/decision_log.md`). D-003, D-006, D-011, D-012 and D-013 can be decided
-during Milestone 1, but before the experiments that depend on them.
+D-001 (adopt 39 inputs), D-002, D-004, D-005, D-007, D-009 (official
+partition?), D-008 (DDoS subset scope) and D-010 (see `docs/decision_log.md`).
+D-003, D-006, D-011, D-012 and D-013 can be decided during Milestone 1, but
+before the experiments that depend on them.

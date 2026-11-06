@@ -15,7 +15,18 @@ Status values: OPEN · DECIDED · SUPERSEDED.
 
 ---
 
-## D-001 NetFlow feature count: 43 vs 40 vs 39 — OPEN
+## D-001 NetFlow feature count: 43 vs 40 vs 39 — OPEN (facts resolved 2026-11-07)
+
+**Resolved from the downloaded data.** The hypothesis below holds exactly:
+
+- `NF-UNSW-NB15-v2.csv` has 45 columns: 43 NetFlow features, which include `IPV4_SRC_ADDR`, `L4_SRC_PORT`, `IPV4_DST_ADDR` and `L4_DST_PORT`, plus `Label` and `Attack`.
+- Wardana's 39 Table 2 inputs are *exactly* the 43 features minus those 4 identifiers (set comparison, `configs/datasets.yaml`).
+- The publisher's BagIt SHA-1 checksums verify the file.
+
+**Still the team's call:**
+
+- adopting the 39-input set for MES-DNN (recommended: it is faithful);
+- correcting the "43-feature" wording in Phase IV.
 
 **Evidence**
 
@@ -159,11 +170,26 @@ The four datasets use three different feature definitions:
 
 **Open choices:** the number of seeds, the grouping key (e.g. capture day, host pair, flow 5-tuple), and whether exact duplicates are removed before splitting.
 
+**Measured duplication (2026-11-07, `results/inspection/`).** "Content duplicates" means identical rows once labels and identifier columns are ignored.
+
+| Data | Content duplicates |
+|---|---|
+| NF-UNSW-NB15-v2, on Wardana's 39 inputs | 90.1% of rows (2,153,276), no conflicting labels |
+| UNSW-NB15 training-set (`id` ignored) | 42.4% |
+| UNSW-NB15 testing-set (`id` ignored) | 34.5% |
+| UNSW-NB15 full CSVs, per file | 9.3–33.9% |
+| CICIDS2017 MachineLearningCVE, per day | 2.0% (Friday DDoS) to 58.3% (Friday PortScan) |
+
+- **Official UNSW-NB15 partition:** 10.4% of testing-set rows have an exact training twin.
+- **Consequence:** a random row split (Wardana's 70/30, Phase II's 70/15/15) will place identical rows in train and test, especially on NF-UNSW-NB15-v2. Any random-split protocol needs either deduplication before splitting or a reported cross-split duplicate rate (`cross_split_duplicates`).
+- **Grouping keys:** the CICIDS2017 grouping/time keys (Flow ID, IPs, Timestamp) exist only in `TrafficLabelling` (GeneratedLabelledFlows), not in MachineLearningCVE.
+
 ## D-008 CICIDS2017 scope for each baseline — OPEN
 
 - Nezhadsistani uses a 225,745-row DDoS subset with 78 features.
-  - This row count is consistent with the Friday-afternoon DDoS file of the CSV release. That is a hypothesis to verify after download.
+  - **Confirmed by measurement:** `Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv` has exactly 225,745 rows and 79 columns (78 features + Label): 128,027 DDoS and 97,718 BENIGN.
 - Phase II cites [1] for "2.83 million flows across 15 classes", which is a misattribution.
+  - The full release does have 2,830,743 rows and 15 labels (measured), but [1] used only the Friday DDoS file.
 - **Decision required:** reproduce on the DDoS subset (faithful), and/or extend to the full multi-class corpus as a declared extension.
 
 ## D-009 Fang UNSW-NB15 subset and split — OPEN
@@ -171,7 +197,17 @@ The four datasets use three different feature definitions:
 - Fang reports 92,998 normal and 16,353 DoS records.
   - Train: 55,998 + 12,264. Test: 37,000 + 4,089 (p.22).
   - That is about a 62/38 split, not the stated stratified 70/30.
-- These counts closely resemble the Normal and DoS rows of the official `UNSW_NB15_training-set.csv` / `UNSW_NB15_testing-set.csv` partition. This is a hypothesis; the class counts must be measured after download.
+- **Measured:** the official partition holds:
+
+  | File | DoS | Normal |
+  |---|---|---|
+  | `UNSW_NB15_training-set.csv` | 12,264 | 56,000 |
+  | `UNSW_NB15_testing-set.csv` | 4,089 | 37,000 |
+
+  Fang's DoS counts and test Normal count match exactly; train Normal is 2 short. Fang evidently used the official partition, not a 70/30 split. The 2 missing rows are unexplained (cleaning?).
+- **Leakage in that partition (Normal/DoS only):**
+  - 202 of 4,089 DoS test rows (4.9%) and 1,193 of 37,000 Normal test rows (3.2%) have an exact Normal/DoS training twin.
+  - Against the whole training set, 49% of DoS test rows have a twin, mostly labelled as other attack classes. That is label ambiguity that matters for multi-class work.
 - Fang names normal as the *positive* class (p.14), so metric polarity must be fixed explicitly.
 - The author repository `github.com/ZHF123775838/WSN-DCNN-SHAP` claims to include the splits and code. It has not been accessed.
 
@@ -196,6 +232,15 @@ The four datasets use three different feature definitions:
 
 - Phase II purges NaN/Infinity rows and rows with negative duration, and removes `Fwd URG Flags` / `Bwd URG Flags` as constant.
 - Whether those columns are actually constant must be measured. The preprocessor drops columns that are constant **on the training partition**, rather than using a hard-coded list.
+- **Measured on CICIDS2017 (MachineLearningCVE, all 8 days):**
+  - **Constant in every day file:** `Bwd PSH Flags`, `Bwd URG Flags` and the six `Fwd/Bwd Avg Bytes/Bulk`, `Avg Packets/Bulk` and `Avg Bulk Rate` columns.
+    - `Fwd URG Flags` is **not** constant, so Phase II's claim is wrong for it.
+  - **Infinity:** `Flow Bytes/s` 1,509 rows, `Flow Packets/s` 2,867 rows. NaN also appears in `Flow Bytes/s`.
+  - **Negative values:**
+    - `Init_Win_bytes_forward/backward` = -1 in 1,001,189 / 1,441,552 rows. This is a "not observed" sentinel; dropping those rows would remove about half the data, so they need a distinct policy, not a purge.
+    - Negative `Flow Duration` in 115 rows.
+    - Negative `Fwd Header Length` and `min_seg_size_forward` in 35 rows. Both are registry candidates (D-012).
+- **Measured on UNSW-NB15 full CSVs:** `ct_flw_http_mthd` and `is_ftp_login` are empty in most rows of files 2–4, and `attack_cat` labels need whitespace and Backdoor/Backdoors normalization.
 - Row filters are reported by `invalid_row_mask` and never applied silently.
 - **Decision required:** drop vs impute for each rule, decided per dataset after inspection. Record the row counts removed.
 

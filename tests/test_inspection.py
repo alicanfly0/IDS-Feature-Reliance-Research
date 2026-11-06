@@ -1,7 +1,8 @@
 import pandas as pd
+import pytest
 
 from src.data.inspection import inspect_frame, main
-from src.data.load import read_flow_csv
+from src.data.load import read_flow_csv, read_names_file
 
 
 def _reasons(report, column):
@@ -37,6 +38,30 @@ def test_conflicting_label_duplicates():
     assert report["conflicting_label_duplicates"] == 1
 
 
+@pytest.mark.parametrize("name,is_id", [
+    ("Source IP", True), ("Dst IP", True), ("IPV4_SRC_ADDR", True), ("srcip", True),
+    ("L4_DST_PORT", True), ("Destination Port", True), ("dsport", True),
+    ("MIN_IP_PKT_LEN", False), ("MAX_IP_PKT_LEN", False), ("Flow IAT Min", False), ("sttl", False),
+])
+def test_identifier_name_patterns(name, is_id):
+    df = pd.DataFrame({name: [1, 2, 1, 2], "label": [0, 1, 0, 1]})
+    assert (inspect_frame(df, "label")["identifier_columns"] == [name]) is is_id
+
+
+def test_identifier_columns_do_not_hide_duplicates():
+    # Same flow contents, unique row ids (as in UNSW-NB15 training-set.csv), one label clash.
+    df = pd.DataFrame({
+        "id": [1, 2, 3, 4], "dur": [0.1, 0.1, 0.2, 0.3], "proto": ["tcp", "tcp", "udp", "tcp"],
+        "attack_cat": ["DoS", "Normal", "Normal", "Normal"], "label": [1, 0, 0, 0],
+    })
+    report = inspect_frame(df, "label")
+    assert report["duplicate_feature_rows"] == 0  # the id makes every row distinct
+    assert report["identifier_columns"] == ["id"]
+    assert report["duplicate_content_rows"] == 1
+    assert report["conflicting_label_duplicates"] == 1
+    assert report["label_like_counts"] == {"attack_cat": {"Normal": 3, "DoS": 1}}
+
+
 def test_reader_handles_cicids_style_quirks(tmp_path):
     # Leading spaces, a repeated column name, an "Infinity" token and a cp1252 byte.
     raw = (
@@ -51,6 +76,29 @@ def test_reader_handles_cicids_style_quirks(tmp_path):
     assert notes["duplicated_names"] == ["Fwd Header Length"]
     assert list(df.columns) == ["Destination Port", "Fwd Header Length", "Fwd Header Length.1", "Flow Bytes/s", "Label"]
     assert inspect_frame(df, "Label")["infinite"] == {"Flow Bytes/s": 1}
+
+
+def test_reader_strips_utf8_bom_and_applies_names_file(tmp_path):
+    with_header = tmp_path / "bom.csv"
+    with_header.write_bytes("﻿id,label\n1,0\n".encode("utf-8"))
+    df, notes = read_flow_csv(with_header)
+    assert notes["utf8_bom"] and list(df.columns) == ["id", "label"]
+
+    names_file = tmp_path / "features.csv"
+    names_file.write_text("No.,Name,Type \n1,srcip,nominal\n2, Label ,binary\n", encoding="utf-8")
+    body = tmp_path / "data.csv"
+    body.write_bytes("﻿10.0.0.1,0\n10.0.0.2,1\n".encode("utf-8"))
+    df, notes = read_flow_csv(body, header=False, names=read_names_file(names_file))
+    assert list(df.columns) == ["srcip", "Label"]
+    assert df.iloc[0, 0] == "10.0.0.1"  # BOM not glued to the first value
+    assert notes["names_source"] == "names"
+
+
+def test_names_count_mismatch_raises(tmp_path):
+    body = tmp_path / "data.csv"
+    body.write_text("1,2,3\n", encoding="utf-8")
+    with pytest.raises(ValueError):
+        read_flow_csv(body, header=False, names=["a", "b"])
 
 
 def test_cli_runs_on_directory(tmp_path, toy_flows, capsys):

@@ -19,9 +19,17 @@ The planned baselines are:
 | SHAP-selected DCNN + self-attention | Fang et al. 2026 |
 
 **Status: Milestone 0.** This milestone covers the repository, dataset
-provenance, inspection, train-only preprocessing and split utilities. No
-dataset has been downloaded, no model has been trained, and the repository
-contains no results.
+provenance and acquisition, inspection, train-only preprocessing and split
+utilities.
+
+- **Data:** CICIDS2017 (original), UNSW-NB15 and NF-UNSW-NB15-v2 are
+  downloaded and verified. Engelen's corrected CICIDS2017 is in progress.
+- **Inspection:** reports for every downloaded file are in
+  `results/inspection/`. They describe the data only.
+- **Not yet done:** no model has been trained and no experimental result
+  exists.
+
+See `docs/milestone0_checklist.md` and `docs/decision_log.md`.
 
 ## Layout
 
@@ -101,11 +109,29 @@ Interpreter").
   `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`. `run.cmd` avoids the
   need.
 
-- `manifest` checks the manifest and lists which files are on disk. With
-  `--hash` it also computes sha256 checksums.
-- `inspection` reports a dataset's schema, label counts, missing/infinite
-  values, duplicates and leakage candidates. The label column name in the
-  example is unconfirmed.
+### Getting the datasets
+
+```powershell
+.\run.cmd -m src.data.acquire download all   # fetch every file with a scripted official source
+.\run.cmd -m src.data.acquire verify all     # check sizes and sha256 against the manifest
+.\run.cmd -m src.data.acquire extract all    # unzip archives into data\raw\<id>\extracted\
+```
+
+Downloads come only from the sources recorded in `configs/datasets.yaml`:
+
+| Source | How it is fetched |
+|---|---|
+| Engelen corrected CICIDS2017 | direct link |
+| UNSW-NB15 | the official SharePoint share |
+| NF-UNSW-NB15-v2 | the UQ RDM API |
+
+**Manual step: original CIC-IDS2017.** Its download sits behind CIC's
+registration form at https://cicresearch.ca/CICDataset/CIC-IDS-2017/. Submit
+the form in a browser and save `MachineLearningCSV.zip` (and
+`GeneratedLabelledFlows.zip`) into `data\raw\cicids2017_original\`. Then run
+`verify` and `extract`.
+
+Extraction refuses archive entries that would land outside the target folder.
 
 ### Preprocessing and splitting
 

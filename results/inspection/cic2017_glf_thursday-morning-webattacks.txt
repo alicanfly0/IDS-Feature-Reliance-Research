@@ -1,0 +1,252 @@
+﻿file: C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation\data\raw\cicids2017_original\extracted\TrafficLabelling\Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv  (encoding cp1252, nrows limit None)
+column names from: header
+column names stripped of whitespace: 70
+duplicated column names (renamed .N): ['Fwd Header Length']
+shape: 458968 rows x 85 columns
+
+schema (column: dtype / inferred type)
+  Flow ID: object / categorical
+  Source IP: object / categorical
+  Source Port: float64 / float
+  Destination IP: object / categorical
+  Destination Port: float64 / float
+  Protocol: float64 / float
+  Timestamp: object / categorical
+  Flow Duration: float64 / float
+  Total Fwd Packets: float64 / float
+  Total Backward Packets: float64 / float
+  Total Length of Fwd Packets: float64 / float
+  Total Length of Bwd Packets: float64 / float
+  Fwd Packet Length Max: float64 / float
+  Fwd Packet Length Min: float64 / float
+  Fwd Packet Length Mean: float64 / float
+  Fwd Packet Length Std: float64 / float
+  Bwd Packet Length Max: float64 / float
+  Bwd Packet Length Min: float64 / float
+  Bwd Packet Length Mean: float64 / float
+  Bwd Packet Length Std: float64 / float
+  Flow Bytes/s: float64 / float
+  Flow Packets/s: float64 / float
+  Flow IAT Mean: float64 / float
+  Flow IAT Std: float64 / float
+  Flow IAT Max: float64 / float
+  Flow IAT Min: float64 / float
+  Fwd IAT Total: float64 / float
+  Fwd IAT Mean: float64 / float
+  Fwd IAT Std: float64 / float
+  Fwd IAT Max: float64 / float
+  Fwd IAT Min: float64 / float
+  Bwd IAT Total: float64 / float
+  Bwd IAT Mean: float64 / float
+  Bwd IAT Std: float64 / float
+  Bwd IAT Max: float64 / float
+  Bwd IAT Min: float64 / float
+  Fwd PSH Flags: float64 / float
+  Bwd PSH Flags: float64 / float
+  Fwd URG Flags: float64 / float
+  Bwd URG Flags: float64 / float
+  Fwd Header Length: float64 / float
+  Bwd Header Length: float64 / float
+  Fwd Packets/s: float64 / float
+  Bwd Packets/s: float64 / float
+  Min Packet Length: float64 / float
+  Max Packet Length: float64 / float
+  Packet Length Mean: float64 / float
+  Packet Length Std: float64 / float
+  Packet Length Variance: float64 / float
+  FIN Flag Count: float64 / float
+  SYN Flag Count: float64 / float
+  RST Flag Count: float64 / float
+  PSH Flag Count: float64 / float
+  ACK Flag Count: float64 / float
+  URG Flag Count: float64 / float
+  CWE Flag Count: float64 / float
+  ECE Flag Count: float64 / float
+  Down/Up Ratio: float64 / float
+  Average Packet Size: float64 / float
+  Avg Fwd Segment Size: float64 / float
+  Avg Bwd Segment Size: float64 / float
+  Fwd Header Length.1: float64 / float
+  Fwd Avg Bytes/Bulk: float64 / float
+  Fwd Avg Packets/Bulk: float64 / float
+  Fwd Avg Bulk Rate: float64 / float
+  Bwd Avg Bytes/Bulk: float64 / float
+  Bwd Avg Packets/Bulk: float64 / float
+  Bwd Avg Bulk Rate: float64 / float
+  Subflow Fwd Packets: float64 / float
+  Subflow Fwd Bytes: float64 / float
+  Subflow Bwd Packets: float64 / float
+  Subflow Bwd Bytes: float64 / float
+  Init_Win_bytes_forward: float64 / float
+  Init_Win_bytes_backward: float64 / float
+  act_data_pkt_fwd: float64 / float
+  min_seg_size_forward: float64 / float
+  Active Mean: float64 / float
+  Active Std: float64 / float
+  Active Max: float64 / float
+  Active Min: float64 / float
+  Idle Mean: float64 / float
+  Idle Std: float64 / float
+  Idle Max: float64 / float
+  Idle Min: float64 / float
+  Label: object / categorical
+
+label counts (Label)
+  nan: 288602 (62.8806%)
+  BENIGN: 168186 (36.6444%)
+  Web Attack � Brute Force: 1507 (0.3283%)
+  Web Attack � XSS: 652 (0.1421%)
+  Web Attack � Sql Injection: 21 (0.0046%)
+
+missing values: 24531190 in 85 columns
+  Flow ID: 288602
+  Source IP: 288602
+  Source Port: 288602
+  Destination IP: 288602
+  Destination Port: 288602
+  Protocol: 288602
+  Timestamp: 288602
+  Flow Duration: 288602
+  Total Fwd Packets: 288602
+  Total Backward Packets: 288602
+  Total Length of Fwd Packets: 288602
+  Total Length of Bwd Packets: 288602
+  Fwd Packet Length Max: 288602
+  Fwd Packet Length Min: 288602
+  Fwd Packet Length Mean: 288602
+  Fwd Packet Length Std: 288602
+  Bwd Packet Length Max: 288602
+  Bwd Packet Length Min: 288602
+  Bwd Packet Length Mean: 288602
+  Bwd Packet Length Std: 288602
+  Flow Bytes/s: 288622
+  Flow Packets/s: 288602
+  Flow IAT Mean: 288602
+  Flow IAT Std: 288602
+  Flow IAT Max: 288602
+  Flow IAT Min: 288602
+  Fwd IAT Total: 288602
+  Fwd IAT Mean: 288602
+  Fwd IAT Std: 288602
+  Fwd IAT Max: 288602
+  Fwd IAT Min: 288602
+  Bwd IAT Total: 288602
+  Bwd IAT Mean: 288602
+  Bwd IAT Std: 288602
+  Bwd IAT Max: 288602
+  Bwd IAT Min: 288602
+  Fwd PSH Flags: 288602
+  Bwd PSH Flags: 288602
+  Fwd URG Flags: 288602
+  Bwd URG Flags: 288602
+  Fwd Header Length: 288602
+  Bwd Header Length: 288602
+  Fwd Packets/s: 288602
+  Bwd Packets/s: 288602
+  Min Packet Length: 288602
+  Max Packet Length: 288602
+  Packet Length Mean: 288602
+  Packet Length Std: 288602
+  Packet Length Variance: 288602
+  FIN Flag Count: 288602
+  SYN Flag Count: 288602
+  RST Flag Count: 288602
+  PSH Flag Count: 288602
+  ACK Flag Count: 288602
+  URG Flag Count: 288602
+  CWE Flag Count: 288602
+  ECE Flag Count: 288602
+  Down/Up Ratio: 288602
+  Average Packet Size: 288602
+  Avg Fwd Segment Size: 288602
+  Avg Bwd Segment Size: 288602
+  Fwd Header Length.1: 288602
+  Fwd Avg Bytes/Bulk: 288602
+  Fwd Avg Packets/Bulk: 288602
+  Fwd Avg Bulk Rate: 288602
+  Bwd Avg Bytes/Bulk: 288602
+  Bwd Avg Packets/Bulk: 288602
+  Bwd Avg Bulk Rate: 288602
+  Subflow Fwd Packets: 288602
+  Subflow Fwd Bytes: 288602
+  Subflow Bwd Packets: 288602
+  Subflow Bwd Bytes: 288602
+  Init_Win_bytes_forward: 288602
+  Init_Win_bytes_backward: 288602
+  act_data_pkt_fwd: 288602
+  min_seg_size_forward: 288602
+  Active Mean: 288602
+  Active Std: 288602
+  Active Max: 288602
+  Active Min: 288602
+  Idle Mean: 288602
+  Idle Std: 288602
+  Idle Max: 288602
+  Idle Min: 288602
+  Label: 288602
+
+infinite values: 250 in 2 columns
+  Flow Bytes/s: 115
+  Flow Packets/s: 135
+
+negative values: 184601 in 8 columns
+  Flow Duration: 11
+  Flow Bytes/s: 10
+  Flow Packets/s: 11
+  Flow IAT Mean: 11
+  Flow IAT Max: 11
+  Flow IAT Min: 263
+  Init_Win_bytes_forward: 81911
+  Init_Win_bytes_backward: 102373
+
+duplicate rows (all columns): 288602
+duplicate feature vectors (label columns excluded): 288602
+duplicate flow contents (labels and identifiers ['Flow ID', 'Source IP', 'Source Port', 'Destination IP', 'Destination Port', 'Timestamp'] excluded): 303041
+flow contents with conflicting labels: 0
+
+candidate leakage fields (heuristic, review manually)
+  Flow ID: name matches flow_id
+  Source IP: name matches ip_address
+  Source IP: single-column label separator (purity 0.9985 vs majority 0.6288)
+  Source Port: name matches port
+  Destination IP: name matches ip_address
+  Destination Port: name matches port
+  Protocol: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Timestamp: name matches timestamp
+  Timestamp: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Total Fwd Packets: single-column label separator (purity 0.9954 vs majority 0.6288)
+  Total Backward Packets: single-column label separator (purity 0.9954 vs majority 0.6288)
+  Fwd Packet Length Max: single-column label separator (purity 0.9955 vs majority 0.6288)
+  Fwd Packet Length Min: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Bwd Packet Length Max: single-column label separator (purity 0.9956 vs majority 0.6288)
+  Bwd Packet Length Min: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Fwd PSH Flags: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Bwd PSH Flags: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Fwd URG Flags: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Bwd URG Flags: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Fwd Header Length: single-column label separator (purity 0.9954 vs majority 0.6288)
+  Bwd Header Length: single-column label separator (purity 0.9954 vs majority 0.6288)
+  Min Packet Length: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Max Packet Length: single-column label separator (purity 0.9956 vs majority 0.6288)
+  FIN Flag Count: single-column label separator (purity 0.9953 vs majority 0.6288)
+  SYN Flag Count: single-column label separator (purity 0.9953 vs majority 0.6288)
+  RST Flag Count: single-column label separator (purity 0.9953 vs majority 0.6288)
+  PSH Flag Count: single-column label separator (purity 0.9953 vs majority 0.6288)
+  ACK Flag Count: single-column label separator (purity 0.9953 vs majority 0.6288)
+  URG Flag Count: single-column label separator (purity 0.9953 vs majority 0.6288)
+  CWE Flag Count: single-column label separator (purity 0.9953 vs majority 0.6288)
+  ECE Flag Count: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Down/Up Ratio: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Fwd Header Length.1: single-column label separator (purity 0.9954 vs majority 0.6288)
+  Fwd Avg Bytes/Bulk: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Fwd Avg Packets/Bulk: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Fwd Avg Bulk Rate: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Bwd Avg Bytes/Bulk: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Bwd Avg Packets/Bulk: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Bwd Avg Bulk Rate: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Subflow Fwd Packets: single-column label separator (purity 0.9954 vs majority 0.6288)
+  Subflow Bwd Packets: single-column label separator (purity 0.9954 vs majority 0.6288)
+  Init_Win_bytes_forward: single-column label separator (purity 0.9953 vs majority 0.6288)
+  Init_Win_bytes_backward: single-column label separator (purity 0.9972 vs majority 0.6288)
+  act_data_pkt_fwd: single-column label separator (purity 0.9954 vs majority 0.6288)
+  min_seg_size_forward: single-column label separator (purity 0.9953 vs majority 0.6288)

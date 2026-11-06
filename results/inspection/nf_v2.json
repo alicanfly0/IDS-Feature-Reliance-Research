@@ -1,0 +1,244 @@
+{
+  "shape": [
+    2390275,
+    45
+  ],
+  "columns": [
+    "IPV4_SRC_ADDR",
+    "L4_SRC_PORT",
+    "IPV4_DST_ADDR",
+    "L4_DST_PORT",
+    "PROTOCOL",
+    "L7_PROTO",
+    "IN_BYTES",
+    "IN_PKTS",
+    "OUT_BYTES",
+    "OUT_PKTS",
+    "TCP_FLAGS",
+    "CLIENT_TCP_FLAGS",
+    "SERVER_TCP_FLAGS",
+    "FLOW_DURATION_MILLISECONDS",
+    "DURATION_IN",
+    "DURATION_OUT",
+    "MIN_TTL",
+    "MAX_TTL",
+    "LONGEST_FLOW_PKT",
+    "SHORTEST_FLOW_PKT",
+    "MIN_IP_PKT_LEN",
+    "MAX_IP_PKT_LEN",
+    "SRC_TO_DST_SECOND_BYTES",
+    "DST_TO_SRC_SECOND_BYTES",
+    "RETRANSMITTED_IN_BYTES",
+    "RETRANSMITTED_IN_PKTS",
+    "RETRANSMITTED_OUT_BYTES",
+    "RETRANSMITTED_OUT_PKTS",
+    "SRC_TO_DST_AVG_THROUGHPUT",
+    "DST_TO_SRC_AVG_THROUGHPUT",
+    "NUM_PKTS_UP_TO_128_BYTES",
+    "NUM_PKTS_128_TO_256_BYTES",
+    "NUM_PKTS_256_TO_512_BYTES",
+    "NUM_PKTS_512_TO_1024_BYTES",
+    "NUM_PKTS_1024_TO_1514_BYTES",
+    "TCP_WIN_MAX_IN",
+    "TCP_WIN_MAX_OUT",
+    "ICMP_TYPE",
+    "ICMP_IPV4_TYPE",
+    "DNS_QUERY_ID",
+    "DNS_QUERY_TYPE",
+    "DNS_TTL_ANSWER",
+    "FTP_COMMAND_RET_CODE",
+    "Label",
+    "Attack"
+  ],
+  "dtypes": {
+    "IPV4_SRC_ADDR": "object",
+    "L4_SRC_PORT": "int64",
+    "IPV4_DST_ADDR": "object",
+    "L4_DST_PORT": "int64",
+    "PROTOCOL": "int64",
+    "L7_PROTO": "float64",
+    "IN_BYTES": "int64",
+    "IN_PKTS": "int64",
+    "OUT_BYTES": "int64",
+    "OUT_PKTS": "int64",
+    "TCP_FLAGS": "int64",
+    "CLIENT_TCP_FLAGS": "int64",
+    "SERVER_TCP_FLAGS": "int64",
+    "FLOW_DURATION_MILLISECONDS": "int64",
+    "DURATION_IN": "int64",
+    "DURATION_OUT": "int64",
+    "MIN_TTL": "int64",
+    "MAX_TTL": "int64",
+    "LONGEST_FLOW_PKT": "int64",
+    "SHORTEST_FLOW_PKT": "int64",
+    "MIN_IP_PKT_LEN": "int64",
+    "MAX_IP_PKT_LEN": "int64",
+    "SRC_TO_DST_SECOND_BYTES": "float64",
+    "DST_TO_SRC_SECOND_BYTES": "float64",
+    "RETRANSMITTED_IN_BYTES": "int64",
+    "RETRANSMITTED_IN_PKTS": "int64",
+    "RETRANSMITTED_OUT_BYTES": "int64",
+    "RETRANSMITTED_OUT_PKTS": "int64",
+    "SRC_TO_DST_AVG_THROUGHPUT": "int64",
+    "DST_TO_SRC_AVG_THROUGHPUT": "int64",
+    "NUM_PKTS_UP_TO_128_BYTES": "int64",
+    "NUM_PKTS_128_TO_256_BYTES": "int64",
+    "NUM_PKTS_256_TO_512_BYTES": "int64",
+    "NUM_PKTS_512_TO_1024_BYTES": "int64",
+    "NUM_PKTS_1024_TO_1514_BYTES": "int64",
+    "TCP_WIN_MAX_IN": "int64",
+    "TCP_WIN_MAX_OUT": "int64",
+    "ICMP_TYPE": "int64",
+    "ICMP_IPV4_TYPE": "int64",
+    "DNS_QUERY_ID": "int64",
+    "DNS_QUERY_TYPE": "int64",
+    "DNS_TTL_ANSWER": "int64",
+    "FTP_COMMAND_RET_CODE": "float64",
+    "Label": "int64",
+    "Attack": "object"
+  },
+  "feature_types": {
+    "IPV4_SRC_ADDR": "categorical",
+    "L4_SRC_PORT": "integer",
+    "IPV4_DST_ADDR": "categorical",
+    "L4_DST_PORT": "integer",
+    "PROTOCOL": "integer",
+    "L7_PROTO": "float",
+    "IN_BYTES": "integer",
+    "IN_PKTS": "integer",
+    "OUT_BYTES": "integer",
+    "OUT_PKTS": "integer",
+    "TCP_FLAGS": "integer",
+    "CLIENT_TCP_FLAGS": "integer",
+    "SERVER_TCP_FLAGS": "integer",
+    "FLOW_DURATION_MILLISECONDS": "integer",
+    "DURATION_IN": "integer",
+    "DURATION_OUT": "integer",
+    "MIN_TTL": "integer",
+    "MAX_TTL": "integer",
+    "LONGEST_FLOW_PKT": "integer",
+    "SHORTEST_FLOW_PKT": "integer",
+    "MIN_IP_PKT_LEN": "integer",
+    "MAX_IP_PKT_LEN": "integer",
+    "SRC_TO_DST_SECOND_BYTES": "float",
+    "DST_TO_SRC_SECOND_BYTES": "float",
+    "RETRANSMITTED_IN_BYTES": "integer",
+    "RETRANSMITTED_IN_PKTS": "integer",
+    "RETRANSMITTED_OUT_BYTES": "integer",
+    "RETRANSMITTED_OUT_PKTS": "integer",
+    "SRC_TO_DST_AVG_THROUGHPUT": "integer",
+    "DST_TO_SRC_AVG_THROUGHPUT": "integer",
+    "NUM_PKTS_UP_TO_128_BYTES": "integer",
+    "NUM_PKTS_128_TO_256_BYTES": "integer",
+    "NUM_PKTS_256_TO_512_BYTES": "integer",
+    "NUM_PKTS_512_TO_1024_BYTES": "integer",
+    "NUM_PKTS_1024_TO_1514_BYTES": "integer",
+    "TCP_WIN_MAX_IN": "integer",
+    "TCP_WIN_MAX_OUT": "integer",
+    "ICMP_TYPE": "integer",
+    "ICMP_IPV4_TYPE": "integer",
+    "DNS_QUERY_ID": "integer",
+    "DNS_QUERY_TYPE": "integer",
+    "DNS_TTL_ANSWER": "integer",
+    "FTP_COMMAND_RET_CODE": "float",
+    "Label": "integer",
+    "Attack": "categorical"
+  },
+  "label_column": "Label",
+  "label_counts": {
+    "0": 2295222,
+    "1": 95053
+  },
+  "label_like_counts": {
+    "Attack": {
+      "Benign": 2295222,
+      "Exploits": 31551,
+      "Fuzzers": 22310,
+      "Generic": 16560,
+      "Reconnaissance": 12779,
+      "DoS": 5794,
+      "Analysis": 2299,
+      "Backdoor": 2169,
+      "Shellcode": 1427,
+      "Worms": 164
+    }
+  },
+  "missing": {},
+  "infinite": {},
+  "negative": {},
+  "duplicate_rows": 0,
+  "duplicate_feature_rows": 12038,
+  "identifier_columns": [
+    "IPV4_SRC_ADDR",
+    "L4_SRC_PORT",
+    "IPV4_DST_ADDR",
+    "L4_DST_PORT"
+  ],
+  "duplicate_content_rows": 2153276,
+  "conflicting_label_duplicates": 0,
+  "leakage_candidates": [
+    {
+      "column": "IPV4_SRC_ADDR",
+      "reason": "name matches ip_address"
+    },
+    {
+      "column": "IPV4_SRC_ADDR",
+      "reason": "single-column label separator (purity 0.9923 vs majority 0.9602)"
+    },
+    {
+      "column": "L4_SRC_PORT",
+      "reason": "name matches port"
+    },
+    {
+      "column": "IPV4_DST_ADDR",
+      "reason": "name matches ip_address"
+    },
+    {
+      "column": "IPV4_DST_ADDR",
+      "reason": "single-column label separator (purity 0.9923 vs majority 0.9602)"
+    },
+    {
+      "column": "L4_DST_PORT",
+      "reason": "name matches port"
+    },
+    {
+      "column": "IN_BYTES",
+      "reason": "single-column label separator (purity 0.9904 vs majority 0.9602)"
+    },
+    {
+      "column": "MIN_TTL",
+      "reason": "single-column label separator (purity 0.9922 vs majority 0.9602)"
+    },
+    {
+      "column": "MAX_TTL",
+      "reason": "single-column label separator (purity 0.9922 vs majority 0.9602)"
+    },
+    {
+      "column": "SHORTEST_FLOW_PKT",
+      "reason": "single-column label separator (purity 0.9921 vs majority 0.9602)"
+    },
+    {
+      "column": "SRC_TO_DST_SECOND_BYTES",
+      "reason": "single-column label separator (purity 0.9904 vs majority 0.9602)"
+    },
+    {
+      "column": "Attack",
+      "reason": "label-like column besides the target"
+    },
+    {
+      "column": "Attack",
+      "reason": "single-column label separator (purity 1.0000 vs majority 0.9602)"
+    }
+  ],
+  "files": [
+    {
+      "path": "C:\\Users\\aliwa\\OneDrive\\Desktop\\FAST NUCES\\semester 7\\CNET\\cnet project implementation\\data\\raw\\nf_unsw_nb15_v2\\extracted\\fe6cb615d161452c_MOHANAD_A4706\\data\\NF-UNSW-NB15-v2.csv",
+      "encoding": "utf-8-sig",
+      "utf8_bom": false,
+      "nrows_limit": null,
+      "names_source": "header",
+      "names_with_whitespace": [],
+      "duplicated_names": []
+    }
+  ]
+}

@@ -12,19 +12,22 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
-from src.data.load import read_flow_csv
+from src.data.load import read_flow_csv, read_names_file
 
 # Name patterns for fields that identify hosts, sessions or capture time.
 IDENTIFIER_PATTERNS = {
     "flow_id": r"^flow[ _]?id$",
-    "ip_address": r"(^|[ _])(src|dst|source|destination)?[ _]?ip([ _]|$)|ipv4_(src|dst)_addr|^(srcip|dstip)$",
+    # Whole-name matches only: MIN_IP_PKT_LEN etc. are features, not addresses.
+    "ip_address": r"^((src|dst|source|destination)[ _]?)?ip$|^ipv4_(src|dst)_addr$|^(srcip|dstip)$",
     "port": r"port$|^(sport|dsport)$|^l4_(src|dst)_port$",
     "timestamp": r"timestamp|^(stime|ltime)$|^date$",
+    "row_id": r"^(id|no\.?|index|unnamed: 0)$",
 }
 # Columns that carry the answer in another form (e.g. attack_cat next to label).
 LABEL_LIKE = r"^(label|class|attack|attack_cat|attack_type|category|target)$"
@@ -100,6 +103,9 @@ def inspect_frame(df: pd.DataFrame, label_col: str | None = None) -> dict:
     infinite = pd.Series(np.isinf(numeric.to_numpy()).sum(axis=0), index=numeric.columns)
     negative = (numeric < 0).sum()
 
+    id_cols = [c for c in feature_cols if any(_match(c, p) for p in IDENTIFIER_PATTERNS.values())]
+    content_cols = [c for c in feature_cols if c not in id_cols]
+
     report = {
         "shape": list(df.shape),
         "columns": list(df.columns),
@@ -110,19 +116,25 @@ def inspect_frame(df: pd.DataFrame, label_col: str | None = None) -> dict:
             {str(k): int(v) for k, v in df[label_col].value_counts(dropna=False).items()}
             if label_col else None
         ),
+        "label_like_counts": {
+            c: {str(k): int(v) for k, v in df[c].value_counts(dropna=False).items()}
+            for c in label_cols if c != label_col
+        },
         "missing": {c: int(v) for c, v in missing.items() if v},
         "infinite": {c: int(v) for c, v in infinite.items() if v},
         "negative": {c: int(v) for c, v in negative.items() if v},
         "duplicate_rows": int(df.duplicated().sum()),
         "duplicate_feature_rows": int(df.duplicated(subset=feature_cols).sum()) if feature_cols else 0,
+        "identifier_columns": id_cols,
+        "duplicate_content_rows": int(df.duplicated(subset=content_cols).sum()) if content_cols else 0,
         "conflicting_label_duplicates": 0,
         "leakage_candidates": leakage_candidates(df, label_col),
     }
-    if label_col and feature_cols:
-        # Identical feature vectors that carry different labels.
-        dup = df[df.duplicated(subset=feature_cols, keep=False)]
+    if label_col and content_cols:
+        # Identical flow contents (identifiers and labels ignored) that carry different labels.
+        dup = df[df.duplicated(subset=content_cols, keep=False)]
         if len(dup):
-            n_labels = dup.groupby(feature_cols, dropna=False)[label_col].nunique(dropna=False)
+            n_labels = dup.groupby(content_cols, dropna=False)[label_col].nunique(dropna=False)
             report["conflicting_label_duplicates"] = int((n_labels > 1).sum())
     return report
 
@@ -131,6 +143,7 @@ def format_report(report: dict, notes: dict | None = None) -> str:
     lines = []
     if notes:
         lines.append(f"file: {notes['path']}  (encoding {notes['encoding']}, nrows limit {notes['nrows_limit']})")
+        lines.append(f"column names from: {notes['names_source']}" + ("; UTF-8 BOM present" if notes["utf8_bom"] else ""))
         if notes["names_with_whitespace"]:
             lines.append(f"column names stripped of whitespace: {len(notes['names_with_whitespace'])}")
         if notes["duplicated_names"]:
@@ -144,13 +157,19 @@ def format_report(report: dict, notes: dict | None = None) -> str:
         lines.append(f"\nlabel counts ({report['label_column']})")
         for k, v in report["label_counts"].items():
             lines.append(f"  {k}: {v} ({v / rows:.4%})")
+    for col, counts in report["label_like_counts"].items():
+        lines.append(f"\nclass counts ({col})")
+        for k, v in counts.items():
+            lines.append(f"  {k}: {v} ({v / rows:.4%})")
     for key in ("missing", "infinite", "negative"):
         lines.append(f"\n{key} values: {sum(report[key].values())} in {len(report[key])} columns")
         for c, v in report[key].items():
             lines.append(f"  {c}: {v}")
     lines.append(f"\nduplicate rows (all columns): {report['duplicate_rows']}")
     lines.append(f"duplicate feature vectors (label columns excluded): {report['duplicate_feature_rows']}")
-    lines.append(f"feature vectors with conflicting labels: {report['conflicting_label_duplicates']}")
+    lines.append(f"duplicate flow contents (labels and identifiers {report['identifier_columns']} excluded): "
+                 f"{report['duplicate_content_rows']}")
+    lines.append(f"flow contents with conflicting labels: {report['conflicting_label_duplicates']}")
     lines.append("\ncandidate leakage fields (heuristic, review manually)")
     for flag in report["leakage_candidates"]:
         lines.append(f"  {flag['column']}: {flag['reason']}")
@@ -169,12 +188,18 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--label", help="target label column")
     parser.add_argument("--nrows", type=int, help="read only the first N rows of each file")
     parser.add_argument("--no-header", action="store_true", help="file has no header row (e.g. UNSW-NB15_1..4.csv)")
+    parser.add_argument("--names-from", type=Path,
+                        help="descriptor CSV with a 'Name' column giving column names (implies --no-header)")
     parser.add_argument("--json", type=Path, help="also write the report as JSON")
     args = parser.parse_args(argv)
+    # CICIDS2017 labels contain U+FFFD; a cp1252 console cannot print it.
+    sys.stdout.reconfigure(errors="backslashreplace")
 
+    names = read_names_file(args.names_from) if args.names_from else None
+    header = not (args.no_header or names)
     frames, all_notes = [], []
     for path in _csv_paths(args.path):
-        df, notes = read_flow_csv(path, nrows=args.nrows, header=not args.no_header)
+        df, notes = read_flow_csv(path, nrows=args.nrows, header=header, names=names)
         frames.append(df)
         all_notes.append(notes)
     if not frames:

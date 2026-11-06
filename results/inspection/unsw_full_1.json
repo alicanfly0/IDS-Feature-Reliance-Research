@@ -1,0 +1,256 @@
+{
+  "shape": [
+    700001,
+    49
+  ],
+  "columns": [
+    "srcip",
+    "sport",
+    "dstip",
+    "dsport",
+    "proto",
+    "state",
+    "dur",
+    "sbytes",
+    "dbytes",
+    "sttl",
+    "dttl",
+    "sloss",
+    "dloss",
+    "service",
+    "Sload",
+    "Dload",
+    "Spkts",
+    "Dpkts",
+    "swin",
+    "dwin",
+    "stcpb",
+    "dtcpb",
+    "smeansz",
+    "dmeansz",
+    "trans_depth",
+    "res_bdy_len",
+    "Sjit",
+    "Djit",
+    "Stime",
+    "Ltime",
+    "Sintpkt",
+    "Dintpkt",
+    "tcprtt",
+    "synack",
+    "ackdat",
+    "is_sm_ips_ports",
+    "ct_state_ttl",
+    "ct_flw_http_mthd",
+    "is_ftp_login",
+    "ct_ftp_cmd",
+    "ct_srv_src",
+    "ct_srv_dst",
+    "ct_dst_ltm",
+    "ct_src_ ltm",
+    "ct_src_dport_ltm",
+    "ct_dst_sport_ltm",
+    "ct_dst_src_ltm",
+    "attack_cat",
+    "Label"
+  ],
+  "dtypes": {
+    "srcip": "object",
+    "sport": "object",
+    "dstip": "object",
+    "dsport": "object",
+    "proto": "object",
+    "state": "object",
+    "dur": "float64",
+    "sbytes": "int64",
+    "dbytes": "int64",
+    "sttl": "int64",
+    "dttl": "int64",
+    "sloss": "int64",
+    "dloss": "int64",
+    "service": "object",
+    "Sload": "float64",
+    "Dload": "float64",
+    "Spkts": "int64",
+    "Dpkts": "int64",
+    "swin": "int64",
+    "dwin": "int64",
+    "stcpb": "int64",
+    "dtcpb": "int64",
+    "smeansz": "int64",
+    "dmeansz": "int64",
+    "trans_depth": "int64",
+    "res_bdy_len": "int64",
+    "Sjit": "float64",
+    "Djit": "float64",
+    "Stime": "int64",
+    "Ltime": "int64",
+    "Sintpkt": "float64",
+    "Dintpkt": "float64",
+    "tcprtt": "float64",
+    "synack": "float64",
+    "ackdat": "float64",
+    "is_sm_ips_ports": "int64",
+    "ct_state_ttl": "int64",
+    "ct_flw_http_mthd": "int64",
+    "is_ftp_login": "int64",
+    "ct_ftp_cmd": "int64",
+    "ct_srv_src": "int64",
+    "ct_srv_dst": "int64",
+    "ct_dst_ltm": "int64",
+    "ct_src_ ltm": "int64",
+    "ct_src_dport_ltm": "int64",
+    "ct_dst_sport_ltm": "int64",
+    "ct_dst_src_ltm": "int64",
+    "attack_cat": "object",
+    "Label": "int64"
+  },
+  "feature_types": {
+    "srcip": "categorical",
+    "sport": "numeric_stored_as_text",
+    "dstip": "categorical",
+    "dsport": "numeric_stored_as_text",
+    "proto": "categorical",
+    "state": "categorical",
+    "dur": "float",
+    "sbytes": "integer",
+    "dbytes": "integer",
+    "sttl": "integer",
+    "dttl": "integer",
+    "sloss": "integer",
+    "dloss": "integer",
+    "service": "categorical",
+    "Sload": "float",
+    "Dload": "float",
+    "Spkts": "integer",
+    "Dpkts": "integer",
+    "swin": "integer",
+    "dwin": "integer",
+    "stcpb": "integer",
+    "dtcpb": "integer",
+    "smeansz": "integer",
+    "dmeansz": "integer",
+    "trans_depth": "integer",
+    "res_bdy_len": "integer",
+    "Sjit": "float",
+    "Djit": "float",
+    "Stime": "integer",
+    "Ltime": "integer",
+    "Sintpkt": "float",
+    "Dintpkt": "float",
+    "tcprtt": "float",
+    "synack": "float",
+    "ackdat": "float",
+    "is_sm_ips_ports": "integer",
+    "ct_state_ttl": "integer",
+    "ct_flw_http_mthd": "integer",
+    "is_ftp_login": "integer",
+    "ct_ftp_cmd": "integer",
+    "ct_srv_src": "integer",
+    "ct_srv_dst": "integer",
+    "ct_dst_ltm": "integer",
+    "ct_src_ ltm": "integer",
+    "ct_src_dport_ltm": "integer",
+    "ct_dst_sport_ltm": "integer",
+    "ct_dst_src_ltm": "integer",
+    "attack_cat": "categorical",
+    "Label": "integer"
+  },
+  "label_column": "Label",
+  "label_counts": {
+    "0": 677786,
+    "1": 22215
+  },
+  "label_like_counts": {
+    "attack_cat": {
+      "nan": 677786,
+      "Generic": 7522,
+      "Exploits": 5409,
+      " Fuzzers": 5051,
+      "Reconnaissance": 1759,
+      "DoS": 1167,
+      "Backdoors": 534,
+      "Analysis": 526,
+      "Shellcode": 223,
+      "Worms": 24
+    }
+  },
+  "missing": {
+    "attack_cat": 677786
+  },
+  "infinite": {},
+  "negative": {},
+  "duplicate_rows": 59213,
+  "duplicate_feature_rows": 60279,
+  "identifier_columns": [
+    "srcip",
+    "sport",
+    "dstip",
+    "dsport",
+    "Stime",
+    "Ltime"
+  ],
+  "duplicate_content_rows": 65318,
+  "conflicting_label_duplicates": 47,
+  "leakage_candidates": [
+    {
+      "column": "srcip",
+      "reason": "name matches ip_address"
+    },
+    {
+      "column": "srcip",
+      "reason": "single-column label separator (purity 0.9925 vs majority 0.9683)"
+    },
+    {
+      "column": "sport",
+      "reason": "name matches port"
+    },
+    {
+      "column": "dstip",
+      "reason": "name matches ip_address"
+    },
+    {
+      "column": "dstip",
+      "reason": "single-column label separator (purity 0.9925 vs majority 0.9683)"
+    },
+    {
+      "column": "dsport",
+      "reason": "name matches port"
+    },
+    {
+      "column": "sttl",
+      "reason": "single-column label separator (purity 0.9924 vs majority 0.9683)"
+    },
+    {
+      "column": "Stime",
+      "reason": "name matches timestamp"
+    },
+    {
+      "column": "Ltime",
+      "reason": "name matches timestamp"
+    },
+    {
+      "column": "ct_state_ttl",
+      "reason": "single-column label separator (purity 0.9919 vs majority 0.9683)"
+    },
+    {
+      "column": "attack_cat",
+      "reason": "label-like column besides the target"
+    },
+    {
+      "column": "attack_cat",
+      "reason": "single-column label separator (purity 1.0000 vs majority 0.9683)"
+    }
+  ],
+  "files": [
+    {
+      "path": "C:\\Users\\aliwa\\OneDrive\\Desktop\\FAST NUCES\\semester 7\\CNET\\cnet project implementation\\data\\raw\\unsw_nb15\\UNSW-NB15_1.csv",
+      "encoding": "utf-8-sig",
+      "utf8_bom": true,
+      "nrows_limit": null,
+      "names_source": "names",
+      "names_with_whitespace": [],
+      "duplicated_names": []
+    }
+  ]
+}

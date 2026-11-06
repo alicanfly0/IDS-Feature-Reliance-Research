@@ -1,0 +1,83 @@
+﻿file: C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation\data\raw\unsw_nb15\UNSW_NB15_training-set.csv  (encoding utf-8-sig, nrows limit None)
+column names from: header; UTF-8 BOM present
+shape: 175341 rows x 45 columns
+
+schema (column: dtype / inferred type)
+  id: int64 / integer
+  dur: float64 / float
+  proto: object / categorical
+  service: object / categorical
+  state: object / categorical
+  spkts: int64 / integer
+  dpkts: int64 / integer
+  sbytes: int64 / integer
+  dbytes: int64 / integer
+  rate: float64 / float
+  sttl: int64 / integer
+  dttl: int64 / integer
+  sload: float64 / float
+  dload: float64 / float
+  sloss: int64 / integer
+  dloss: int64 / integer
+  sinpkt: float64 / float
+  dinpkt: float64 / float
+  sjit: float64 / float
+  djit: float64 / float
+  swin: int64 / integer
+  stcpb: int64 / integer
+  dtcpb: int64 / integer
+  dwin: int64 / integer
+  tcprtt: float64 / float
+  synack: float64 / float
+  ackdat: float64 / float
+  smean: int64 / integer
+  dmean: int64 / integer
+  trans_depth: int64 / integer
+  response_body_len: int64 / integer
+  ct_srv_src: int64 / integer
+  ct_state_ttl: int64 / integer
+  ct_dst_ltm: int64 / integer
+  ct_src_dport_ltm: int64 / integer
+  ct_dst_sport_ltm: int64 / integer
+  ct_dst_src_ltm: int64 / integer
+  is_ftp_login: int64 / integer
+  ct_ftp_cmd: int64 / integer
+  ct_flw_http_mthd: int64 / integer
+  ct_src_ltm: int64 / integer
+  ct_srv_dst: int64 / integer
+  is_sm_ips_ports: int64 / integer
+  attack_cat: object / categorical
+  label: int64 / integer
+
+label counts (label)
+  1: 119341 (68.0622%)
+  0: 56000 (31.9378%)
+
+class counts (attack_cat)
+  Normal: 56000 (31.9378%)
+  Generic: 40000 (22.8127%)
+  Exploits: 33393 (19.0446%)
+  Fuzzers: 18184 (10.3706%)
+  DoS: 12264 (6.9944%)
+  Reconnaissance: 10491 (5.9832%)
+  Analysis: 2000 (1.1406%)
+  Backdoor: 1746 (0.9958%)
+  Shellcode: 1133 (0.6462%)
+  Worms: 130 (0.0741%)
+
+missing values: 0 in 0 columns
+
+infinite values: 0 in 0 columns
+
+negative values: 0 in 0 columns
+
+duplicate rows (all columns): 0
+duplicate feature vectors (label columns excluded): 0
+duplicate flow contents (labels and identifiers ['id'] excluded): 74301
+flow contents with conflicting labels: 229
+
+candidate leakage fields (heuristic, review manually)
+  id: name matches row_id
+  id: near-unique values (175341/175341)
+  attack_cat: label-like column besides the target
+  attack_cat: single-column label separator (purity 1.0000 vs majority 0.6806)

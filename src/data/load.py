@@ -1,18 +1,20 @@
 """Read flow CSVs without silently altering them.
 
-Known release quirks this handles (CICIDS2017 especially): whitespace around
-column names, repeated column names, non-UTF-8 bytes in label strings, and
-"Infinity" tokens. Every adjustment is reported in the returned notes; the
-values themselves are not modified.
+Known release quirks this handles: whitespace around column names, repeated
+column names, non-UTF-8 bytes in label strings and "Infinity" tokens
+(CICIDS2017), a UTF-8 byte-order mark and header-less files whose names live
+in a separate file (UNSW-NB15). Every adjustment is reported in the returned
+notes; the values themselves are not modified.
 """
 from __future__ import annotations
 
+import codecs
 import csv
 from pathlib import Path
 
 import pandas as pd
 
-ENCODINGS = ("utf-8", "cp1252")
+ENCODINGS = ("utf-8-sig", "cp1252")  # utf-8-sig also reads plain UTF-8 and drops a BOM
 
 
 def _read_header(path: Path, encoding: str) -> list[str]:
@@ -20,9 +22,25 @@ def _read_header(path: Path, encoding: str) -> list[str]:
         return next(csv.reader(f))
 
 
-def read_flow_csv(path: str | Path, nrows: int | None = None, header: bool = True) -> tuple[pd.DataFrame, dict]:
-    """Return (frame, notes). Column names are stripped; duplicates get a .N suffix."""
+def read_names_file(path: str | Path, column: str = "Name") -> list[str]:
+    """Column names listed one per row in a descriptor CSV (e.g. NUSW-NB15_features.csv)."""
+    df, _ = read_flow_csv(path)
+    return df[column].astype(str).tolist()
+
+
+def read_flow_csv(
+    path: str | Path,
+    nrows: int | None = None,
+    header: bool = True,
+    names: list[str] | None = None,
+) -> tuple[pd.DataFrame, dict]:
+    """Return (frame, notes). Column names are stripped; duplicates get a .N suffix.
+
+    For header-less files pass `header=False` and, if known, `names`.
+    """
     path = Path(path)
+    with open(path, "rb") as f:
+        has_bom = f.read(3) == codecs.BOM_UTF8
     last_error = None
     for encoding in ENCODINGS:
         try:
@@ -40,24 +58,28 @@ def read_flow_csv(path: str | Path, nrows: int | None = None, header: bool = Tru
     else:
         raise last_error
 
-    notes = {"path": str(path), "encoding": encoding, "nrows_limit": nrows}
+    notes = {"path": str(path), "encoding": encoding, "utf8_bom": has_bom, "nrows_limit": nrows}
     if header:
-        stripped = [c.strip() for c in raw_header]
-        notes["names_with_whitespace"] = [c for c in raw_header if c != c.strip()]
-        seen: dict[str, int] = {}
-        duplicated, names = [], []
-        for name in stripped:
-            if name in seen:
-                seen[name] += 1
-                duplicated.append(name)
-                names.append(f"{name}.{seen[name]}")
-            else:
-                seen[name] = 0
-                names.append(name)
-        notes["duplicated_names"] = duplicated
-        df.columns = names
+        raw_names = raw_header
+    elif names is not None:
+        if len(names) != df.shape[1]:
+            raise ValueError(f"{len(names)} names given for {df.shape[1]} columns in {path.name}")
+        raw_names = list(names)
     else:
-        df.columns = [f"col_{i}" for i in range(df.shape[1])]
-        notes["names_with_whitespace"] = []
-        notes["duplicated_names"] = []
+        raw_names = [f"col_{i}" for i in range(df.shape[1])]
+    notes["names_source"] = "header" if header else ("names" if names is not None else "positional")
+
+    notes["names_with_whitespace"] = [c for c in raw_names if c != c.strip()]
+    seen: dict[str, int] = {}
+    duplicated, final = [], []
+    for name in (c.strip() for c in raw_names):
+        if name in seen:
+            seen[name] += 1
+            duplicated.append(name)
+            final.append(f"{name}.{seen[name]}")
+        else:
+            seen[name] = 0
+            final.append(name)
+    notes["duplicated_names"] = duplicated
+    df.columns = final
     return df, notes

@@ -6,10 +6,14 @@
 #    substitutes. Any change of source is a decision-log entry first.
 #  - `null` means unknown. Every value carries its evidence in `source` /
 #    `confirmed`. "UNCONFIRMED" values must be checked against downloaded files.
-#  - sha256 fields are filled from our own download (python -m src.data.manifest
-#    --hash) and are then the reference for every later run. Publishers did not
-#    post checksums on the pages checked on 2026-11-07.
-#  - Nothing has been downloaded. status: not_acquired for every entry.
+#  - sha256 fields come from our own downloads on 2026-11-07 and are the
+#    reference for every later run (`python -m src.data.acquire verify all`).
+#    Where a publisher ships its own checksum (CIC .md5 files, UQ BagIt
+#    sha1 manifest) it was checked as well and is recorded as publisher_*.
+#  - status: verified = every listed file present and hash-recorded;
+#    not_acquired = nothing downloaded yet.
+#  - Facts measured from the files are in `measured:` blocks; inspection
+#    reports are in results/inspection/.
 #
 # Web pages were checked on 2026-11-07. Paper facts cite PDFs in ../project/
 # (physical page numbers) as audited in CNET_FULL_PAPER_AUDIT.md.
@@ -22,33 +26,39 @@ datasets:
   # ---------------------------------------------------------------------------
   cicids2017_original:
     name: CIC-IDS2017 (original CICFlowMeter CSV release)
-    status: not_acquired
+    status: verified
     local_dir: data/raw/cicids2017_original
     publisher: Canadian Institute for Cybersecurity, University of New Brunswick
     official_source:
       landing_page: https://www.unb.ca/cic/datasets/ids-2017.html
       download: http://cicresearch.ca/CICDataset/CIC-IDS-2017/
       access_notes: >
-        Download page is a registration form (name, email, organization,
-        country). On 2026-11-07 it returned "Server error. Please try again
-        later." and showed no file list. Plain http, not https.
+        Download page (now https) is a registration form: first/last name,
+        email, organization, job title, country. After submitting, a session
+        cookie unlocks browse.php -> CIC-IDS-2017/CSVs/ (MachineLearningCSV.zip,
+        GeneratedLabelledFlows.zip, each with a publisher .md5) and
+        CIC-IDS-2017/PCAPs/. The server sends no Content-Length. Registered
+        2026-11-07 (A. Abbasi, FAST NUCES).
     version: null  # no version identifier or DOI published on the landing page
     files:
       - name: MachineLearningCSV.zip
-        purpose: CICFlowMeter features + label, identifiers removed (expected)
-        size_bytes: null
-        sha256: null
-        confirmed: name only (landing page)
+        purpose: CICFlowMeter features + label, identifiers removed
+        size_bytes: 235102953
+        sha256: c3f26274b36c837ccf28ffd2dbf4582941c30b3ee70a635c6e5b2f87c4727928
+        publisher_md5: 4f83860afbf29cac8163854095bf6cf7  # verified; CIC's .md5 names it "MachineLearningCVE.zip"
+        extract_to: extracted   # unpacks to extracted/MachineLearningCVE/<8 day CSVs>
+        download: &cic_form {method: manual, instructions: "submit the registration form at https://cicresearch.ca/CICDataset/CIC-IDS-2017/, open CIC-IDS-2017/CSVs/ and save the file into data/raw/cicids2017_original/"}
       - name: GeneratedLabelledFlows.zip
-        purpose: labelled flows incl. Flow ID / IPs / ports / timestamp (expected)
-        size_bytes: null
-        sha256: null
-        confirmed: name only (landing page)
-      - name: PCAPs (per day)
-        purpose: NOT planned for download; needed only if we re-extract flows
+        purpose: labelled flows incl. Flow ID / IPs / ports / timestamp
+        size_bytes: 283876488
+        sha256: 7bdbef286f8893f31c6db12105fa097fa5c2dcc6733179037a08129d150ea27a
+        publisher_md5: 5ca3f8f69e3514950681615824149973  # verified
+        extract_to: extracted   # zip folder "TrafficLabelling " (trailing space) is written as extracted/TrafficLabelling/
+        download: *cic_form
+    not_downloaded:
+      - name: PCAPs (per day, CIC-IDS-2017/PCAPs/ on the download server)
+        reason: only needed to re-extract flows ourselves
         size_note: "Landing page table 'Size (GB)': Mon 11.0, Tue 11, Wed 13, Thu 7.8, Fri 8.3 (not stated whether PCAP-only)"
-        sha256: null
-        confirmed: per-day sizes only
     license: >
       No named license. Page says the dataset is publicly available for
       researchers and users should cite the related paper. Redistribution terms
@@ -58,25 +68,44 @@ datasets:
       Intrusion Detection Dataset and Intrusion Traffic Characterization",
       ICISSP 2018.
     records:
-      value: null
+      value: 2830743   # measured: sum of the 8 MachineLearningCVE day files
       notes: >
-        Phase II states 2.83 million flows / 15 classes and attributes it to [1];
-        [1] actually uses a 225,745-row DDoS subset (Nezhadsistani p.5). Total
-        must be measured from the files.
+        Matches the "2.83 million" in Phase II, but Phase II attributes it to
+        [1]; [1] uses only the 225,745-row Friday-afternoon DDoS file (D-008).
+      measured_per_file:   # MachineLearningCVE/*.csv
+        Monday-WorkingHours: 529918
+        Tuesday-WorkingHours: 445909
+        Wednesday-workingHours: 692703
+        Thursday-WorkingHours-Morning-WebAttacks: 170366
+        Thursday-WorkingHours-Afternoon-Infilteration: 288602
+        Friday-WorkingHours-Morning: 191033
+        Friday-WorkingHours-Afternoon-PortScan: 286467
+        Friday-WorkingHours-Afternoon-DDos: 225745   # = Nezhadsistani [1] subset size; 128,027 DDoS / 97,718 BENIGN
     feature_schema:
-      count: null
-      source: landing page says "more than 80 network flow features"
+      count: 78   # measured: 79 columns = 78 features + Label (MachineLearningCVE)
+      source: measured; landing page says "more than 80 network flow features"
       paper_reported:
-        - "Nezhadsistani et al. [1]: 78 features + label in the DDoS subset (Table 3)"
-      expected_quirks_to_verify:
-        - leading/trailing whitespace in column names
-        - a duplicated "Fwd Header Length" column
-        - '"Infinity" / NaN values in Flow Bytes/s and Flow Packets/s'
-        - non-UTF-8 byte in "Web Attack" label strings
-      identifier_fields_expected: [Flow ID, Source IP, Source Port, Destination IP, Timestamp]
-      confirmed: false
+        - "Nezhadsistani et al. [1]: 78 features + label in the DDoS subset (Table 3); matches"
+      measured_quirks:
+        - leading whitespace on 65 of 79 column names
+        - '"Fwd Header Length" appears twice (second read as "Fwd Header Length.1")'
+        - 'Infinity in Flow Bytes/s (1,509) and Flow Packets/s (2,867); NaN in Flow Bytes/s'
+        - 'labels contain U+FFFD literally ("Web Attack � Brute Force"); the original dash was lost before release'
+        - 'Init_Win_bytes_forward/backward = -1 in 1,001,189 / 1,441,552 rows (sentinel, not a window size)'
+        - negative Flow Duration (115 rows), Fwd Header Length and min_seg_size_forward (35 rows)
+        - 'constant in every day file: Bwd PSH Flags, Bwd URG Flags, Fwd/Bwd Avg Bytes/Bulk, Fwd/Bwd Avg Packets/Bulk, Fwd/Bwd Avg Bulk Rate (Fwd URG Flags is NOT constant, contrary to Phase II)'
+      identifier_fields: >
+        MachineLearningCVE contains only Destination Port. TrafficLabelling
+        (GeneratedLabelledFlows.zip) has 85 columns: Flow ID, Source IP,
+        Source Port, Destination IP, Destination Port, Protocol, Timestamp +
+        the same 77 remaining features + Label; see results/inspection/cic2017_glf_*.
+      traffic_labelling_quirks:
+        - 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv is cp1252 (labels use a real en dash) and has 458,968 rows of which 288,602 are completely empty; 170,366 real rows, as in MachineLearningCVE'
+        - other 7 files are UTF-8 with BOM; real row counts equal MachineLearningCVE file by file (total 2,830,743)
+      confirmed: true
     labeling:
-      columns: null  # expected a "Label" column; exact name UNCONFIRMED
+      columns: [Label]
+      measured_counts: {BENIGN: 2273097, DoS Hulk: 231073, PortScan: 158930, DDoS: 128027, DoS GoldenEye: 10293, FTP-Patator: 7938, SSH-Patator: 5897, DoS slowloris: 5796, DoS Slowhttptest: 5499, Bot: 1966, "Web Attack � Brute Force": 1507, "Web Attack � XSS": 652, Infiltration: 36, "Web Attack � Sql Injection": 21, Heartbleed: 11}
       classes_from_landing_page: >
         BENIGN plus Brute Force FTP/SSH, DoS (slowloris, Slowhttptest, Hulk,
         GoldenEye), Heartbleed, Web Attack (Brute Force, XSS, SQL Injection),
@@ -115,9 +144,12 @@ datasets:
       D-004 required before either version is downloaded.
     files:
       - name: dataset.zip
-        size_bytes: null
+        size_bytes: 333841436   # HTTP Content-Length, Last-Modified 2021-11-24
         sha256: null
-        confirmed: link only; contents, size and per-day CSV names UNCONFIRMED
+        extract_to: extracted
+        download:
+          method: direct
+          url: https://intrusion-detection.distrinet-research.be/WTMC2021/Dataset/dataset.zip
     license: UNCONFIRMED (no license text on pages checked). Page asks users to cite the paper.
     citation: >
       G. Engelen, V. Rimmer, W. Joosen, "Troubleshooting an Intrusion Detection
@@ -153,27 +185,57 @@ datasets:
   # ---------------------------------------------------------------------------
   unsw_nb15:
     name: UNSW-NB15 (Argus/Bro CSV release)
-    status: not_acquired
+    status: verified
     local_dir: data/raw/unsw_nb15
     publisher: UNSW Canberra Cyber (Moustafa & Slay)
     official_source:
       landing_page: https://research.unsw.edu.au/projects/unsw-nb15-dataset
-      download: UNSW SharePoint folder linked as "HERE" from the landing page
+      download: https://unsw-my.sharepoint.com/:f:/g/personal/z5025758_ad_unsw_edu_au/EnuQZZn3XuNBjgfcUu4DIVMBLCHyoLHqOswirpOQifr1ag?e=gKWkLS
       access_notes: >
-        SharePoint link returned HTTP 403 to automated fetch on 2026-11-07;
-        must be opened manually in a browser. Landing page last updated
-        02 June 2021.
-    version: null
+        SharePoint share linked as "HERE" from the landing page (landing page
+        last updated 02 June 2021). Folder "UNSW-NB15 dataset" holds Argus,
+        BRO, CSV, pcap and Reports subfolders, all modified 2024-02-08. Only
+        the CSV Files folder is downloaded. Note the official file names
+        "NUSW-NB15_features.csv" and "NUSW-NB15_GT.csv" (sic); the landing
+        page calls them UNSW-NB15_*. Sizes are byte counts from the server.
+    version: SharePoint copy, files modified 2024-02-08
     files:
-      - {name: UNSW-NB15_1.csv, size_bytes: null, sha256: null}
-      - {name: UNSW-NB15_2.csv, size_bytes: null, sha256: null}
-      - {name: UNSW-NB15_3.csv, size_bytes: null, sha256: null}
-      - {name: UNSW-NB15_4.csv, size_bytes: null, sha256: null}
-      - {name: UNSW-NB15_features.csv, size_bytes: null, sha256: null}
-      - {name: UNSW-NB15_GT.csv, size_bytes: null, sha256: null}
-      - {name: UNSW-NB15_LIST_EVENTS.csv, size_bytes: null, sha256: null}
-      - {name: UNSW_NB15_training-set.csv, size_bytes: null, sha256: null}
-      - {name: UNSW_NB15_testing-set.csv, size_bytes: null, sha256: null}
+      - name: UNSW-NB15_1.csv
+        size_bytes: 168979718
+        sha256: 7d851bbeabd27894ce39c8e78835c73341fc946652fb7743b9eff193b55eb511
+        download: &unsw_share {method: sharepoint_share, share_url: "https://unsw-my.sharepoint.com/:f:/g/personal/z5025758_ad_unsw_edu_au/EnuQZZn3XuNBjgfcUu4DIVMBLCHyoLHqOswirpOQifr1ag?e=gKWkLS", site: "https://unsw-my.sharepoint.com/personal/z5025758_ad_unsw_edu_au", source_path: "/personal/z5025758_ad_unsw_edu_au/Documents/UNSW-NB15 dataset/CSV Files/UNSW-NB15_1.csv"}
+      - name: UNSW-NB15_2.csv
+        size_bytes: 165221021
+        sha256: 6130ad02873cc6069ae695cf2844f2e8c2e9a9a1b7532dd82ab8f202757cacf8
+        download: {<<: *unsw_share, source_path: "/personal/z5025758_ad_unsw_edu_au/Documents/UNSW-NB15 dataset/CSV Files/UNSW-NB15_2.csv"}
+      - name: UNSW-NB15_3.csv
+        size_bytes: 154588103
+        sha256: ae990a96c3dfcd425ce2801aadb1727a34d5e0ae6d8215dbcdae60dedfaef640
+        download: {<<: *unsw_share, source_path: "/personal/z5025758_ad_unsw_edu_au/Documents/UNSW-NB15 dataset/CSV Files/UNSW-NB15_3.csv"}
+      - name: UNSW-NB15_4.csv
+        size_bytes: 97588754
+        sha256: cdf563692d51d405541dd659ddcdad9fa01f001f05fe9fc4b67f00ca12fbc96a
+        download: {<<: *unsw_share, source_path: "/personal/z5025758_ad_unsw_edu_au/Documents/UNSW-NB15 dataset/CSV Files/UNSW-NB15_4.csv"}
+      - name: NUSW-NB15_features.csv
+        size_bytes: 4044
+        sha256: c55f19cceebb6360dc50f44f8a5f246ccefbcf8a6c604ac1ad46e643869cafce
+        download: {<<: *unsw_share, source_path: "/personal/z5025758_ad_unsw_edu_au/Documents/UNSW-NB15 dataset/CSV Files/NUSW-NB15_features.csv"}
+      - name: NUSW-NB15_GT.csv
+        size_bytes: 86426111
+        sha256: 6d27542cb6457db599e0a78274ac141fec0296531f00ac5569551a276c5ab1a8
+        download: {<<: *unsw_share, source_path: "/personal/z5025758_ad_unsw_edu_au/Documents/UNSW-NB15 dataset/CSV Files/NUSW-NB15_GT.csv"}
+      - name: UNSW-NB15_LIST_EVENTS.csv
+        size_bytes: 4639
+        sha256: 5b40f8128e2c87e691157c76debde04c328b0eb66bab97f1e7e17625f84497f2
+        download: {<<: *unsw_share, source_path: "/personal/z5025758_ad_unsw_edu_au/Documents/UNSW-NB15 dataset/CSV Files/UNSW-NB15_LIST_EVENTS.csv"}
+      - name: UNSW_NB15_training-set.csv
+        size_bytes: 32293018
+        sha256: bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa
+        download: {<<: *unsw_share, source_path: "/personal/z5025758_ad_unsw_edu_au/Documents/UNSW-NB15 dataset/CSV Files/Training and Testing Sets/UNSW_NB15_training-set.csv"}
+      - name: UNSW_NB15_testing-set.csv
+        size_bytes: 15380800
+        sha256: 734fe6642edf758f7c94d7d9149426b49d202fe8e7bf0bef47392489c3c0a559
+        download: {<<: *unsw_share, source_path: "/personal/z5025758_ad_unsw_edu_au/Documents/UNSW-NB15 dataset/CSV Files/Training and Testing Sets/UNSW_NB15_testing-set.csv"}
     license: >
       "Free use ... for academic research purposes is hereby granted in
       perpetuity"; commercial use must be agreed with the authors.
@@ -183,26 +245,41 @@ datasets:
       citations).
     records:
       full_csvs: 2540044        # landing page
-      training_set: 175341      # landing page
-      testing_set: 82332        # landing page
+      training_set: 175341      # landing page; measured 175341
+      testing_set: 82332        # landing page; measured 82332
+      measured_full_csvs: 2540047   # 700,001 x 3 + 440,044; 3 more than the landing page; 321,283 attacks
+      measured_partition_counts:
+        training_set: {Normal: 56000, Generic: 40000, Exploits: 33393, Fuzzers: 18184, DoS: 12264, Reconnaissance: 10491, Analysis: 2000, Backdoor: 1746, Shellcode: 1133, Worms: 130}
+        testing_set: {Normal: 37000, Generic: 18871, Exploits: 11132, Fuzzers: 6062, DoS: 4089, Reconnaissance: 3496, Analysis: 677, Backdoor: 583, Shellcode: 378, Worms: 44}
       paper_reported:
         - >
           Fang et al. [3]: Normal-vs-DoS subset 92,998 normal / 16,353 DoS;
-          train 55,998 + 12,264, test 37,000 + 4,089 (p.22). These counts look
-          close to the official training/testing-set partition rather than a
-          70/30 stratified split (hypothesis, D-009).
+          train 55,998 + 12,264, test 37,000 + 4,089 (p.22). The DoS counts and
+          the test Normal count equal the official partition exactly; train
+          Normal is 2 fewer than the official 56,000. Fang therefore used the
+          official training/testing-set partition, not a 70/30 split (D-009).
     feature_schema:
-      count: 49  # "49 features with the class label" (landing page)
+      count: 49  # "49 features with the class label" (landing page); measured 49 columns in UNSW-NB15_1..4
       paper_reported: ["Fang et al. [3]: 47 feature types"]
       notes: >
-        The full CSVs have no header row (column names in UNSW-NB15_features.csv,
-        UNCONFIRMED). The training/testing-set CSVs use a different, reduced
-        column set. Categorical: proto, service, state (Phase II / Fang).
-      identifier_fields_expected: [srcip, sport, dstip, dsport, stime, ltime]
-      confirmed: false
+        UNSW-NB15_1..4.csv have no header row; names come from
+        NUSW-NB15_features.csv (column "Name"; 49 rows incl. attack_cat, Label).
+        UNSW_NB15_training/testing-set.csv have their own 45-column header:
+        id + 42 features + attack_cat + label (no IPs, ports or times).
+        All UNSW CSVs start with a UTF-8 BOM. Categorical: proto, service,
+        state (+ srcip, dstip in the full CSVs).
+      measured_quirks:
+        - 'attack_cat has whitespace variants (" Fuzzers", " Fuzzers ", " Reconnaissance ", " Shellcode ") and both "Backdoor" and "Backdoors" in the full CSVs; normal rows have attack_cat empty'
+        - ct_flw_http_mthd and is_ftp_login are empty in most rows of UNSW-NB15_2..4
+        - sport / dsport partly stored as text (hex values and "-")
+        - training-set 42.4% and testing-set 34.5% rows duplicate another row once id is ignored
+        - '8,541 testing-set rows (10.4%) have an exact content twin in the training set; 49% of DoS test rows have a training twin, mostly labelled as another class (Exploits, Backdoor, Analysis ...)'
+        - 'within the Normal/DoS scope: 202/4,089 DoS and 1,193/37,000 Normal test rows have a Normal/DoS training twin'
+      identifier_fields: [srcip, sport, dstip, dsport, Stime, Ltime]   # full CSVs; "id" (row number) in training/testing sets
+      confirmed: true
     labeling:
-      columns: null  # expected label (0/1) and attack_cat; UNCONFIRMED
-      classes: [Normal, Fuzzers, Analysis, Backdoors, DoS, Exploits, Generic, Reconnaissance, Shellcode, Worms]
+      columns: "full CSVs: Label (0/1) + attack_cat; training/testing sets: label (0/1) + attack_cat"
+      classes: [Normal, Fuzzers, Analysis, Backdoor, DoS, Exploits, Generic, Reconnaissance, Shellcode, Worms]
       notes: >
         Fang [3] defines normal as the positive class and DoS as the negative
         class (p.14). Metric polarity must be explicit when comparing.
@@ -215,21 +292,31 @@ datasets:
   # ---------------------------------------------------------------------------
   nf_unsw_nb15_v2:
     name: NF-UNSW-NB15-v2 (UQ NetFlow v2 feature set)
-    status: not_acquired
+    status: verified
     local_dir: data/raw/nf_unsw_nb15_v2
     publisher: University of Queensland (Sarhan, Layeghy, Portmann)
     official_source:
       landing_page: https://staff.itee.uq.edu.au/marius/NIDS_datasets/
       download: https://rdm.uq.edu.au/files/8c6e2a00-ef9c-11ed-827d-e762de186848
       access_notes: >
-        RDM file page is JavaScript-rendered; automated fetch returned an empty
-        body. File name, size and DOI UNCONFIRMED. Do not confuse with
-        NF-UNSW-NB15 (v1, 1,623,118 flows), NF-UNSW-NB15-v3 (53 features) or
-        CIC-UNSW-NB15 on the same page.
-    version: v2
+        RDM page (UQ eSpace record UQ:ffbb0c1, Open Access) is rendered by
+        JavaScript; its "Download file" button calls
+        api.rdm.uq.edu.au/datasets/<uuid>/download, which returns a one-hour
+        signed URL to UQ's S3 bucket (object fe6cb615d161452c_MOHANAD_A4706.zip,
+        Last-Modified 2023-05-15). Do not confuse with NF-UNSW-NB15 (v1,
+        1,623,118 flows), NF-UNSW-NB15-v3 (53 features) or CIC-UNSW-NB15 on
+        the same page.
+    version: v2 (UQ RDM object last modified 2023-05-15)
     files:
-      - {name: null, size_bytes: null, sha256: null, confirmed: false}
-    license: UNCONFIRMED (no dataset license on landing page; CC BY 4.0 is NOT confirmed)
+      - name: NF-UNSW-NB15-v2.zip   # local name; server object is fe6cb615d161452c_MOHANAD_A4706.zip
+        size_bytes: 33877423
+        sha256: 0e42c11dc9799a1e0851ff0b98c2ed1b47c56331a6eb99ba14c800cfe94d03ed
+        extract_to: extracted
+        download: {method: uq_rdm, uuid: 8c6e2a00-ef9c-11ed-827d-e762de186848}
+    license: >
+      "Permitted Re-Use with Commercial Use Restriction" (UQ RDM dataset
+      licence; terms at guides.library.uq.edu.au/deposit_your_data/terms_and_conditions).
+      Academic use granted after citing the paper; commercial use by agreement.
     citation: >
       M. Sarhan, S. Layeghy, M. Portmann, "Towards a Standard Feature Set for
       Network Intrusion Detection System Datasets", Mobile Networks and
@@ -245,15 +332,29 @@ datasets:
           Wardana et al. [2] Table 3 (p.5): N1 NF-UNSW-NB15 normal 1,911,666 /
           anomalous 75,079 (sum 1,986,745), which does not match the official
           totals above. No filtering step is described (D-001).
+    publisher_checksums: >
+      Zip is a BagIt bag (bagging date 2023-05-11); manifest-sha1.txt verified:
+      data/NF-UNSW-NB15-v2.csv dde9a9e38009ec60121cbb4fd884bf2c7cf5c0b0,
+      data/NetFlow_v2_Features.csv 6cf84d2d76c29321175d9429996d7cda2f3b15d6.
+    measured:
+      csv: extracted/fe6cb615d161452c_MOHANAD_A4706/data/NF-UNSW-NB15-v2.csv
+      rows: 2390275          # = landing page total
+      columns: 45            # 43 features + Label + Attack
+      label_counts: {0: 2295222, 1: 95053}   # = landing page
+      attack_counts: {Benign: 2295222, Exploits: 31551, Fuzzers: 22310, Generic: 16560, Reconnaissance: 12779, DoS: 5794, Analysis: 2299, Backdoor: 2169, Shellcode: 1427, Worms: 164}
+      missing_or_infinite: 0
+      duplicate_rows_all_columns: 0
+      duplicate_rows_on_39_wardana_inputs_plus_labels: 2153276   # 90.1%; no conflicting labels
     feature_schema:
-      count: 43  # "43 extended NetFlow features" (landing page)
+      count: 43  # landing page; confirmed by the CSV header and NetFlow_v2_Features.csv
       paper_reported:
         - "Wardana [2] p.5: 45 fields, 40 used. Table 2 lists 39 fields + Label. Table 6: input dimension 39."
+        - "Resolved (D-001): 45 columns = 43 features + Label + Attack; Wardana's 39 = the 43 minus the 4 IP/port fields, exact set match."
       wardana_table2_inputs: [PROTOCOL, L7_PROTO, IN_BYTES, IN_PKTS, OUT_BYTES, OUT_PKTS, TCP_FLAGS, CLIENT_TCP_FLAGS, SERVER_TCP_FLAGS, FLOW_DURATION_MILLISECONDS, DURATION_IN, DURATION_OUT, MIN_TTL, MAX_TTL, LONGEST_FLOW_PKT, SHORTEST_FLOW_PKT, MIN_IP_PKT_LEN, MAX_IP_PKT_LEN, SRC_TO_DST_SECOND_BYTES, DST_TO_SRC_SECOND_BYTES, RETRANSMITTED_IN_BYTES, RETRANSMITTED_IN_PKTS, RETRANSMITTED_OUT_BYTES, RETRANSMITTED_OUT_PKTS, SRC_TO_DST_AVG_THROUGHPUT, DST_TO_SRC_AVG_THROUGHPUT, NUM_PKTS_UP_TO_128_BYTES, NUM_PKTS_128_TO_256_BYTES, NUM_PKTS_256_TO_512_BYTES, NUM_PKTS_512_TO_1024_BYTES, NUM_PKTS_1024_TO_1514_BYTES, TCP_WIN_MAX_IN, TCP_WIN_MAX_OUT, ICMP_TYPE, ICMP_IPV4_TYPE, DNS_QUERY_ID, DNS_QUERY_TYPE, DNS_TTL_ANSWER, FTP_COMMAND_RET_CODE]
-      identifier_fields_expected: [IPV4_SRC_ADDR, L4_SRC_PORT, IPV4_DST_ADDR, L4_DST_PORT]
-      confirmed: false
+      identifier_fields: [IPV4_SRC_ADDR, L4_SRC_PORT, IPV4_DST_ADDR, L4_DST_PORT]
+      confirmed: true
     labeling:
-      columns: null  # expected Label (binary) and Attack (class); UNCONFIRMED
+      columns: [Label, Attack]   # Label 0/1; Attack = class name ("Benign" for normal)
       notes: Wardana uses binary normal/anomaly only.
     split_policy: undecided
     intended_experiments:

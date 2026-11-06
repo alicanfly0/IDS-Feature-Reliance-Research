@@ -1,0 +1,96 @@
+﻿file: C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation\data\raw\unsw_nb15\UNSW-NB15_1.csv  (encoding utf-8-sig, nrows limit None)
+column names from: names; UTF-8 BOM present
+shape: 700001 rows x 49 columns
+
+schema (column: dtype / inferred type)
+  srcip: object / categorical
+  sport: object / numeric_stored_as_text
+  dstip: object / categorical
+  dsport: object / numeric_stored_as_text
+  proto: object / categorical
+  state: object / categorical
+  dur: float64 / float
+  sbytes: int64 / integer
+  dbytes: int64 / integer
+  sttl: int64 / integer
+  dttl: int64 / integer
+  sloss: int64 / integer
+  dloss: int64 / integer
+  service: object / categorical
+  Sload: float64 / float
+  Dload: float64 / float
+  Spkts: int64 / integer
+  Dpkts: int64 / integer
+  swin: int64 / integer
+  dwin: int64 / integer
+  stcpb: int64 / integer
+  dtcpb: int64 / integer
+  smeansz: int64 / integer
+  dmeansz: int64 / integer
+  trans_depth: int64 / integer
+  res_bdy_len: int64 / integer
+  Sjit: float64 / float
+  Djit: float64 / float
+  Stime: int64 / integer
+  Ltime: int64 / integer
+  Sintpkt: float64 / float
+  Dintpkt: float64 / float
+  tcprtt: float64 / float
+  synack: float64 / float
+  ackdat: float64 / float
+  is_sm_ips_ports: int64 / integer
+  ct_state_ttl: int64 / integer
+  ct_flw_http_mthd: int64 / integer
+  is_ftp_login: int64 / integer
+  ct_ftp_cmd: int64 / integer
+  ct_srv_src: int64 / integer
+  ct_srv_dst: int64 / integer
+  ct_dst_ltm: int64 / integer
+  ct_src_ ltm: int64 / integer
+  ct_src_dport_ltm: int64 / integer
+  ct_dst_sport_ltm: int64 / integer
+  ct_dst_src_ltm: int64 / integer
+  attack_cat: object / categorical
+  Label: int64 / integer
+
+label counts (Label)
+  0: 677786 (96.8264%)
+  1: 22215 (3.1736%)
+
+class counts (attack_cat)
+  nan: 677786 (96.8264%)
+  Generic: 7522 (1.0746%)
+  Exploits: 5409 (0.7727%)
+   Fuzzers: 5051 (0.7216%)
+  Reconnaissance: 1759 (0.2513%)
+  DoS: 1167 (0.1667%)
+  Backdoors: 534 (0.0763%)
+  Analysis: 526 (0.0751%)
+  Shellcode: 223 (0.0319%)
+  Worms: 24 (0.0034%)
+
+missing values: 677786 in 1 columns
+  attack_cat: 677786
+
+infinite values: 0 in 0 columns
+
+negative values: 0 in 0 columns
+
+duplicate rows (all columns): 59213
+duplicate feature vectors (label columns excluded): 60279
+duplicate flow contents (labels and identifiers ['srcip', 'sport', 'dstip', 'dsport', 'Stime', 'Ltime'] excluded): 65318
+flow contents with conflicting labels: 47
+
+candidate leakage fields (heuristic, review manually)
+  srcip: name matches ip_address
+  srcip: single-column label separator (purity 0.9925 vs majority 0.9683)
+  sport: name matches port
+  dstip: name matches ip_address
+  dstip: single-column label separator (purity 0.9925 vs majority 0.9683)
+  dsport: name matches port
+  sttl: single-column label separator (purity 0.9924 vs majority 0.9683)
+  Stime: name matches timestamp
+  Ltime: name matches timestamp
+  ct_state_ttl: single-column label separator (purity 0.9919 vs majority 0.9683)
+  attack_cat: label-like column besides the target
+  attack_cat: single-column label separator (purity 1.0000 vs majority 0.9683)

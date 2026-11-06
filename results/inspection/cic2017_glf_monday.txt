@@ -1,0 +1,139 @@
+﻿file: C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation\data\raw\cicids2017_original\extracted\TrafficLabelling\Monday-WorkingHours.pcap_ISCX.csv  (encoding utf-8-sig, nrows limit None)
+column names from: header
+column names stripped of whitespace: 70
+duplicated column names (renamed .N): ['Fwd Header Length']
+shape: 529918 rows x 85 columns
+
+schema (column: dtype / inferred type)
+  Flow ID: object / categorical
+  Source IP: object / categorical
+  Source Port: int64 / integer
+  Destination IP: object / categorical
+  Destination Port: int64 / integer
+  Protocol: int64 / integer
+  Timestamp: object / categorical
+  Flow Duration: int64 / integer
+  Total Fwd Packets: int64 / integer
+  Total Backward Packets: int64 / integer
+  Total Length of Fwd Packets: float64 / float
+  Total Length of Bwd Packets: float64 / float
+  Fwd Packet Length Max: float64 / float
+  Fwd Packet Length Min: float64 / float
+  Fwd Packet Length Mean: float64 / float
+  Fwd Packet Length Std: float64 / float
+  Bwd Packet Length Max: float64 / float
+  Bwd Packet Length Min: float64 / float
+  Bwd Packet Length Mean: float64 / float
+  Bwd Packet Length Std: float64 / float
+  Flow Bytes/s: float64 / float
+  Flow Packets/s: float64 / float
+  Flow IAT Mean: float64 / float
+  Flow IAT Std: float64 / float
+  Flow IAT Max: float64 / float
+  Flow IAT Min: float64 / float
+  Fwd IAT Total: float64 / float
+  Fwd IAT Mean: float64 / float
+  Fwd IAT Std: float64 / float
+  Fwd IAT Max: float64 / float
+  Fwd IAT Min: float64 / float
+  Bwd IAT Total: float64 / float
+  Bwd IAT Mean: float64 / float
+  Bwd IAT Std: float64 / float
+  Bwd IAT Max: float64 / float
+  Bwd IAT Min: float64 / float
+  Fwd PSH Flags: int64 / integer
+  Bwd PSH Flags: int64 / integer
+  Fwd URG Flags: int64 / integer
+  Bwd URG Flags: int64 / integer
+  Fwd Header Length: int64 / integer
+  Bwd Header Length: int64 / integer
+  Fwd Packets/s: float64 / float
+  Bwd Packets/s: float64 / float
+  Min Packet Length: float64 / float
+  Max Packet Length: float64 / float
+  Packet Length Mean: float64 / float
+  Packet Length Std: float64 / float
+  Packet Length Variance: float64 / float
+  FIN Flag Count: int64 / integer
+  SYN Flag Count: int64 / integer
+  RST Flag Count: int64 / integer
+  PSH Flag Count: int64 / integer
+  ACK Flag Count: int64 / integer
+  URG Flag Count: int64 / integer
+  CWE Flag Count: int64 / integer
+  ECE Flag Count: int64 / integer
+  Down/Up Ratio: float64 / float
+  Average Packet Size: float64 / float
+  Avg Fwd Segment Size: float64 / float
+  Avg Bwd Segment Size: float64 / float
+  Fwd Header Length.1: int64 / integer
+  Fwd Avg Bytes/Bulk: int64 / integer
+  Fwd Avg Packets/Bulk: int64 / integer
+  Fwd Avg Bulk Rate: int64 / integer
+  Bwd Avg Bytes/Bulk: int64 / integer
+  Bwd Avg Packets/Bulk: int64 / integer
+  Bwd Avg Bulk Rate: int64 / integer
+  Subflow Fwd Packets: int64 / integer
+  Subflow Fwd Bytes: int64 / integer
+  Subflow Bwd Packets: int64 / integer
+  Subflow Bwd Bytes: int64 / integer
+  Init_Win_bytes_forward: int64 / integer
+  Init_Win_bytes_backward: int64 / integer
+  act_data_pkt_fwd: int64 / integer
+  min_seg_size_forward: int64 / integer
+  Active Mean: float64 / float
+  Active Std: float64 / float
+  Active Max: float64 / float
+  Active Min: float64 / float
+  Idle Mean: float64 / float
+  Idle Std: float64 / float
+  Idle Max: float64 / float
+  Idle Min: float64 / float
+  Label: object / categorical
+
+label counts (Label)
+  BENIGN: 529918 (100.0000%)
+
+missing values: 64 in 1 columns
+  Flow Bytes/s: 64
+
+infinite values: 810 in 2 columns
+  Flow Bytes/s: 373
+  Flow Packets/s: 437
+
+negative values: 524256 in 12 columns
+  Flow Duration: 15
+  Flow Bytes/s: 9
+  Flow Packets/s: 15
+  Flow IAT Mean: 15
+  Flow IAT Max: 15
+  Flow IAT Min: 512
+  Fwd Header Length: 23
+  Bwd Header Length: 17
+  Fwd Header Length.1: 23
+  Init_Win_bytes_forward: 224495
+  Init_Win_bytes_backward: 299094
+  min_seg_size_forward: 23
+
+duplicate rows (all columns): 34
+duplicate feature vectors (label columns excluded): 34
+duplicate flow contents (labels and identifiers ['Flow ID', 'Source IP', 'Source Port', 'Destination IP', 'Destination Port', 'Timestamp'] excluded): 70696
+flow contents with conflicting labels: 0
+
+candidate leakage fields (heuristic, review manually)
+  Flow ID: name matches flow_id
+  Source IP: name matches ip_address
+  Source Port: name matches port
+  Destination IP: name matches ip_address
+  Destination Port: name matches port
+  Timestamp: name matches timestamp
+  Bwd PSH Flags: constant column
+  Fwd URG Flags: constant column
+  Bwd URG Flags: constant column
+  CWE Flag Count: constant column
+  Fwd Avg Bytes/Bulk: constant column
+  Fwd Avg Packets/Bulk: constant column
+  Fwd Avg Bulk Rate: constant column
+  Bwd Avg Bytes/Bulk: constant column
+  Bwd Avg Packets/Bulk: constant column
+  Bwd Avg Bulk Rate: constant column

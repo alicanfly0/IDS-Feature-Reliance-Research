@@ -1,0 +1,92 @@
+﻿file: C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation\data\raw\nf_unsw_nb15_v2\extracted\fe6cb615d161452c_MOHANAD_A4706\data\NF-UNSW-NB15-v2.csv  (encoding utf-8-sig, nrows limit None)
+column names from: header
+shape: 2390275 rows x 45 columns
+
+schema (column: dtype / inferred type)
+  IPV4_SRC_ADDR: object / categorical
+  L4_SRC_PORT: int64 / integer
+  IPV4_DST_ADDR: object / categorical
+  L4_DST_PORT: int64 / integer
+  PROTOCOL: int64 / integer
+  L7_PROTO: float64 / float
+  IN_BYTES: int64 / integer
+  IN_PKTS: int64 / integer
+  OUT_BYTES: int64 / integer
+  OUT_PKTS: int64 / integer
+  TCP_FLAGS: int64 / integer
+  CLIENT_TCP_FLAGS: int64 / integer
+  SERVER_TCP_FLAGS: int64 / integer
+  FLOW_DURATION_MILLISECONDS: int64 / integer
+  DURATION_IN: int64 / integer
+  DURATION_OUT: int64 / integer
+  MIN_TTL: int64 / integer
+  MAX_TTL: int64 / integer
+  LONGEST_FLOW_PKT: int64 / integer
+  SHORTEST_FLOW_PKT: int64 / integer
+  MIN_IP_PKT_LEN: int64 / integer
+  MAX_IP_PKT_LEN: int64 / integer
+  SRC_TO_DST_SECOND_BYTES: float64 / float
+  DST_TO_SRC_SECOND_BYTES: float64 / float
+  RETRANSMITTED_IN_BYTES: int64 / integer
+  RETRANSMITTED_IN_PKTS: int64 / integer
+  RETRANSMITTED_OUT_BYTES: int64 / integer
+  RETRANSMITTED_OUT_PKTS: int64 / integer
+  SRC_TO_DST_AVG_THROUGHPUT: int64 / integer
+  DST_TO_SRC_AVG_THROUGHPUT: int64 / integer
+  NUM_PKTS_UP_TO_128_BYTES: int64 / integer
+  NUM_PKTS_128_TO_256_BYTES: int64 / integer
+  NUM_PKTS_256_TO_512_BYTES: int64 / integer
+  NUM_PKTS_512_TO_1024_BYTES: int64 / integer
+  NUM_PKTS_1024_TO_1514_BYTES: int64 / integer
+  TCP_WIN_MAX_IN: int64 / integer
+  TCP_WIN_MAX_OUT: int64 / integer
+  ICMP_TYPE: int64 / integer
+  ICMP_IPV4_TYPE: int64 / integer
+  DNS_QUERY_ID: int64 / integer
+  DNS_QUERY_TYPE: int64 / integer
+  DNS_TTL_ANSWER: int64 / integer
+  FTP_COMMAND_RET_CODE: float64 / float
+  Label: int64 / integer
+  Attack: object / categorical
+
+label counts (Label)
+  0: 2295222 (96.0233%)
+  1: 95053 (3.9767%)
+
+class counts (Attack)
+  Benign: 2295222 (96.0233%)
+  Exploits: 31551 (1.3200%)
+  Fuzzers: 22310 (0.9334%)
+  Generic: 16560 (0.6928%)
+  Reconnaissance: 12779 (0.5346%)
+  DoS: 5794 (0.2424%)
+  Analysis: 2299 (0.0962%)
+  Backdoor: 2169 (0.0907%)
+  Shellcode: 1427 (0.0597%)
+  Worms: 164 (0.0069%)
+
+missing values: 0 in 0 columns
+
+infinite values: 0 in 0 columns
+
+negative values: 0 in 0 columns
+
+duplicate rows (all columns): 0
+duplicate feature vectors (label columns excluded): 12038
+duplicate flow contents (labels and identifiers ['IPV4_SRC_ADDR', 'L4_SRC_PORT', 'IPV4_DST_ADDR', 'L4_DST_PORT'] excluded): 2153276
+flow contents with conflicting labels: 0
+
+candidate leakage fields (heuristic, review manually)
+  IPV4_SRC_ADDR: name matches ip_address
+  IPV4_SRC_ADDR: single-column label separator (purity 0.9923 vs majority 0.9602)
+  L4_SRC_PORT: name matches port
+  IPV4_DST_ADDR: name matches ip_address
+  IPV4_DST_ADDR: single-column label separator (purity 0.9923 vs majority 0.9602)
+  L4_DST_PORT: name matches port
+  IN_BYTES: single-column label separator (purity 0.9904 vs majority 0.9602)
+  MIN_TTL: single-column label separator (purity 0.9922 vs majority 0.9602)
+  MAX_TTL: single-column label separator (purity 0.9922 vs majority 0.9602)
+  SHORTEST_FLOW_PKT: single-column label separator (purity 0.9921 vs majority 0.9602)
+  SRC_TO_DST_SECOND_BYTES: single-column label separator (purity 0.9904 vs majority 0.9602)
+  Attack: label-like column besides the target
+  Attack: single-column label separator (purity 1.0000 vs majority 0.9602)

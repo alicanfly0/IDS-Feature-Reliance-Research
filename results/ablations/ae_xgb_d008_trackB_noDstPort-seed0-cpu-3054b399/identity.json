@@ -1,0 +1,10 @@
+{
+  "run_id": "ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399",
+  "config_hash": "3054b399e71cff0fa99c156aff35ddf042092c2bc8caf5c4b3df7cefe720c97c",
+  "device": "cpu",
+  "git_commit": "fd65ad5afcef3f46c07da5e68c629069766b9849",
+  "dataset_sha256": {
+    "MachineLearningCSV.zip": "c3f26274b36c837ccf28ffd2dbf4582941c30b3ee70a635c6e5b2f87c4727928",
+    "GeneratedLabelledFlows.zip": "7bdbef286f8893f31c6db12105fa097fa5c2dcc6733179037a08129d150ea27a"
+  }
+}

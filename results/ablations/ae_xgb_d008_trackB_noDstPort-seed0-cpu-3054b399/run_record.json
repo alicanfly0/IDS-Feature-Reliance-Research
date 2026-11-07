@@ -1,0 +1,70 @@
+{
+  "identity": {
+    "run_id": "ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399",
+    "config_hash": "3054b399e71cff0fa99c156aff35ddf042092c2bc8caf5c4b3df7cefe720c97c",
+    "device": "cpu",
+    "git_commit": "fd65ad5afcef3f46c07da5e68c629069766b9849",
+    "dataset_sha256": {
+      "MachineLearningCSV.zip": "c3f26274b36c837ccf28ffd2dbf4582941c30b3ee70a635c6e5b2f87c4727928",
+      "GeneratedLabelledFlows.zip": "7bdbef286f8893f31c6db12105fa097fa5c2dcc6733179037a08129d150ea27a"
+    }
+  },
+  "split_file": "ae_xgb_d008_trackB_noDstPort-split.json",
+  "split_source": {
+    "dataset": "cicids2017_original",
+    "archive": "MachineLearningCSV.zip",
+    "archive_sha256": "c3f26274b36c837ccf28ffd2dbf4582941c30b3ee70a635c6e5b2f87c4727928",
+    "member": "MachineLearningCVE/Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+    "member_crc32": "57439907",
+    "csv_sha256": "6ff1580f5f81c0ae28a26f7631721018577f5f7c5e0feac28b795fcfe7b411ee",
+    "rules": [
+      "Flow Duration"
+    ],
+    "n_rows": 225709,
+    "strategy": "group",
+    "fractions": [
+      0.7,
+      0.15,
+      0.15
+    ],
+    "seed": 42
+  },
+  "split_fingerprint": "50bd994880abbe151738993e299b90a6e50fb5ffae235a72677bb7813c447f44",
+  "evaluation_fingerprint": "0435302bf798010dec7b4251f3a489b81ea17cbe5c9078784d5306d9d9796319",
+  "data_report_file": "data_report.json",
+  "preprocessor_file": "preprocessor.json",
+  "input_dim": 67,
+  "autoencoder": {
+    "best_epoch": 98,
+    "best_val_mse": 1.585953025241098e-06,
+    "epochs_run": 100,
+    "stopped": "reached max_epochs 100"
+  },
+  "augmentation": {
+    "enabled": false,
+    "applicable": false,
+    "n_new": 0,
+    "reason": "attack class is not the minority in training data (89577 attack vs 68421 benign)"
+  },
+  "xgboost": {
+    "best_iteration": 166,
+    "params": {
+      "n_estimators": 2000,
+      "learning_rate": 0.11,
+      "max_depth": 6,
+      "reg_alpha": 0,
+      "reg_lambda": 1,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "early_stopping_rounds": 50
+    },
+    "outside_paper_ranges": []
+  },
+  "metrics_file": "metrics.json",
+  "timings": {
+    "data_and_preprocess_s": 13.24,
+    "autoencoder_s": 119.94,
+    "xgboost_s": 2.72
+  },
+  "smoke": false
+}

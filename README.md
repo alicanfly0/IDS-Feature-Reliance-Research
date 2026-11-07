@@ -18,10 +18,14 @@ The planned baselines are:
 | MES-DNN | Wardana et al. 2026 |
 | SHAP-selected DCNN + self-attention | Fang et al. 2026 |
 
-**Status: Milestone 1A complete; first AE-XGBoost baseline run (one seed, laptop CPU).**
-The one measured result so far is AE-XGBoost on the CICIDS2017 Friday DDoS file, leakage-resistant split,
-model seed 0. Summary: `results/baselines/`; details and interpretation limits: D-016 Amendment 1 in
-`docs/decision_log.md`. No other model has been trained.
+**Status: Milestone 1B complete.**
+
+| Run (one model seed, laptop CPU) | Summary | Details |
+|---|---|---|
+| AE-XGBoost baseline on the CICIDS2017 Friday DDoS file, leakage-resistant split | `results/baselines/` | D-016 Amendment 1 in `docs/decision_log.md` |
+| `Destination Port` ablation | `results/ablations/`, `results/comparisons/` | D-018 |
+
+No other model has been trained. Shortcut diagnostics: `docs/DIAGNOSTIC_D008_SHORTCUTS.md`.
 
 | Capability | State |
 |---|---|
@@ -217,7 +221,18 @@ The diagnostics are read-only and take about 25 s. They write `results/diagnosti
 .\run.cmd -m src.experiments.shortcut_diagnostics --config configs/experiments/ae_xgb_d008_trackB.yaml --baseline-run results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e
 ```
 
-The ablation design (D-018) is **prepared but not yet run, pending review**:
+The ablation (D-018) was **run after review** (seed 0, CPU) and independently re-verified. It is scored on the same 33,486 test rows (391 BENIGN rows excluded because they become duplicates once the port is removed):
+
+| | F1 | MCC |
+|---|---|---|
+| Full model | 0.999870 | 0.999695 |
+| Without the port | 0.999818 | 0.999572 |
+
+- Exact McNemar p = 0.625: **not significant, which does not prove equivalence**.
+- One seed only; the ablated AE hit the 100-epoch cap.
+- `Destination Port` remains a candidate shortcut, not a confirmed artifact.
+
+To reproduce it:
 
 ```powershell
 .\run.cmd -m src.experiments.ae_xgb --config configs/experiments/ae_xgb_d008_trackB_noDstPort.yaml

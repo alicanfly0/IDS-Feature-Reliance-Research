@@ -1,0 +1,109 @@
+[01:52:27] new run ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399
+[01:52:30] split saved to splits/ae_xgb_d008_trackB_noDstPort-split.json
+[01:52:31] evaluation twins excluded in the 77-feature view: val 357, test 391
+[01:52:41] preprocessing: 10 constant-on-train columns dropped -> input dim 67
+[01:52:43] epoch   0  train 0.00334263  val 0.000231637  0.8s  *
+[01:52:44] epoch   1  train 0.000128441  val 8.19331e-05  1.0s  *
+[01:52:44] epoch   2  train 6.76481e-05  val 5.83478e-05  0.9s  *
+[01:52:45] epoch   3  train 5.02016e-05  val 4.43507e-05  1.0s  *
+[01:52:46] epoch   4  train 3.98109e-05  val 3.64593e-05  0.9s  *
+[01:52:47] epoch   5  train 3.27212e-05  val 3.52015e-05  0.9s  *
+[01:52:48] epoch   6  train 2.8484e-05  val 2.58931e-05  0.9s  *
+[01:52:49] epoch   7  train 2.49121e-05  val 3.24534e-05  1.0s
+[01:52:50] epoch   8  train 2.20466e-05  val 2.01418e-05  0.9s  *
+[01:52:51] epoch   9  train 1.99251e-05  val 2.21586e-05  1.0s
+[01:52:52] epoch  10  train 1.82301e-05  val 1.93692e-05  1.0s  *
+[01:52:53] epoch  11  train 1.6575e-05  val 1.58715e-05  0.9s  *
+[01:52:54] epoch  12  train 1.54361e-05  val 1.44908e-05  0.9s  *
+[01:52:55] epoch  13  train 1.4869e-05  val 1.29239e-05  1.0s  *
+[01:52:56] epoch  14  train 1.32448e-05  val 1.06883e-05  1.0s  *
+[01:52:57] epoch  15  train 1.27769e-05  val 1.10858e-05  1.0s
+[01:52:58] epoch  16  train 1.1151e-05  val 1.16547e-05  1.0s
+[01:52:59] epoch  17  train 1.14443e-05  val 1.32687e-05  0.9s
+[01:53:00] epoch  18  train 1.03681e-05  val 2.25055e-05  1.0s
+[01:53:01] epoch  19  train 1.00099e-05  val 9.02905e-06  0.9s  *
+[01:53:02] epoch  20  train 9.61321e-06  val 1.23612e-05  0.9s
+[01:53:03] epoch  21  train 9.00683e-06  val 9.08172e-06  1.0s
+[01:53:04] epoch  22  train 9.13801e-06  val 1.28383e-05  1.0s
+[01:53:05] epoch  23  train 8.48771e-06  val 8.93442e-06  1.0s  *
+[01:53:06] epoch  24  train 8.19061e-06  val 7.69884e-06  1.0s  *
+[01:53:07] epoch  25  train 8.10193e-06  val 7.12512e-06  1.0s  *
+[01:53:08] epoch  26  train 7.87706e-06  val 7.82509e-06  1.0s
+[01:53:09] epoch  27  train 7.41262e-06  val 6.17557e-06  0.9s  *
+[01:53:10] epoch  28  train 7.58812e-06  val 1.03034e-05  1.0s
+[01:53:11] epoch  29  train 6.95144e-06  val 8.02507e-06  1.0s
+[01:53:11] epoch  30  train 8.16726e-06  val 1.10049e-05  0.9s
+[01:53:12] epoch  31  train 6.04516e-06  val 6.51844e-06  1.0s
+[01:53:13] epoch  32  train 6.62663e-06  val 8.47846e-06  1.0s
+[01:53:14] epoch  33  train 7.03049e-06  val 8.76384e-05  1.0s
+[01:53:15] epoch  34  train 7.34561e-06  val 0.000211302  0.9s
+[01:53:16] epoch  35  train 9.58403e-06  val 5.15045e-06  1.0s  *
+[01:53:17] epoch  36  train 5.78165e-06  val 7.12433e-06  1.0s
+[01:53:18] epoch  37  train 5.69162e-06  val 5.57165e-06  1.0s
+[01:53:19] epoch  38  train 5.82066e-06  val 9.58222e-06  1.0s
+[01:53:20] epoch  39  train 6.26671e-06  val 4.11723e-06  1.0s  *
+[01:53:21] epoch  40  train 5.462e-06  val 4.93049e-06  1.0s
+[01:53:22] epoch  41  train 5.2399e-06  val 4.6516e-06  1.0s
+[01:53:23] epoch  42  train 5.51328e-06  val 6.98887e-06  1.0s
+[01:53:24] epoch  43  train 5.27729e-06  val 3.7567e-06  1.1s  *
+[01:53:26] epoch  44  train 5.57864e-06  val 4.93443e-06  1.1s
+[01:53:27] epoch  45  train 4.92019e-06  val 5.24167e-06  1.1s
+[01:53:28] epoch  46  train 5.06302e-06  val 5.28734e-06  1.2s
+[01:53:29] epoch  47  train 5.14907e-06  val 1.21132e-05  1.0s
+[01:53:30] epoch  48  train 5.07478e-06  val 3.59375e-06  1.0s  *
+[01:53:31] epoch  49  train 4.70117e-06  val 9.67968e-06  1.1s
+[01:53:32] epoch  50  train 4.78912e-06  val 3.50408e-06  1.0s  *
+[01:53:33] epoch  51  train 4.71305e-06  val 4.14774e-06  1.1s
+[01:53:34] epoch  52  train 4.44242e-06  val 4.29839e-06  1.1s
+[01:53:35] epoch  53  train 4.73582e-06  val 4.66541e-06  1.1s
+[01:53:36] epoch  54  train 4.99995e-06  val 3.71955e-06  1.0s
+[01:53:37] epoch  55  train 4.02538e-06  val 3.99139e-06  1.1s
+[01:53:38] epoch  56  train 4.37772e-06  val 3.87436e-06  1.0s
+[01:53:39] epoch  57  train 4.10522e-06  val 3.45986e-06  1.1s  *
+[01:53:40] epoch  58  train 4.19881e-06  val 3.60906e-06  1.1s
+[01:53:42] epoch  59  train 4.10654e-06  val 4.56315e-06  1.0s
+[01:53:43] epoch  60  train 4.40167e-06  val 5.09111e-06  1.0s
+[01:53:44] epoch  61  train 3.94753e-06  val 3.01957e-06  1.1s  *
+[01:53:45] epoch  62  train 4.12867e-06  val 3.13838e-06  1.0s
+[01:53:46] epoch  63  train 4.0841e-06  val 5.478e-06  1.1s
+[01:53:47] epoch  64  train 3.99703e-06  val 5.21138e-06  1.0s
+[01:53:48] epoch  65  train 3.92483e-06  val 4.44047e-06  1.1s
+[01:53:49] epoch  66  train 3.70087e-06  val 2.89215e-06  1.1s  *
+[01:53:50] epoch  67  train 3.73328e-06  val 9.87176e-06  1.1s
+[01:53:51] epoch  68  train 3.83441e-06  val 2.46667e-06  1.0s  *
+[01:53:52] epoch  69  train 3.93115e-06  val 1.92835e-06  1.1s  *
+[01:53:53] epoch  70  train 3.42155e-06  val 2.08361e-06  1.1s
+[01:53:55] epoch  71  train 3.26775e-06  val 3.39357e-06  1.4s
+[01:53:56] epoch  72  train 3.62766e-06  val 6.54762e-06  1.6s
+[01:53:58] epoch  73  train 3.34003e-06  val 2.47619e-06  2.0s
+[01:54:00] epoch  74  train 3.43242e-06  val 2.9714e-06  1.5s
+[01:54:02] epoch  75  train 3.17362e-06  val 3.37119e-06  1.7s
+[01:54:03] epoch  76  train 3.11978e-06  val 1.87023e-06  1.7s  *
+[01:54:05] epoch  77  train 3.90668e-06  val 5.978e-06  1.5s
+[01:54:06] epoch  78  train 2.76689e-06  val 2.99161e-06  1.6s
+[01:54:08] epoch  79  train 3.32035e-06  val 2.45327e-06  1.6s
+[01:54:10] epoch  80  train 3.12655e-06  val 2.25811e-05  1.5s
+[01:54:11] epoch  81  train 3.42909e-06  val 3.85473e-06  1.6s
+[01:54:13] epoch  82  train 3.09073e-06  val 3.22741e-06  1.6s
+[01:54:14] epoch  83  train 3.10983e-06  val 7.56897e-06  1.6s
+[01:54:16] epoch  84  train 3.28321e-06  val 1.79248e-06  1.6s  *
+[01:54:18] epoch  85  train 3.37716e-06  val 2.14463e-06  1.6s
+[01:54:19] epoch  86  train 2.74217e-06  val 2.54091e-06  1.6s
+[01:54:21] epoch  87  train 3.34226e-06  val 7.40275e-06  1.6s
+[01:54:22] epoch  88  train 2.73005e-06  val 1.681e-06  1.6s  *
+[01:54:24] epoch  89  train 2.95141e-06  val 2.38555e-06  1.6s
+[01:54:26] epoch  90  train 3.24049e-06  val 1.94131e-06  1.6s
+[01:54:27] epoch  91  train 3.15557e-06  val 1.58988e-06  1.6s  *
+[01:54:29] epoch  92  train 2.89349e-06  val 2.4587e-06  2.1s
+[01:54:31] epoch  93  train 2.72019e-06  val 2.10133e-06  1.6s
+[01:54:33] epoch  94  train 2.98474e-06  val 4.10247e-06  1.6s
+[01:54:34] epoch  95  train 2.75268e-06  val 2.55537e-06  1.6s
+[01:54:36] epoch  96  train 3.25148e-06  val 2.79928e-06  1.7s
+[01:54:37] epoch  97  train 3.13575e-06  val 4.64194e-06  1.6s
+[01:54:39] epoch  98  train 2.78729e-06  val 1.58595e-06  1.6s  *
+[01:54:41] epoch  99  train 2.76486e-06  val 1.65732e-06  1.6s
+[01:54:42] augmentation: {'enabled': False, 'applicable': False, 'n_new': 0, 'reason': 'attack class is not the minority in training data (89577 attack vs 68421 benign)'}
+[01:54:45] XGBoost best iteration 166
+[01:54:46] validation: {"f1": 0.9998178553771695, "macro_f1": 0.9997862196985416, "auroc": 0.9999993249267373, "mcc": 0.9995724412620642}
+[01:54:46] test:       {"f1": 0.999818016378526, "macro_f1": 0.9997862313274395, "auroc": 0.999980399663662, "mcc": 0.9995724645196572}
+[01:54:46] DONE -> runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399

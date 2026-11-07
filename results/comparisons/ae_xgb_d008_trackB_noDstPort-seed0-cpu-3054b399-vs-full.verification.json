@@ -1,0 +1,5405 @@
+{
+  "experiment": "D-018 Destination Port ablation, independently re-verified 2026-11-08",
+  "method": "metrics: scikit-learn directly; McNemar: scipy.stats.binomtest (exact, two-sided); duplicate groups: row tuples over the 77 remaining features; nothing retrained",
+  "runs": {
+    "full": "ae_xgb_d008_trackB-seed0-cpu-565a8b9e",
+    "ablated": "ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399"
+  },
+  "commits": {
+    "full_run": "6fed9b06b85170e00ebc0c2e0e1fadbea42e0d4e",
+    "ablated_run": "fd65ad5afcef3f46c07da5e68c629069766b9849"
+  },
+  "data_provenance": {
+    "archive": "MachineLearningCSV.zip",
+    "archive_sha256": "c3f26274b36c837ccf28ffd2dbf4582941c30b3ee70a635c6e5b2f87c4727928",
+    "member": "MachineLearningCVE/Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+    "member_crc32": "57439907",
+    "csv_sha256": "6ff1580f5f81c0ae28a26f7631721018577f5f7c5e0feac28b795fcfe7b411ee"
+  },
+  "split_fingerprint": "50bd994880abbe151738993e299b90a6e50fb5ffae235a72677bb7813c447f44",
+  "evaluation_fingerprint": "0435302bf798010dec7b4251f3a489b81ea17cbe5c9078784d5306d9d9796319",
+  "common_test_rows": 33486,
+  "common_test_classes": {
+    "DDoS": 19233,
+    "BENIGN": 14253
+  },
+  "full_on_common": {
+    "tn": 14250,
+    "fp": 3,
+    "fn": 2,
+    "tp": 19231,
+    "f1": 0.9998700184573791,
+    "mcc": 0.9996946124991521,
+    "auroc": 0.9999923138081772
+  },
+  "ablated_on_common": {
+    "tn": 14250,
+    "fp": 3,
+    "fn": 4,
+    "tp": 19229,
+    "f1": 0.999818016378526,
+    "mcc": 0.9995724645196572,
+    "auroc": 0.999980399663662
+  },
+  "paired": {
+    "both_correct": 33478,
+    "only_full_correct": 3,
+    "only_ablated_correct": 1,
+    "both_wrong": 4,
+    "mcnemar_exact_p_scipy": 0.625
+  },
+  "discordant_rows": [
+    {
+      "source_row": 155712,
+      "y_true_full": 0,
+      "prob_ddos_full": 0.99986196,
+      "prob_ddos_abl": 0.02836094
+    },
+    {
+      "source_row": 187242,
+      "y_true_full": 1,
+      "prob_ddos_full": 0.95827687,
+      "prob_ddos_abl": 0.041928936
+    },
+    {
+      "source_row": 190967,
+      "y_true_full": 1,
+      "prob_ddos_full": 0.94692224,
+      "prob_ddos_abl": 0.22420944
+    },
+    {
+      "source_row": 210451,
+      "y_true_full": 0,
+      "prob_ddos_full": 0.22078808,
+      "prob_ddos_abl": 0.96526706
+    }
+  ],
+  "both_wrong_rows": [
+    {
+      "source_row": 5245,
+      "y_true_full": 0,
+      "prob_ddos_full": 0.9918045,
+      "prob_ddos_abl": 0.9834125
+    },
+    {
+      "source_row": 5246,
+      "y_true_full": 0,
+      "prob_ddos_full": 0.98818934,
+      "prob_ddos_abl": 0.9834125
+    },
+    {
+      "source_row": 99515,
+      "y_true_full": 1,
+      "prob_ddos_full": 0.0010480039,
+      "prob_ddos_abl": 0.0005343339
+    },
+    {
+      "source_row": 110943,
+      "y_true_full": 1,
+      "prob_ddos_full": 3.3359072e-05,
+      "prob_ddos_abl": 1.2926958e-05
+    }
+  ],
+  "exclusions": {
+    "val_excluded": 357,
+    "val_excluded_classes": {
+      "BENIGN": 357
+    },
+    "val_reason": {
+      "twin_of_train": 357
+    },
+    "test_excluded": 391,
+    "test_excluded_classes": {
+      "BENIGN": 391
+    },
+    "test_reason": {
+      "twin_of_train_only": 228,
+      "twin_of_val_only": 27,
+      "twin_of_train_and_val": 136
+    },
+    "matches_run_data_report": true
+  },
+  "excluded_rows": [
+    {
+      "partition": "val",
+      "source_row": 8,
+      "label": "BENIGN",
+      "destination_port": 9282,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 32,
+      "label": "BENIGN",
+      "destination_port": 55156,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 1348,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 1558,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 1639,
+      "label": "BENIGN",
+      "destination_port": 55136,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 1653,
+      "label": "BENIGN",
+      "destination_port": 55059,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 1678,
+      "label": "BENIGN",
+      "destination_port": 55089,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 1743,
+      "label": "BENIGN",
+      "destination_port": 57839,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 1776,
+      "label": "BENIGN",
+      "destination_port": 57860,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 1808,
+      "label": "BENIGN",
+      "destination_port": 8682,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 1812,
+      "label": "BENIGN",
+      "destination_port": 8712,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 1827,
+      "label": "BENIGN",
+      "destination_port": 38082,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 1920,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 2109,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 3374,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 3482,
+      "label": "BENIGN",
+      "destination_port": 54160,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 3525,
+      "label": "BENIGN",
+      "destination_port": 45070,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 3547,
+      "label": "BENIGN",
+      "destination_port": 57779,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 3592,
+      "label": "BENIGN",
+      "destination_port": 57824,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 3634,
+      "label": "BENIGN",
+      "destination_port": 58026,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 3653,
+      "label": "BENIGN",
+      "destination_port": 55214,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 3662,
+      "label": "BENIGN",
+      "destination_port": 59640,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 3665,
+      "label": "BENIGN",
+      "destination_port": 35348,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 3970,
+      "label": "BENIGN",
+      "destination_port": 38594,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 4049,
+      "label": "BENIGN",
+      "destination_port": 9010,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 5342,
+      "label": "BENIGN",
+      "destination_port": 8969,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 5348,
+      "label": "BENIGN",
+      "destination_port": 8950,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 5364,
+      "label": "BENIGN",
+      "destination_port": 47782,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 5365,
+      "label": "BENIGN",
+      "destination_port": 9097,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 5449,
+      "label": "BENIGN",
+      "destination_port": 39614,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 5451,
+      "label": "BENIGN",
+      "destination_port": 56554,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 6163,
+      "label": "BENIGN",
+      "destination_port": 49248,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 6197,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 6198,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 6290,
+      "label": "BENIGN",
+      "destination_port": 54417,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 6790,
+      "label": "BENIGN",
+      "destination_port": 36840,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 6828,
+      "label": "BENIGN",
+      "destination_port": 8966,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 6914,
+      "label": "BENIGN",
+      "destination_port": 33698,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 7541,
+      "label": "BENIGN",
+      "destination_port": 55495,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 8420,
+      "label": "BENIGN",
+      "destination_port": 443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 8446,
+      "label": "BENIGN",
+      "destination_port": 53515,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 8532,
+      "label": "BENIGN",
+      "destination_port": 55364,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 8556,
+      "label": "BENIGN",
+      "destination_port": 55648,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 8557,
+      "label": "BENIGN",
+      "destination_port": 55641,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 8773,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 9467,
+      "label": "BENIGN",
+      "destination_port": 58158,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 9477,
+      "label": "BENIGN",
+      "destination_port": 55561,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 9479,
+      "label": "BENIGN",
+      "destination_port": 55569,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 9498,
+      "label": "BENIGN",
+      "destination_port": 55664,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 9521,
+      "label": "BENIGN",
+      "destination_port": 9124,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 9542,
+      "label": "BENIGN",
+      "destination_port": 55628,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 10109,
+      "label": "BENIGN",
+      "destination_port": 55449,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 10162,
+      "label": "BENIGN",
+      "destination_port": 9321,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 10201,
+      "label": "BENIGN",
+      "destination_port": 58215,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 11445,
+      "label": "BENIGN",
+      "destination_port": 53705,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 11446,
+      "label": "BENIGN",
+      "destination_port": 37028,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 11494,
+      "label": "BENIGN",
+      "destination_port": 58198,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 11503,
+      "label": "BENIGN",
+      "destination_port": 58241,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 11509,
+      "label": "BENIGN",
+      "destination_port": 58199,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 11545,
+      "label": "BENIGN",
+      "destination_port": 55647,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 11549,
+      "label": "BENIGN",
+      "destination_port": 55844,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 11554,
+      "label": "BENIGN",
+      "destination_port": 55617,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 11564,
+      "label": "BENIGN",
+      "destination_port": 45600,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 11567,
+      "label": "BENIGN",
+      "destination_port": 56282,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 11589,
+      "label": "BENIGN",
+      "destination_port": 58130,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 12257,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 12259,
+      "label": "BENIGN",
+      "destination_port": 9337,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 12326,
+      "label": "BENIGN",
+      "destination_port": 55830,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 12333,
+      "label": "BENIGN",
+      "destination_port": 55805,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 12342,
+      "label": "BENIGN",
+      "destination_port": 55826,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 13218,
+      "label": "BENIGN",
+      "destination_port": 55960,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 13268,
+      "label": "BENIGN",
+      "destination_port": 58190,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 13301,
+      "label": "BENIGN",
+      "destination_port": 9290,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 13305,
+      "label": "BENIGN",
+      "destination_port": 9253,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 13366,
+      "label": "BENIGN",
+      "destination_port": 9263,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 13657,
+      "label": "BENIGN",
+      "destination_port": 56013,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 13857,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 14035,
+      "label": "BENIGN",
+      "destination_port": 9347,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 14042,
+      "label": "BENIGN",
+      "destination_port": 9343,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 14045,
+      "label": "BENIGN",
+      "destination_port": 40548,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 14733,
+      "label": "BENIGN",
+      "destination_port": 57912,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 14734,
+      "label": "BENIGN",
+      "destination_port": 57913,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 14735,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 15002,
+      "label": "BENIGN",
+      "destination_port": 57902,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 15274,
+      "label": "BENIGN",
+      "destination_port": 13759,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 15589,
+      "label": "BENIGN",
+      "destination_port": 17781,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 15785,
+      "label": "BENIGN",
+      "destination_port": 57933,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 15787,
+      "label": "BENIGN",
+      "destination_port": 49246,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 16656,
+      "label": "BENIGN",
+      "destination_port": 50089,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 16947,
+      "label": "BENIGN",
+      "destination_port": 58390,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 16967,
+      "label": "BENIGN",
+      "destination_port": 58416,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 17088,
+      "label": "BENIGN",
+      "destination_port": 58491,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 17754,
+      "label": "BENIGN",
+      "destination_port": 58551,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 18028,
+      "label": "BENIGN",
+      "destination_port": 9410,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 18033,
+      "label": "BENIGN",
+      "destination_port": 9464,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 18038,
+      "label": "BENIGN",
+      "destination_port": 9429,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 18069,
+      "label": "BENIGN",
+      "destination_port": 58526,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 18076,
+      "label": "BENIGN",
+      "destination_port": 58521,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 18248,
+      "label": "BENIGN",
+      "destination_port": 9458,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 18873,
+      "label": "BENIGN",
+      "destination_port": 58627,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 21321,
+      "label": "BENIGN",
+      "destination_port": 9377,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 21322,
+      "label": "BENIGN",
+      "destination_port": 9393,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 22200,
+      "label": "BENIGN",
+      "destination_port": 9483,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 22491,
+      "label": "BENIGN",
+      "destination_port": 9425,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 22493,
+      "label": "BENIGN",
+      "destination_port": 58618,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 22494,
+      "label": "BENIGN",
+      "destination_port": 58630,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 22498,
+      "label": "BENIGN",
+      "destination_port": 58671,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 22503,
+      "label": "BENIGN",
+      "destination_port": 54380,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 22507,
+      "label": "BENIGN",
+      "destination_port": 51282,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 22525,
+      "label": "BENIGN",
+      "destination_port": 58633,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 22539,
+      "label": "BENIGN",
+      "destination_port": 58730,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 30795,
+      "label": "BENIGN",
+      "destination_port": 47190,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 30805,
+      "label": "BENIGN",
+      "destination_port": 58781,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 33242,
+      "label": "BENIGN",
+      "destination_port": 39574,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 33285,
+      "label": "BENIGN",
+      "destination_port": 48156,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 33304,
+      "label": "BENIGN",
+      "destination_port": 43316,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 39917,
+      "label": "BENIGN",
+      "destination_port": 42266,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 42883,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 42931,
+      "label": "BENIGN",
+      "destination_port": 58022,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 42943,
+      "label": "BENIGN",
+      "destination_port": 39136,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 49683,
+      "label": "BENIGN",
+      "destination_port": 58740,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 52445,
+      "label": "BENIGN",
+      "destination_port": 58997,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 52476,
+      "label": "BENIGN",
+      "destination_port": 58914,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 52482,
+      "label": "BENIGN",
+      "destination_port": 58917,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 59097,
+      "label": "BENIGN",
+      "destination_port": 52172,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 59616,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 59624,
+      "label": "BENIGN",
+      "destination_port": 443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 61527,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 70897,
+      "label": "BENIGN",
+      "destination_port": 43878,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 70917,
+      "label": "BENIGN",
+      "destination_port": 58962,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 77869,
+      "label": "BENIGN",
+      "destination_port": 58614,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 77874,
+      "label": "BENIGN",
+      "destination_port": 58956,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 77879,
+      "label": "BENIGN",
+      "destination_port": 58845,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 79293,
+      "label": "BENIGN",
+      "destination_port": 59084,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 79315,
+      "label": "BENIGN",
+      "destination_port": 9576,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 86107,
+      "label": "BENIGN",
+      "destination_port": 47030,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 88088,
+      "label": "BENIGN",
+      "destination_port": 42906,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 88112,
+      "label": "BENIGN",
+      "destination_port": 58081,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 104745,
+      "label": "BENIGN",
+      "destination_port": 58110,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 104754,
+      "label": "BENIGN",
+      "destination_port": 58060,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 112936,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 112959,
+      "label": "BENIGN",
+      "destination_port": 58090,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 119036,
+      "label": "BENIGN",
+      "destination_port": 58053,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 121752,
+      "label": "BENIGN",
+      "destination_port": 43248,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 121772,
+      "label": "BENIGN",
+      "destination_port": 9545,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 121776,
+      "label": "BENIGN",
+      "destination_port": 9547,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 128123,
+      "label": "BENIGN",
+      "destination_port": 9609,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 130012,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 130017,
+      "label": "BENIGN",
+      "destination_port": 9635,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 130648,
+      "label": "BENIGN",
+      "destination_port": 9770,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 130701,
+      "label": "BENIGN",
+      "destination_port": 42130,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 130707,
+      "label": "BENIGN",
+      "destination_port": 58176,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 137782,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 146139,
+      "label": "BENIGN",
+      "destination_port": 59145,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 146147,
+      "label": "BENIGN",
+      "destination_port": 59153,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 146160,
+      "label": "BENIGN",
+      "destination_port": 59146,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 146161,
+      "label": "BENIGN",
+      "destination_port": 52608,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 146178,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 154741,
+      "label": "BENIGN",
+      "destination_port": 9538,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 157802,
+      "label": "BENIGN",
+      "destination_port": 59266,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 157804,
+      "label": "BENIGN",
+      "destination_port": 59286,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 157805,
+      "label": "BENIGN",
+      "destination_port": 59291,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 157807,
+      "label": "BENIGN",
+      "destination_port": 59290,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 157819,
+      "label": "BENIGN",
+      "destination_port": 59297,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 157847,
+      "label": "BENIGN",
+      "destination_port": 59385,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 157853,
+      "label": "BENIGN",
+      "destination_port": 58130,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 164408,
+      "label": "BENIGN",
+      "destination_port": 58159,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 166649,
+      "label": "BENIGN",
+      "destination_port": 59445,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 166656,
+      "label": "BENIGN",
+      "destination_port": 59460,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 166716,
+      "label": "BENIGN",
+      "destination_port": 50730,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 173158,
+      "label": "BENIGN",
+      "destination_port": 58215,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 177699,
+      "label": "BENIGN",
+      "destination_port": 59473,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 177701,
+      "label": "BENIGN",
+      "destination_port": 59472,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 177726,
+      "label": "BENIGN",
+      "destination_port": 59498,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 177769,
+      "label": "BENIGN",
+      "destination_port": 37708,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 177790,
+      "label": "BENIGN",
+      "destination_port": 45044,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 177801,
+      "label": "BENIGN",
+      "destination_port": 45564,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 177825,
+      "label": "BENIGN",
+      "destination_port": 37154,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 177880,
+      "label": "BENIGN",
+      "destination_port": 59236,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 177894,
+      "label": "BENIGN",
+      "destination_port": 59278,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 184344,
+      "label": "BENIGN",
+      "destination_port": 58237,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 184350,
+      "label": "BENIGN",
+      "destination_port": 56260,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 184359,
+      "label": "BENIGN",
+      "destination_port": 56274,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 184373,
+      "label": "BENIGN",
+      "destination_port": 56306,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 184513,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 186987,
+      "label": "BENIGN",
+      "destination_port": 31491,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 187015,
+      "label": "BENIGN",
+      "destination_port": 59523,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 187017,
+      "label": "BENIGN",
+      "destination_port": 59529,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 187026,
+      "label": "BENIGN",
+      "destination_port": 59533,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 187038,
+      "label": "BENIGN",
+      "destination_port": 59546,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 187062,
+      "label": "BENIGN",
+      "destination_port": 56326,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 187067,
+      "label": "BENIGN",
+      "destination_port": 56321,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 187072,
+      "label": "BENIGN",
+      "destination_port": 58239,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 187171,
+      "label": "BENIGN",
+      "destination_port": 40329,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 193450,
+      "label": "BENIGN",
+      "destination_port": 58236,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 196127,
+      "label": "BENIGN",
+      "destination_port": 37549,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 196169,
+      "label": "BENIGN",
+      "destination_port": 44714,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 198943,
+      "label": "BENIGN",
+      "destination_port": 9820,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 198990,
+      "label": "BENIGN",
+      "destination_port": 9838,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 199272,
+      "label": "BENIGN",
+      "destination_port": 55106,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 199280,
+      "label": "BENIGN",
+      "destination_port": 58435,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 199580,
+      "label": "BENIGN",
+      "destination_port": 56338,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 199635,
+      "label": "BENIGN",
+      "destination_port": 47502,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 199640,
+      "label": "BENIGN",
+      "destination_port": 9726,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 199731,
+      "label": "BENIGN",
+      "destination_port": 9768,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 200318,
+      "label": "BENIGN",
+      "destination_port": 9859,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 200443,
+      "label": "BENIGN",
+      "destination_port": 59626,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 201234,
+      "label": "BENIGN",
+      "destination_port": 59737,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 201236,
+      "label": "BENIGN",
+      "destination_port": 59738,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 201287,
+      "label": "BENIGN",
+      "destination_port": 53710,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 201330,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 201614,
+      "label": "BENIGN",
+      "destination_port": 59701,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 202218,
+      "label": "BENIGN",
+      "destination_port": 49388,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 202251,
+      "label": "BENIGN",
+      "destination_port": 50038,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 202314,
+      "label": "BENIGN",
+      "destination_port": 59718,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 202315,
+      "label": "BENIGN",
+      "destination_port": 59717,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 202347,
+      "label": "BENIGN",
+      "destination_port": 59622,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 202348,
+      "label": "BENIGN",
+      "destination_port": 59743,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 202349,
+      "label": "BENIGN",
+      "destination_port": 59768,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 202363,
+      "label": "BENIGN",
+      "destination_port": 59683,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 202364,
+      "label": "BENIGN",
+      "destination_port": 59651,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 202658,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 203155,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 203822,
+      "label": "BENIGN",
+      "destination_port": 58550,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 203826,
+      "label": "BENIGN",
+      "destination_port": 58487,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 203842,
+      "label": "BENIGN",
+      "destination_port": 9992,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 203847,
+      "label": "BENIGN",
+      "destination_port": 58565,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 203858,
+      "label": "BENIGN",
+      "destination_port": 9979,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 203878,
+      "label": "BENIGN",
+      "destination_port": 9922,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 203978,
+      "label": "BENIGN",
+      "destination_port": 51490,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 203985,
+      "label": "BENIGN",
+      "destination_port": 41294,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 204054,
+      "label": "BENIGN",
+      "destination_port": 10039,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 204413,
+      "label": "BENIGN",
+      "destination_port": 58575,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 204453,
+      "label": "BENIGN",
+      "destination_port": 57710,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 204503,
+      "label": "BENIGN",
+      "destination_port": 56458,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 204643,
+      "label": "BENIGN",
+      "destination_port": 49283,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 204705,
+      "label": "BENIGN",
+      "destination_port": 9897,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 204718,
+      "label": "BENIGN",
+      "destination_port": 9898,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 205532,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 205576,
+      "label": "BENIGN",
+      "destination_port": 56526,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 205660,
+      "label": "BENIGN",
+      "destination_port": 37443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 206646,
+      "label": "BENIGN",
+      "destination_port": 443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 207273,
+      "label": "BENIGN",
+      "destination_port": 58646,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 207420,
+      "label": "BENIGN",
+      "destination_port": 60195,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 207433,
+      "label": "BENIGN",
+      "destination_port": 60421,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 207457,
+      "label": "BENIGN",
+      "destination_port": 58640,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 207467,
+      "label": "BENIGN",
+      "destination_port": 58628,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 207505,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 207958,
+      "label": "BENIGN",
+      "destination_port": 60443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 207980,
+      "label": "BENIGN",
+      "destination_port": 60415,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 208090,
+      "label": "BENIGN",
+      "destination_port": 443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 209078,
+      "label": "BENIGN",
+      "destination_port": 60005,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 209283,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 209312,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 209319,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 209365,
+      "label": "BENIGN",
+      "destination_port": 56612,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 209369,
+      "label": "BENIGN",
+      "destination_port": 60386,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 209405,
+      "label": "BENIGN",
+      "destination_port": 60383,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 209635,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 209689,
+      "label": "BENIGN",
+      "destination_port": 55034,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 209691,
+      "label": "BENIGN",
+      "destination_port": 55033,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 209792,
+      "label": "BENIGN",
+      "destination_port": 9984,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 209837,
+      "label": "BENIGN",
+      "destination_port": 56596,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 210467,
+      "label": "BENIGN",
+      "destination_port": 10017,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 210475,
+      "label": "BENIGN",
+      "destination_port": 9996,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 210484,
+      "label": "BENIGN",
+      "destination_port": 52506,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 210488,
+      "label": "BENIGN",
+      "destination_port": 10096,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 210570,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 210978,
+      "label": "BENIGN",
+      "destination_port": 57844,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 211027,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 211083,
+      "label": "BENIGN",
+      "destination_port": 10321,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 211291,
+      "label": "BENIGN",
+      "destination_port": 10319,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 212446,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 212538,
+      "label": "BENIGN",
+      "destination_port": 60639,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 212560,
+      "label": "BENIGN",
+      "destination_port": 60680,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 212659,
+      "label": "BENIGN",
+      "destination_port": 443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 213547,
+      "label": "BENIGN",
+      "destination_port": 60659,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 213550,
+      "label": "BENIGN",
+      "destination_port": 60735,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 213568,
+      "label": "BENIGN",
+      "destination_port": 56704,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 213573,
+      "label": "BENIGN",
+      "destination_port": 58723,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 213592,
+      "label": "BENIGN",
+      "destination_port": 10390,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 213603,
+      "label": "BENIGN",
+      "destination_port": 60724,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 213614,
+      "label": "BENIGN",
+      "destination_port": 58767,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 213633,
+      "label": "BENIGN",
+      "destination_port": 56807,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 214282,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 214350,
+      "label": "BENIGN",
+      "destination_port": 10441,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 214351,
+      "label": "BENIGN",
+      "destination_port": 10445,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 214450,
+      "label": "BENIGN",
+      "destination_port": 10425,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 214463,
+      "label": "BENIGN",
+      "destination_port": 60588,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 214475,
+      "label": "BENIGN",
+      "destination_port": 56695,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 214480,
+      "label": "BENIGN",
+      "destination_port": 60838,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 214984,
+      "label": "BENIGN",
+      "destination_port": 60767,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 214985,
+      "label": "BENIGN",
+      "destination_port": 60770,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 214986,
+      "label": "BENIGN",
+      "destination_port": 58745,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 215012,
+      "label": "BENIGN",
+      "destination_port": 58775,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 215164,
+      "label": "BENIGN",
+      "destination_port": 58778,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 215243,
+      "label": "BENIGN",
+      "destination_port": 47060,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 216063,
+      "label": "BENIGN",
+      "destination_port": 60878,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 216077,
+      "label": "BENIGN",
+      "destination_port": 58806,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 216316,
+      "label": "BENIGN",
+      "destination_port": 56744,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 216322,
+      "label": "BENIGN",
+      "destination_port": 56852,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 216325,
+      "label": "BENIGN",
+      "destination_port": 56871,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 216797,
+      "label": "BENIGN",
+      "destination_port": 10583,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 216835,
+      "label": "BENIGN",
+      "destination_port": 60881,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 216881,
+      "label": "BENIGN",
+      "destination_port": 47228,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 216924,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 217133,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 217214,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 217239,
+      "label": "BENIGN",
+      "destination_port": 60901,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 217375,
+      "label": "BENIGN",
+      "destination_port": 10554,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 218049,
+      "label": "BENIGN",
+      "destination_port": 10518,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 218067,
+      "label": "BENIGN",
+      "destination_port": 49856,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 218093,
+      "label": "BENIGN",
+      "destination_port": 10595,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 218427,
+      "label": "BENIGN",
+      "destination_port": 48916,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 218440,
+      "label": "BENIGN",
+      "destination_port": 49592,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 218461,
+      "label": "BENIGN",
+      "destination_port": 53718,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 219003,
+      "label": "BENIGN",
+      "destination_port": 60967,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 219039,
+      "label": "BENIGN",
+      "destination_port": 10242,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 219058,
+      "label": "BENIGN",
+      "destination_port": 61045,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 219067,
+      "label": "BENIGN",
+      "destination_port": 61205,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 219071,
+      "label": "BENIGN",
+      "destination_port": 10244,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 220267,
+      "label": "BENIGN",
+      "destination_port": 61102,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 220321,
+      "label": "BENIGN",
+      "destination_port": 61078,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 220323,
+      "label": "BENIGN",
+      "destination_port": 61247,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 220324,
+      "label": "BENIGN",
+      "destination_port": 61248,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 220333,
+      "label": "BENIGN",
+      "destination_port": 10617,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 220622,
+      "label": "BENIGN",
+      "destination_port": 56760,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 220662,
+      "label": "BENIGN",
+      "destination_port": 61026,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 220666,
+      "label": "BENIGN",
+      "destination_port": 56941,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 220675,
+      "label": "BENIGN",
+      "destination_port": 56972,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 220685,
+      "label": "BENIGN",
+      "destination_port": 56975,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 220707,
+      "label": "BENIGN",
+      "destination_port": 50307,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 221583,
+      "label": "BENIGN",
+      "destination_port": 33921,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 221647,
+      "label": "BENIGN",
+      "destination_port": 10645,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 221648,
+      "label": "BENIGN",
+      "destination_port": 10642,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 221703,
+      "label": "BENIGN",
+      "destination_port": 10649,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 222131,
+      "label": "BENIGN",
+      "destination_port": 10665,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 222152,
+      "label": "BENIGN",
+      "destination_port": 10281,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 222674,
+      "label": "BENIGN",
+      "destination_port": 54002,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 223639,
+      "label": "BENIGN",
+      "destination_port": 58891,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 224105,
+      "label": "BENIGN",
+      "destination_port": 58920,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 224108,
+      "label": "BENIGN",
+      "destination_port": 59029,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 224120,
+      "label": "BENIGN",
+      "destination_port": 58842,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 224122,
+      "label": "BENIGN",
+      "destination_port": 59122,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 224139,
+      "label": "BENIGN",
+      "destination_port": 10364,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 224166,
+      "label": "BENIGN",
+      "destination_port": 59003,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 224176,
+      "label": "BENIGN",
+      "destination_port": 58936,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 224180,
+      "label": "BENIGN",
+      "destination_port": 59094,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 224188,
+      "label": "BENIGN",
+      "destination_port": 59055,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 224209,
+      "label": "BENIGN",
+      "destination_port": 61389,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 225103,
+      "label": "BENIGN",
+      "destination_port": 36905,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 225265,
+      "label": "BENIGN",
+      "destination_port": 59070,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 225296,
+      "label": "BENIGN",
+      "destination_port": 59053,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 225303,
+      "label": "BENIGN",
+      "destination_port": 59145,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 225317,
+      "label": "BENIGN",
+      "destination_port": 52646,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 225332,
+      "label": "BENIGN",
+      "destination_port": 10742,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "val",
+      "source_row": 225724,
+      "label": "BENIGN",
+      "destination_port": 61275,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 29,
+      "label": "BENIGN",
+      "destination_port": 55203,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 34,
+      "label": "BENIGN",
+      "destination_port": 55085,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 49,
+      "label": "BENIGN",
+      "destination_port": 57683,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 53,
+      "label": "BENIGN",
+      "destination_port": 60954,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 75,
+      "label": "BENIGN",
+      "destination_port": 34805,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 719,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 1651,
+      "label": "BENIGN",
+      "destination_port": 55065,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 1654,
+      "label": "BENIGN",
+      "destination_port": 55091,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 1656,
+      "label": "BENIGN",
+      "destination_port": 55090,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 1703,
+      "label": "BENIGN",
+      "destination_port": 55134,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 1705,
+      "label": "BENIGN",
+      "destination_port": 55133,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 1742,
+      "label": "BENIGN",
+      "destination_port": 57798,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 1753,
+      "label": "BENIGN",
+      "destination_port": 57700,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 3382,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 3514,
+      "label": "BENIGN",
+      "destination_port": 57794,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 3516,
+      "label": "BENIGN",
+      "destination_port": 57874,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 3527,
+      "label": "BENIGN",
+      "destination_port": 57699,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 3537,
+      "label": "BENIGN",
+      "destination_port": 8803,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 3559,
+      "label": "BENIGN",
+      "destination_port": 57764,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 3561,
+      "label": "BENIGN",
+      "destination_port": 57766,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 3593,
+      "label": "BENIGN",
+      "destination_port": 57825,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 3605,
+      "label": "BENIGN",
+      "destination_port": 57705,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 3641,
+      "label": "BENIGN",
+      "destination_port": 55137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 3994,
+      "label": "BENIGN",
+      "destination_port": 55072,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 4071,
+      "label": "BENIGN",
+      "destination_port": 55269,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 4878,
+      "label": "BENIGN",
+      "destination_port": 443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 5329,
+      "label": "BENIGN",
+      "destination_port": 8961,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 5331,
+      "label": "BENIGN",
+      "destination_port": 8958,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 5366,
+      "label": "BENIGN",
+      "destination_port": 9091,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 5390,
+      "label": "BENIGN",
+      "destination_port": 55322,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 5401,
+      "label": "BENIGN",
+      "destination_port": 8986,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 5456,
+      "label": "BENIGN",
+      "destination_port": 47736,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 5467,
+      "label": "BENIGN",
+      "destination_port": 47038,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 6166,
+      "label": "BENIGN",
+      "destination_port": 49372,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 6203,
+      "label": "BENIGN",
+      "destination_port": 443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 6224,
+      "label": "BENIGN",
+      "destination_port": 54283,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 6275,
+      "label": "BENIGN",
+      "destination_port": 57868,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 6292,
+      "label": "BENIGN",
+      "destination_port": 60477,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 6302,
+      "label": "BENIGN",
+      "destination_port": 33946,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 6309,
+      "label": "BENIGN",
+      "destination_port": 55407,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 6333,
+      "label": "BENIGN",
+      "destination_port": 55372,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 6787,
+      "label": "BENIGN",
+      "destination_port": 53380,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 6893,
+      "label": "BENIGN",
+      "destination_port": 9204,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 7536,
+      "label": "BENIGN",
+      "destination_port": 55487,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 7551,
+      "label": "BENIGN",
+      "destination_port": 55436,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 8489,
+      "label": "BENIGN",
+      "destination_port": 55438,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 8514,
+      "label": "BENIGN",
+      "destination_port": 55382,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 8523,
+      "label": "BENIGN",
+      "destination_port": 55442,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 8529,
+      "label": "BENIGN",
+      "destination_port": 55357,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 9474,
+      "label": "BENIGN",
+      "destination_port": 58153,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 9476,
+      "label": "BENIGN",
+      "destination_port": 55560,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 9485,
+      "label": "BENIGN",
+      "destination_port": 55636,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 9487,
+      "label": "BENIGN",
+      "destination_port": 55541,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 9495,
+      "label": "BENIGN",
+      "destination_port": 58128,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 9505,
+      "label": "BENIGN",
+      "destination_port": 55651,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 9513,
+      "label": "BENIGN",
+      "destination_port": 9110,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 9515,
+      "label": "BENIGN",
+      "destination_port": 9109,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 9555,
+      "label": "BENIGN",
+      "destination_port": 55521,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 9575,
+      "label": "BENIGN",
+      "destination_port": 55446,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 9593,
+      "label": "BENIGN",
+      "destination_port": 55430,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 9596,
+      "label": "BENIGN",
+      "destination_port": 53825,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 10025,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 10081,
+      "label": "BENIGN",
+      "destination_port": 45673,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 10114,
+      "label": "BENIGN",
+      "destination_port": 55474,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 10197,
+      "label": "BENIGN",
+      "destination_port": 9311,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 11139,
+      "label": "BENIGN",
+      "destination_port": 49374,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 11221,
+      "label": "BENIGN",
+      "destination_port": 9414,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 11448,
+      "label": "BENIGN",
+      "destination_port": 58207,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 11450,
+      "label": "BENIGN",
+      "destination_port": 55773,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 11495,
+      "label": "BENIGN",
+      "destination_port": 58197,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 11500,
+      "label": "BENIGN",
+      "destination_port": 58201,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 11548,
+      "label": "BENIGN",
+      "destination_port": 55852,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 11570,
+      "label": "BENIGN",
+      "destination_port": 43909,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 11579,
+      "label": "BENIGN",
+      "destination_port": 58137,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 11584,
+      "label": "BENIGN",
+      "destination_port": 58095,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 11601,
+      "label": "BENIGN",
+      "destination_port": 55899,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 12255,
+      "label": "BENIGN",
+      "destination_port": 37206,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 12353,
+      "label": "BENIGN",
+      "destination_port": 55796,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 12421,
+      "label": "BENIGN",
+      "destination_port": 49928,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 12425,
+      "label": "BENIGN",
+      "destination_port": 51628,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 12907,
+      "label": "BENIGN",
+      "destination_port": 23029,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 13263,
+      "label": "BENIGN",
+      "destination_port": 57430,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 13278,
+      "label": "BENIGN",
+      "destination_port": 9302,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 13281,
+      "label": "BENIGN",
+      "destination_port": 40494,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 13289,
+      "label": "BENIGN",
+      "destination_port": 39398,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 13298,
+      "label": "BENIGN",
+      "destination_port": 9234,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 13309,
+      "label": "BENIGN",
+      "destination_port": 9235,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 13346,
+      "label": "BENIGN",
+      "destination_port": 33130,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 13622,
+      "label": "BENIGN",
+      "destination_port": 36486,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 13660,
+      "label": "BENIGN",
+      "destination_port": 50970,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 13662,
+      "label": "BENIGN",
+      "destination_port": 49302,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 14034,
+      "label": "BENIGN",
+      "destination_port": 56023,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 14737,
+      "label": "BENIGN",
+      "destination_port": 49376,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 14793,
+      "label": "BENIGN",
+      "destination_port": 58358,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 14812,
+      "label": "BENIGN",
+      "destination_port": 56044,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 14819,
+      "label": "BENIGN",
+      "destination_port": 57901,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 14947,
+      "label": "BENIGN",
+      "destination_port": 24664,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 15010,
+      "label": "BENIGN",
+      "destination_port": 44474,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 15555,
+      "label": "BENIGN",
+      "destination_port": 56060,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 15558,
+      "label": "BENIGN",
+      "destination_port": 56059,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 15568,
+      "label": "BENIGN",
+      "destination_port": 46606,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 15691,
+      "label": "BENIGN",
+      "destination_port": 37295,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 15769,
+      "label": "BENIGN",
+      "destination_port": 57148,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 15776,
+      "label": "BENIGN",
+      "destination_port": 57956,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 16130,
+      "label": "BENIGN",
+      "destination_port": 443,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 16877,
+      "label": "BENIGN",
+      "destination_port": 47215,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 16880,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 16925,
+      "label": "BENIGN",
+      "destination_port": 58433,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 16926,
+      "label": "BENIGN",
+      "destination_port": 58436,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 16943,
+      "label": "BENIGN",
+      "destination_port": 57946,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 16957,
+      "label": "BENIGN",
+      "destination_port": 58543,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 17102,
+      "label": "BENIGN",
+      "destination_port": 57923,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 17105,
+      "label": "BENIGN",
+      "destination_port": 57942,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 17106,
+      "label": "BENIGN",
+      "destination_port": 58428,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 18021,
+      "label": "BENIGN",
+      "destination_port": 47810,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 18044,
+      "label": "BENIGN",
+      "destination_port": 9417,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 18048,
+      "label": "BENIGN",
+      "destination_port": 9414,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 18066,
+      "label": "BENIGN",
+      "destination_port": 49248,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 18077,
+      "label": "BENIGN",
+      "destination_port": 58500,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 18211,
+      "label": "BENIGN",
+      "destination_port": 443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 18245,
+      "label": "BENIGN",
+      "destination_port": 58546,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 18250,
+      "label": "BENIGN",
+      "destination_port": 53758,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 18256,
+      "label": "BENIGN",
+      "destination_port": 47678,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 21330,
+      "label": "BENIGN",
+      "destination_port": 58568,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 22426,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 22496,
+      "label": "BENIGN",
+      "destination_port": 58651,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 22505,
+      "label": "BENIGN",
+      "destination_port": 58613,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 22542,
+      "label": "BENIGN",
+      "destination_port": 40696,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 33241,
+      "label": "BENIGN",
+      "destination_port": 39572,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 33261,
+      "label": "BENIGN",
+      "destination_port": 58755,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 42966,
+      "label": "BENIGN",
+      "destination_port": 38604,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 42995,
+      "label": "BENIGN",
+      "destination_port": 58682,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 43009,
+      "label": "BENIGN",
+      "destination_port": 38808,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 43033,
+      "label": "BENIGN",
+      "destination_port": 56026,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 50839,
+      "label": "BENIGN",
+      "destination_port": 21,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 52236,
+      "label": "BENIGN",
+      "destination_port": 9489,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 52444,
+      "label": "BENIGN",
+      "destination_port": 58989,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 52477,
+      "label": "BENIGN",
+      "destination_port": 58902,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 52529,
+      "label": "BENIGN",
+      "destination_port": 37192,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 52534,
+      "label": "BENIGN",
+      "destination_port": 41330,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 59705,
+      "label": "BENIGN",
+      "destination_port": 20878,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 59708,
+      "label": "BENIGN",
+      "destination_port": 20878,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 59709,
+      "label": "BENIGN",
+      "destination_port": 20878,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 61596,
+      "label": "BENIGN",
+      "destination_port": 38596,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 70909,
+      "label": "BENIGN",
+      "destination_port": 42730,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 70943,
+      "label": "BENIGN",
+      "destination_port": 56115,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 77865,
+      "label": "BENIGN",
+      "destination_port": 9587,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 77872,
+      "label": "BENIGN",
+      "destination_port": 58965,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 79294,
+      "label": "BENIGN",
+      "destination_port": 56120,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 86109,
+      "label": "BENIGN",
+      "destination_port": 52170,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 86118,
+      "label": "BENIGN",
+      "destination_port": 39330,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 86122,
+      "label": "BENIGN",
+      "destination_port": 56117,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 88069,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 88071,
+      "label": "BENIGN",
+      "destination_port": 59097,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 88073,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 88097,
+      "label": "BENIGN",
+      "destination_port": 42064,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 88110,
+      "label": "BENIGN",
+      "destination_port": 58082,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 94711,
+      "label": "BENIGN",
+      "destination_port": 21,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 96135,
+      "label": "BENIGN",
+      "destination_port": 41900,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 96139,
+      "label": "BENIGN",
+      "destination_port": 49382,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 104709,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 104738,
+      "label": "BENIGN",
+      "destination_port": 49666,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 104748,
+      "label": "BENIGN",
+      "destination_port": 58080,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 112975,
+      "label": "BENIGN",
+      "destination_port": 59159,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 112976,
+      "label": "BENIGN",
+      "destination_port": 59159,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 119780,
+      "label": "BENIGN",
+      "destination_port": 443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 119817,
+      "label": "BENIGN",
+      "destination_port": 6341,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 121775,
+      "label": "BENIGN",
+      "destination_port": 9562,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 128100,
+      "label": "BENIGN",
+      "destination_port": 9557,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 128118,
+      "label": "BENIGN",
+      "destination_port": 58100,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 128122,
+      "label": "BENIGN",
+      "destination_port": 9612,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 128131,
+      "label": "BENIGN",
+      "destination_port": 9632,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 130010,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 130638,
+      "label": "BENIGN",
+      "destination_port": 9598,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 130655,
+      "label": "BENIGN",
+      "destination_port": 9590,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 130660,
+      "label": "BENIGN",
+      "destination_port": 9572,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 137181,
+      "label": "BENIGN",
+      "destination_port": 58163,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 137196,
+      "label": "BENIGN",
+      "destination_port": 58151,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 139850,
+      "label": "BENIGN",
+      "destination_port": 43430,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 139856,
+      "label": "BENIGN",
+      "destination_port": 58179,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 139865,
+      "label": "BENIGN",
+      "destination_port": 35970,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 148285,
+      "label": "BENIGN",
+      "destination_port": 52652,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 148290,
+      "label": "BENIGN",
+      "destination_port": 50136,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 148294,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 154726,
+      "label": "BENIGN",
+      "destination_port": 59247,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 154737,
+      "label": "BENIGN",
+      "destination_port": 9576,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 154739,
+      "label": "BENIGN",
+      "destination_port": 9543,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 155414,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 157760,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 157806,
+      "label": "BENIGN",
+      "destination_port": 59292,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 157843,
+      "label": "BENIGN",
+      "destination_port": 59295,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 166629,
+      "label": "BENIGN",
+      "destination_port": 59424,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 166657,
+      "label": "BENIGN",
+      "destination_port": 59459,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 166701,
+      "label": "BENIGN",
+      "destination_port": 42526,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 175332,
+      "label": "BENIGN",
+      "destination_port": 57780,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 177720,
+      "label": "BENIGN",
+      "destination_port": 59487,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 177737,
+      "label": "BENIGN",
+      "destination_port": 59510,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 177742,
+      "label": "BENIGN",
+      "destination_port": 39944,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 177789,
+      "label": "BENIGN",
+      "destination_port": 45032,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 177799,
+      "label": "BENIGN",
+      "destination_port": 45560,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 177817,
+      "label": "BENIGN",
+      "destination_port": 52570,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 177884,
+      "label": "BENIGN",
+      "destination_port": 58254,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 184360,
+      "label": "BENIGN",
+      "destination_port": 56277,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 184379,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 187009,
+      "label": "BENIGN",
+      "destination_port": 59518,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 187053,
+      "label": "BENIGN",
+      "destination_port": 59571,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 187056,
+      "label": "BENIGN",
+      "destination_port": 59567,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 187098,
+      "label": "BENIGN",
+      "destination_port": 58306,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 187119,
+      "label": "BENIGN",
+      "destination_port": 56299,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 193514,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 193515,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 196100,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 196130,
+      "label": "BENIGN",
+      "destination_port": 37620,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 196190,
+      "label": "BENIGN",
+      "destination_port": 58251,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 197558,
+      "label": "BENIGN",
+      "destination_port": 56199,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 197562,
+      "label": "BENIGN",
+      "destination_port": 9730,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 197564,
+      "label": "BENIGN",
+      "destination_port": 52366,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 198945,
+      "label": "BENIGN",
+      "destination_port": 9851,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 198953,
+      "label": "BENIGN",
+      "destination_port": 9771,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 198992,
+      "label": "BENIGN",
+      "destination_port": 9841,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 198998,
+      "label": "BENIGN",
+      "destination_port": 56190,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 199011,
+      "label": "BENIGN",
+      "destination_port": 56275,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 199116,
+      "label": "BENIGN",
+      "destination_port": 36560,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 199119,
+      "label": "BENIGN",
+      "destination_port": 9849,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 199712,
+      "label": "BENIGN",
+      "destination_port": 56410,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 199724,
+      "label": "BENIGN",
+      "destination_port": 39864,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 200234,
+      "label": "BENIGN",
+      "destination_port": 443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 200237,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 200347,
+      "label": "BENIGN",
+      "destination_port": 25573,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 200361,
+      "label": "BENIGN",
+      "destination_port": 56367,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 200373,
+      "label": "BENIGN",
+      "destination_port": 9671,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 200378,
+      "label": "BENIGN",
+      "destination_port": 56409,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 200418,
+      "label": "BENIGN",
+      "destination_port": 59758,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 201195,
+      "label": "BENIGN",
+      "destination_port": 58451,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 201227,
+      "label": "BENIGN",
+      "destination_port": 59774,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 201231,
+      "label": "BENIGN",
+      "destination_port": 59681,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 201238,
+      "label": "BENIGN",
+      "destination_port": 59677,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 201265,
+      "label": "BENIGN",
+      "destination_port": 59786,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 201326,
+      "label": "BENIGN",
+      "destination_port": 36472,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 201578,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 201582,
+      "label": "BENIGN",
+      "destination_port": 47472,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 201612,
+      "label": "BENIGN",
+      "destination_port": 53468,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 202252,
+      "label": "BENIGN",
+      "destination_port": 50040,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 202336,
+      "label": "BENIGN",
+      "destination_port": 58538,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 202355,
+      "label": "BENIGN",
+      "destination_port": 59598,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 202370,
+      "label": "BENIGN",
+      "destination_port": 58560,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 202373,
+      "label": "BENIGN",
+      "destination_port": 56426,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 202667,
+      "label": "BENIGN",
+      "destination_port": 443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 203196,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 203815,
+      "label": "BENIGN",
+      "destination_port": 56432,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 203818,
+      "label": "BENIGN",
+      "destination_port": 58465,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 203856,
+      "label": "BENIGN",
+      "destination_port": 58557,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 204069,
+      "label": "BENIGN",
+      "destination_port": 58556,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 204108,
+      "label": "BENIGN",
+      "destination_port": 58459,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 204117,
+      "label": "BENIGN",
+      "destination_port": 9885,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 204365,
+      "label": "BENIGN",
+      "destination_port": 10044,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 204446,
+      "label": "BENIGN",
+      "destination_port": 58495,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 204454,
+      "label": "BENIGN",
+      "destination_port": 57712,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 204467,
+      "label": "BENIGN",
+      "destination_port": 9882,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 204483,
+      "label": "BENIGN",
+      "destination_port": 58532,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 204487,
+      "label": "BENIGN",
+      "destination_port": 9954,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 204510,
+      "label": "BENIGN",
+      "destination_port": 9871,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 204637,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 204639,
+      "label": "BENIGN",
+      "destination_port": 37562,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 205533,
+      "label": "BENIGN",
+      "destination_port": 58643,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 205534,
+      "label": "BENIGN",
+      "destination_port": 58644,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 205535,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 205536,
+      "label": "BENIGN",
+      "destination_port": 54462,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 205587,
+      "label": "BENIGN",
+      "destination_port": 56561,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 205613,
+      "label": "BENIGN",
+      "destination_port": 60058,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 205648,
+      "label": "BENIGN",
+      "destination_port": 59901,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 207276,
+      "label": "BENIGN",
+      "destination_port": 41424,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 207306,
+      "label": "BENIGN",
+      "destination_port": 60172,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 207380,
+      "label": "BENIGN",
+      "destination_port": 59823,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 207429,
+      "label": "BENIGN",
+      "destination_port": 60064,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 207461,
+      "label": "BENIGN",
+      "destination_port": 58624,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 207462,
+      "label": "BENIGN",
+      "destination_port": 58634,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 207695,
+      "label": "BENIGN",
+      "destination_port": 443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 207944,
+      "label": "BENIGN",
+      "destination_port": 60359,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 207947,
+      "label": "BENIGN",
+      "destination_port": 56499,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 208005,
+      "label": "BENIGN",
+      "destination_port": 48698,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 208069,
+      "label": "BENIGN",
+      "destination_port": 443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 208991,
+      "label": "BENIGN",
+      "destination_port": 10292,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 208997,
+      "label": "BENIGN",
+      "destination_port": 60221,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 209073,
+      "label": "BENIGN",
+      "destination_port": 59893,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 209080,
+      "label": "BENIGN",
+      "destination_port": 59866,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 209382,
+      "label": "BENIGN",
+      "destination_port": 60436,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 209636,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 209681,
+      "label": "BENIGN",
+      "destination_port": 10166,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 209741,
+      "label": "BENIGN",
+      "destination_port": 49392,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 209773,
+      "label": "BENIGN",
+      "destination_port": 10147,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 209786,
+      "label": "BENIGN",
+      "destination_port": 45885,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 209846,
+      "label": "BENIGN",
+      "destination_port": 56586,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 210477,
+      "label": "BENIGN",
+      "destination_port": 10086,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 210657,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 210950,
+      "label": "BENIGN",
+      "destination_port": 8393,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 210976,
+      "label": "BENIGN",
+      "destination_port": 47904,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 210982,
+      "label": "BENIGN",
+      "destination_port": 49393,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 211216,
+      "label": "BENIGN",
+      "destination_port": 28941,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 211306,
+      "label": "BENIGN",
+      "destination_port": 35702,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 212498,
+      "label": "BENIGN",
+      "destination_port": 36196,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 212526,
+      "label": "BENIGN",
+      "destination_port": 60550,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 212535,
+      "label": "BENIGN",
+      "destination_port": 60690,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 213526,
+      "label": "BENIGN",
+      "destination_port": 58741,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 213532,
+      "label": "BENIGN",
+      "destination_port": 60648,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 213551,
+      "label": "BENIGN",
+      "destination_port": 56652,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 213563,
+      "label": "BENIGN",
+      "destination_port": 56670,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 213574,
+      "label": "BENIGN",
+      "destination_port": 58761,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 213586,
+      "label": "BENIGN",
+      "destination_port": 38690,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 213590,
+      "label": "BENIGN",
+      "destination_port": 58748,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 213651,
+      "label": "BENIGN",
+      "destination_port": 60707,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 213667,
+      "label": "BENIGN",
+      "destination_port": 60730,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 214063,
+      "label": "BENIGN",
+      "destination_port": 52502,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 214436,
+      "label": "BENIGN",
+      "destination_port": 60698,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 214489,
+      "label": "BENIGN",
+      "destination_port": 58725,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 214939,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 214966,
+      "label": "BENIGN",
+      "destination_port": 54236,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 214970,
+      "label": "BENIGN",
+      "destination_port": 58773,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 214974,
+      "label": "BENIGN",
+      "destination_port": 60763,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 215010,
+      "label": "BENIGN",
+      "destination_port": 56759,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 215106,
+      "label": "BENIGN",
+      "destination_port": 47772,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 215203,
+      "label": "BENIGN",
+      "destination_port": 10411,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 216062,
+      "label": "BENIGN",
+      "destination_port": 10415,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 216065,
+      "label": "BENIGN",
+      "destination_port": 38362,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 216075,
+      "label": "BENIGN",
+      "destination_port": 58793,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 216113,
+      "label": "BENIGN",
+      "destination_port": 56768,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 216124,
+      "label": "BENIGN",
+      "destination_port": 15888,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 216152,
+      "label": "BENIGN",
+      "destination_port": 60880,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 216282,
+      "label": "BENIGN",
+      "destination_port": 39110,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 216330,
+      "label": "BENIGN",
+      "destination_port": 56826,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 216340,
+      "label": "BENIGN",
+      "destination_port": 54306,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 216356,
+      "label": "BENIGN",
+      "destination_port": 60874,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 216371,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 216796,
+      "label": "BENIGN",
+      "destination_port": 10586,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 216837,
+      "label": "BENIGN",
+      "destination_port": 10561,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 216839,
+      "label": "BENIGN",
+      "destination_port": 10580,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 216883,
+      "label": "BENIGN",
+      "destination_port": 56863,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 216886,
+      "label": "BENIGN",
+      "destination_port": 58807,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 217136,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 217234,
+      "label": "BENIGN",
+      "destination_port": 56848,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 217243,
+      "label": "BENIGN",
+      "destination_port": 10194,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 217383,
+      "label": "BENIGN",
+      "destination_port": 10604,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 218051,
+      "label": "BENIGN",
+      "destination_port": 60993,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 218061,
+      "label": "BENIGN",
+      "destination_port": 60983,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 218075,
+      "label": "BENIGN",
+      "destination_port": 60404,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 218111,
+      "label": "BENIGN",
+      "destination_port": 60931,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 218337,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 218405,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 218467,
+      "label": "BENIGN",
+      "destination_port": 54752,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 218486,
+      "label": "BENIGN",
+      "destination_port": 56911,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 220288,
+      "label": "BENIGN",
+      "destination_port": 61085,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 220340,
+      "label": "BENIGN",
+      "destination_port": 52342,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 220637,
+      "label": "BENIGN",
+      "destination_port": 61081,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 220664,
+      "label": "BENIGN",
+      "destination_port": 61201,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 220670,
+      "label": "BENIGN",
+      "destination_port": 56964,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 220694,
+      "label": "BENIGN",
+      "destination_port": 61217,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 221615,
+      "label": "BENIGN",
+      "destination_port": 36926,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 221619,
+      "label": "BENIGN",
+      "destination_port": 10626,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 221699,
+      "label": "BENIGN",
+      "destination_port": 10227,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 221705,
+      "label": "BENIGN",
+      "destination_port": 10226,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 221716,
+      "label": "BENIGN",
+      "destination_port": 10239,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 221718,
+      "label": "BENIGN",
+      "destination_port": 61147,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 222055,
+      "label": "BENIGN",
+      "destination_port": 57037,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 222056,
+      "label": "BENIGN",
+      "destination_port": 57037,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 222075,
+      "label": "BENIGN",
+      "destination_port": 80,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 222083,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 222123,
+      "label": "BENIGN",
+      "destination_port": 57027,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 222136,
+      "label": "BENIGN",
+      "destination_port": 37847,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 222345,
+      "label": "BENIGN",
+      "destination_port": 61267,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 222648,
+      "label": "BENIGN",
+      "destination_port": 56985,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 223476,
+      "label": "BENIGN",
+      "destination_port": 6131,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 223509,
+      "label": "BENIGN",
+      "destination_port": 57040,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 223626,
+      "label": "BENIGN",
+      "destination_port": 10361,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 223629,
+      "label": "BENIGN",
+      "destination_port": 58878,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 223643,
+      "label": "BENIGN",
+      "destination_port": 59134,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 224113,
+      "label": "BENIGN",
+      "destination_port": 59008,
+      "reason": "twin_of_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 224125,
+      "label": "BENIGN",
+      "destination_port": 58859,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 224131,
+      "label": "BENIGN",
+      "destination_port": 59072,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 224145,
+      "label": "BENIGN",
+      "destination_port": 59132,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 224152,
+      "label": "BENIGN",
+      "destination_port": 59116,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 224201,
+      "label": "BENIGN",
+      "destination_port": 58861,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 224240,
+      "label": "BENIGN",
+      "destination_port": 59035,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 224249,
+      "label": "BENIGN",
+      "destination_port": 10280,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 224252,
+      "label": "BENIGN",
+      "destination_port": 61361,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 224271,
+      "label": "BENIGN",
+      "destination_port": 443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 225301,
+      "label": "BENIGN",
+      "destination_port": 58908,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 225335,
+      "label": "BENIGN",
+      "destination_port": 10322,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 225339,
+      "label": "BENIGN",
+      "destination_port": 10326,
+      "reason": "twin_of_train_and_val"
+    },
+    {
+      "partition": "test",
+      "source_row": 225523,
+      "label": "BENIGN",
+      "destination_port": 137,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 225629,
+      "label": "BENIGN",
+      "destination_port": 443,
+      "reason": "twin_of_train"
+    },
+    {
+      "partition": "test",
+      "source_row": 225738,
+      "label": "BENIGN",
+      "destination_port": 61376,
+      "reason": "twin_of_train"
+    }
+  ],
+  "overlap_after_exclusion_77_features": {
+    "train_val": 0,
+    "train_test": 0,
+    "val_test": 0
+  },
+  "checks": {
+    "matches_saved_comparison": true,
+    "exclusions_match_run_data_report": true,
+    "predictions_cover_exactly_kept_rows": true
+  },
+  "artifact_sha256": {
+    "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/ae_done.json": "28088310561d1639ea5ca6f6606cd55b5bd409d34bfea03fdd07b8473a314094",
+    "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/checkpoints/ae_best.pt": "d90c369aa61f3704b3a5aa0919fecdd98c07c275366ea5fb42d903ba3e973b15",
+    "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/checkpoints/ae_last.pt": "c50d403ce2e29edbc91b4df8315b84bb2d7f2489345ecbbcfc9ad2212568807d",
+    "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/data_report.json": "a0b10767f16540356787c44d80c40ba0387a0c6561a6a2ec3ec23d11e072332d",
+    "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/DONE": "2db93b2756c78cbdc905bea680b58d3e22571181afabe3b14dbd05d67bab3226",
+    "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/effective_config.json": "34c155e9c2aecede58235d524ca32fc4a8a98b958af73b2c59a0a7bc9dadaa55",
+    "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/environment-20261108T012630.json": "50995d686edda0fee2a2a9c88fee4f0c1af165d06ecafee4bfb53937d0762d54",
+    "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/identity.json": "fd1cce069767e44cb0a6ef9c313cc4f586252f1798da9b44fa9e43246874c487",
+    "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/latent.npz": "d339d34ec315fb47eca3e66c2caedfa25b2406271d5dca19f4cbf89f15c822e8",
+    "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/log.txt": "d99a3abbd12fa95c9a69d29c2dad37b018d8b3ebc43ee457730f6aee0581e505",
+    "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/metrics.json": "574d977130c460e9ad8cfe8ccc50ca8ffca53aa1b725ecea4ddd83cd814e43eb",
+    "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/predictions_test.csv.gz": "55386e4d9e0d837d270b2bbc3ff32f0901f9ea26e909b6077d952d9c531a9dee",
+    "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/predictions_val.csv.gz": "98f61f9b7e0b8593525721206dfb2d0318e15dda525f7e499a545c541b601efd",
+    "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/preprocessor.json": "10449e055c792f4ed49a19064d86ce963a67e0f10632f5b53e00b1f54062a0cc",
+    "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/run_record.json": "2bbb2ccfbc10610e62b39dda2ce38ce2742f96815be0bb37e853ae6f865a37e1",
+    "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/xgb_model.json": "c722275f42a308000382f9b2a9381d51940d5c74012f40e778245e941e6271dd",
+    "results/runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399/ae_done.json": "aee533a75c584b4a242c9ec3a521949496e00cfeb6028fe32b4bcc35b817ef8c",
+    "results/runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399/checkpoints/ae_best.pt": "1241a412f63eaea1e60cfc5440909213b9c8d106b064e4c3b9e1927a8ab70ef2",
+    "results/runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399/checkpoints/ae_last.pt": "778503cbbb5fda32b44ebcc7501b05befb80e7250d024267097eaf44c8547997",
+    "results/runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399/data_report.json": "08c8ec1c0088569fd0ac819692eda573095a64608b844e9c97c2e4f2db92567d",
+    "results/runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399/DONE": "c5cdc71b33a8bdb56d9e4d9a55009710225ffe265778ddfe65c6afeea6611f05",
+    "results/runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399/effective_config.json": "5466082243f2cb534e12fa845edd6bfe894a6505c023770001ec91681a2d6579",
+    "results/runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399/environment-20261108T015227.json": "bf30d0ceb2ca9a0aada8d72c090fb923e85a870df6fcdb966b976320e9abeced",
+    "results/runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399/identity.json": "3db188fb8542e15952d22a487390d3bba7808c4ca97ac017293e45d1b6de279c",
+    "results/runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399/latent.npz": "ab8b0edc36f44a50f0217babb1a02909d137f8df7bcce5aca466bb1f7922d654",
+    "results/runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399/log.txt": "22a3e4a33790dd55f5e743976c098f9e9abf643a414ecb69763372af7350ab3b",
+    "results/runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399/metrics.json": "17f927492188f88d61334592e1cded79223f3dedab8edede53f489d7b5005965",
+    "results/runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399/predictions_test.csv.gz": "3acbc189317b2c4082200be4cbb691c7aa639b4b9d9ebae5079c07ce651b02af",
+    "results/runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399/predictions_val.csv.gz": "c61a6c9052ddd60abd46e0bb584e7ebb52781f76ba18560f8f9b67da76713438",
+    "results/runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399/preprocessor.json": "f20814dac277e19b6cb32128d95a5aeea62968f0e8428a1c7aeddba8729e55b9",
+    "results/runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399/run_record.json": "5dd4d8f6c6eb846e046339da12e9daa91b20ee876ec1cea09150b62629fb655a",
+    "results/runs/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399/xgb_model.json": "62eec8dc1590c366b21d93407d38e3b480930eaacf39a4de49e69ae643362cd0"
+  },
+  "paired_file": "ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399-vs-full.paired_test.csv.gz"
+}

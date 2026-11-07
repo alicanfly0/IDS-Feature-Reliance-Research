@@ -82,7 +82,30 @@ Removing the port merges flows that differ only by port. Under the **original** 
 
 **Common test population:** 33,486 rows (19,233 DDoS / 14,253 BENIGN), evaluation fingerprint `0435302b…`. Design: D-018 in the decision log.
 
-## 6. Limitations
+## 6. Result of the Destination Port ablation (executed after review, D-018; independently re-verified)
+
+Both models were scored on the **same 33,486 test rows** (19,233 DDoS / 14,253 BENIGN): the original test set minus 391 BENIGN rows that become duplicates of earlier partitions once the port is removed.
+
+| | Full model (68 inputs) | Without the port (67 inputs) |
+|---|---|---|
+| F1 | 0.999870 | 0.999818 |
+| MCC | 0.999695 | 0.999572 |
+| TN / FP / FN / TP | 14,250 / 3 / 2 / 19,231 | 14,250 / 3 / 4 / 19,229 |
+| AE epochs | 61 (best 50) | 100, the cap (best 98) |
+
+**Paired outcome:** 3 rows only the full model got right vs 1 only the ablated model got right; **exact McNemar p = 0.625**.
+
+**Reading** (see D-018 for the full statement):
+
+- **Not significant, not equivalent:** the difference is not statistically significant, but that **does not prove equivalence** (4 discordant rows give little power).
+- **Scope:** one model seed, on a restricted population (391 test rows excluded).
+- **Convergence:** incomplete convergence of the ablated AE cannot be ruled out.
+- **Artifact status:** `Destination Port` remains a **candidate shortcut, not a confirmed artifact**.
+- **Generalization:** performing well without it does **not** establish cross-session or cross-domain generalization.
+
+**Records:** `results/comparisons/ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399-vs-full.*` (comparison, per-row paired predictions, verification with excluded rows and artifact checksums).
+
+## 7. Limitations
 
 - One model seed.
 - Simple single-feature and depth-2 models only. No multi-feature shortcut search, and no SHAP (deferred, D-002).

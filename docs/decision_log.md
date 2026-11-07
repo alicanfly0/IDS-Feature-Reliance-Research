@@ -35,7 +35,7 @@ Status values: OPEN · APPROVED (team decision) · PARTIALLY APPROVED · DEFERRE
 | D-015 | Storage location (local only) | DECIDED; Amendment 1 PROPOSED, not authorized |
 | D-016 | Compute: local CPU + Google Colab GPU | DECIDED; Amendment 1: first baseline run on laptop CPU (done) |
 | D-017 | AE-XGBoost adaptations vs the paper | DOCUMENTED (Milestone 1A) |
-| D-018 | Destination Port ablation: comparison design | PROPOSED (Milestone 1B); awaiting review before training |
+| D-018 | Destination Port ablation: comparison design | APPROVED and EXECUTED (seed 0, CPU); no measurable effect |
 
 ---
 
@@ -487,7 +487,7 @@ To run the first AE-XGBoost baseline on Google Colab Free, the following would b
 
 **Comparisons:** author-reported numbers (e.g. CIC-IDS2017 F1 0.9993, Table 6) are quoted only as author-reported and are not directly comparable to track-B results.
 
-## D-018 Destination Port ablation: fair comparison design — PROPOSED (2026-11-08), awaiting review
+## D-018 Destination Port ablation: fair comparison design — APPROVED and EXECUTED (2026-11-08)
 
 **Question.** How much of the AE-XGBoost baseline's performance depends on `Destination Port`? This is a controlled removal, not a correction: the port's artifact status stays open (D-012).
 
@@ -535,3 +535,75 @@ Then compare with `python -m src.experiments.compare_ablation --full results/run
 
 **Cost:** about 1.5 min on the laptop CPU, so no Colab GPU (D-016 Amendment 1).
 
+### D-018 result (user approval "Approve and run", 2026-11-08; independently re-verified)
+
+**Runs** (both on the laptop CPU, model seed 0, the same config except the removed feature):
+
+| | Full model | Ablated model |
+|---|---|---|
+| Run | `ae_xgb_d008_trackB-seed0-cpu-565a8b9e` | `ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399` |
+| Commit | `6fed9b0` | `fd65ad5` |
+| Inputs | 68 | 67 (`Destination Port` removed) |
+| AE epochs | 61 (early-stopped, best epoch 50) | **100 (cap reached, best epoch 98)** |
+| XGBoost trees | 204 | 166 |
+| Wall time | 1.45 min | 2.36 min |
+
+**Shared provenance:**
+
+- Data: `MachineLearningCSV.zip` sha256 `c3f26274…727928`; Friday DDoS CSV sha256 `6ff1580f…7b411ee`.
+- Split fingerprint `50bd9948…`; ablated evaluation fingerprint `0435302b…`.
+
+**Records:**
+
+| File | Contents |
+|---|---|
+| `results/baselines/<full run>/` | Full model summary: config, identity, data report, preprocessor with feature list, AE history, metrics, environment, log |
+| `results/ablations/<ablated run>/` | The same for the ablated model |
+| `results/comparisons/<ablated run>-vs-full.json` | The pipeline's comparison |
+| `….paired_test.csv.gz` | Per-row source row, label, and both models' probabilities and predictions |
+| `….verification.json` | The independent re-verification: every excluded row with its reason, and sha256 of all 32 run artifacts |
+
+Large artifacts (checkpoints, latent codes, models, full predictions) stay in Git-ignored `results/runs/`.
+
+**Evaluation population:**
+
+- The same 33,486 test rows for both models: 19,233 DDoS / 14,253 BENIGN.
+- This is the original 33,877-row test set **minus 391 rows** whose 77-feature vector duplicates an earlier partition once the port is removed:
+  - 228 duplicate a training row;
+  - 27 duplicate a validation row;
+  - 136 duplicate both.
+- **All 391 are BENIGN.**
+- The ablated model's validation set also excludes 357 BENIGN rows that duplicate training rows.
+- After exclusion, the 77-feature view has 0 / 0 / 0 shared vectors (train–val / train–test / val–test).
+
+**Results on the common rows** (ours, measured; validation chose each model; test used once):
+
+| Model | F1 | MCC | AUROC | TN / FP / FN / TP |
+|---|---|---|---|---|
+| Full model | **0.999870** | **0.999695** | 0.999992 | 14,250 / 3 / 2 / 19,231 |
+| Without Destination Port | **0.999818** | **0.999572** | 0.999980 | 14,250 / 3 / 4 / 19,229 |
+
+**Paired outcome:**
+
+- both correct 33,478; both wrong 4 (rows 5245, 5246, 99515, 110943);
+- only the full model correct 3 (rows 187242, 190967, 210451);
+- only the ablated model correct 1 (row 155712);
+- **exact two-sided McNemar p = 0.625.**
+
+**Verification:** these figures were recomputed independently from the saved predictions:
+
+- scikit-learn metrics, SciPy's exact binomial test, and an independent duplicate grouping;
+- they match the pipeline's output exactly;
+- the baseline's 16 pre-existing artifacts are byte-identical to their pre-Milestone-1B checksums.
+
+**What this does and does not show:**
+
+- **Not significant, not equivalent.** The difference is not statistically significant (p = 0.625). **That does not prove the two models are equivalent**: with only 4 discordant rows, the test has very little power to detect small differences.
+- **One seed.** Only one model seed was evaluated; seed-to-seed variation is unknown.
+- **Restricted population.** The comparison applies to a restricted evaluation population. 391 original test rows (all BENIGN, mostly ports 137, 80 and 443) are excluded, so the result does not directly describe the full original test set.
+- **Convergence.** Incomplete AE convergence cannot be ruled out for the ablated model: it reached the 100-epoch cap with its best epoch at 98.
+- **Artifact status.** `Destination Port` remains a **candidate shortcut, NOT a confirmed artifact** (D-012). Its strong association with the label is measured; this experiment shows only that this model did not measurably depend on it here.
+- **Generalization.** Strong performance without `Destination Port` does **not** establish cross-session or cross-domain generalization. The remaining features may also encode properties of this single capture, and near-duplicate and session leakage remain unassessed.
+- **No causal conclusion** is drawn beyond "removing this one feature did not measurably change performance on these rows, for one seed".
+
+**Not started (each needs approval):** additional seeds; a time- or session-grouped split; registry-based removal of feature groups; evaluation on the Engelen-corrected data; SHAP.

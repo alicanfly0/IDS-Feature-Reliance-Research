@@ -16,8 +16,11 @@ xgboost==3.2.0
 # requires xgboost>=2.0 (device="cuda" API), runs the test suite, and every run records
 # the exact versions it used (src/env.py).
 
+# Milestone 2A: original-feature SHAP (decision log D-019). shap 0.49.1 is the newest release
+# that supports numpy<2 (0.50+ requires numpy>=2, which this pinned stack does not use).
+shap==0.49.1
+matplotlib==3.11.2
+
 # Later milestones (not installed yet; pin when first used):
 # lightgbm  - SHAP feature selector for SHAP-DCNN (Fang et al. 2026)
-# shap      - attribution (D-002, deferred)
 # scipy     - already present as a scikit-learn dependency; pin if used directly
-# matplotlib

@@ -21,6 +21,8 @@ data/processed/*
 *.npz
 results/runs/
 results/cache/
+results/splits/
+results/benchmarks/
 
 # Python
 __pycache__/

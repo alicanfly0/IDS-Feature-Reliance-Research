@@ -124,8 +124,13 @@ def _gpu() -> dict:
 
 def _git() -> dict:
     commit = _run(["git", "rev-parse", "HEAD"])
-    status = _run(["git", "status", "--porcelain"])
-    return {"commit": commit, "dirty": bool(status) if status is not None else None}
+    if commit:
+        status = _run(["git", "status", "--porcelain"])
+        return {"commit": commit, "dirty": bool(status) if status is not None else None, "source": "git"}
+    # Code delivered as a `git archive` bundle (no .git): the launcher exports the commit id
+    # embedded in the bundle. The tree is exactly that commit, so it cannot be dirty.
+    bundled = os.environ.get("CNET_GIT_COMMIT")
+    return {"commit": bundled, "dirty": False if bundled else None, "source": "bundle" if bundled else None}
 
 
 def in_colab() -> bool:

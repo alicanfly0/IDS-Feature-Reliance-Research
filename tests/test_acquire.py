@@ -25,6 +25,9 @@ def test_direct_download_verifies_size_and_hash(tmp_path):
     assert check_file(tmp_path / "raw/toy/toy.csv", manifest["datasets"]["toy"]["files"][0]) == []
     # verify still fails overall: the manual-source file has not been acquired
     assert cmd_verify(manifest, "toy", root=tmp_path) == 1
+    # ... but the one file that was transferred can be verified on its own
+    assert cmd_verify(manifest, "toy", root=tmp_path, only_file="toy.csv") == 0
+    assert cmd_verify(manifest, "toy", root=tmp_path, only_file="nope.csv") == 1
 
 
 def test_size_or_hash_mismatch_fails(tmp_path):

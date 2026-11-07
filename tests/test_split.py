@@ -5,11 +5,13 @@ import pandas as pd
 import pytest
 
 from src.data.split import (
-    check_disjoint, class_proportions, content_groups, cross_split_duplicates, group_overlap, group_split,
+    check_disjoint, class_proportions, conflicting_groups, content_groups, cross_split_duplicates, group_overlap,
+    group_split, partition_overlap,
     load_split, predefined_split, save_split, stratified_split, temporal_split,
 )
 
 LABELS = np.array(["A"] * 800 + ["B"] * 200)
+GROUP_SPLIT_SEED42_FINGERPRINT = "3d93b9deb786e458"  # pinned 2026-11-08 (numpy legacy RandomState)
 
 
 def test_stratified_is_deterministic_and_disjoint():
@@ -52,6 +54,31 @@ def test_content_groups_keep_identical_vectors_on_one_side():
     check_disjoint(split, len(df))
     assert cross_split_duplicates(df, split, feats) == {"val": 0, "test": 0}
     assert sum(cross_split_duplicates(df, stratified_split(df["label"], seed=1), feats).values()) > 0
+
+
+def test_group_split_is_pinned_to_a_frozen_rng():
+    # Regression pin: legacy RandomState permutations never change, so this split must not either.
+    split = group_split(np.repeat(np.arange(20), 3), seed=42)
+    assert split.fingerprint()[:16] == GROUP_SPLIT_SEED42_FINGERPRINT
+    assert (len(split.train), len(split.val), len(split.test)) == (42, 9, 9)
+
+
+def test_content_groups_are_exact_and_ignore_signed_zero():
+    df = pd.DataFrame({"a": [0.0, -0.0, 1.0, 1.0, 2.0], "b": [5, 5, 6, 6, 7]})
+    assert content_groups(df, ["a", "b"]).tolist() == [0, 0, 1, 1, 2]
+    text = pd.DataFrame({"s": ["x", "y", "x"]})
+    g = content_groups(text, ["s"])
+    assert g[0] == g[2] != g[1]
+
+
+def test_conflicting_groups_and_pairwise_overlap():
+    groups = np.array([0, 0, 1, 1, 2, 3, 3, 4])
+    labels = np.array([1, 1, 0, 1, 0, 0, 0, 1])
+    assert conflicting_groups(groups, labels).tolist() == [1]
+    split = predefined_split(["train", "train", "train", "val", "test", "val", "test", "test"])
+    assert partition_overlap(groups, split) == {"train_val": 1, "train_test": 0, "val_test": 1}
+    clean = group_split(groups, seed=0)
+    assert partition_overlap(groups, clean) == {"train_val": 0, "train_test": 0, "val_test": 0}
 
 
 def test_temporal_split_orders_and_keeps_ties_together():

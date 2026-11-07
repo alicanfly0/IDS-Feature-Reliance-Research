@@ -1,0 +1,55 @@
+# TINY smoke run of the same pipeline (laptop CPU, ~1 minute). NOT an experiment:
+# results are meaningless by design. Same data, rules and split as track B, then a small
+# random subset of each partition and a handful of training steps.
+#   .\run.cmd -m src.experiments.ae_xgb --config configs/experiments/ae_xgb_d008_smoke.yaml
+
+experiment:
+  name: ae_xgb_d008_smoke
+  dataset: cicids2017_original
+  files: {data: MachineLearningCSV.zip}
+  label: Label
+  label_cols: [Label]
+  identifier_cols: []
+  categorical_cols: []
+  split:
+    strategy: group
+    fractions: [0.70, 0.15, 0.15]
+    seed: 42
+    expected_fingerprint: 50bd994880abbe151738993e299b90a6e50fb5ffae235a72677bb7813c447f44
+
+data:
+  label_map: {BENIGN: 0, DDoS: 1}
+  nonnegative_cols: [Flow Duration]
+
+ae:
+  hidden: [80]
+  latent: 40
+  activation: relu
+  latent_activation: relu
+  output_activation: linear
+  lr: 0.001
+  batch_size: 256
+  max_epochs: 3
+  patience: 2
+  min_delta: 0.0
+
+augment:
+  enabled: false
+  sigma_scale: 0.1
+  keep_quantile: 0.95
+
+xgb:
+  n_estimators: 30
+  learning_rate: 0.11
+  max_depth: 6
+  reg_alpha: 0
+  reg_lambda: 1
+  subsample: 0.8
+  colsample_bytree: 0.8
+  early_stopping_rounds: 5
+
+run:
+  model_seed: 0
+  device: cpu
+  threshold: 0.5
+  sample: {train: 3000, val: 1000, test: 1000}

@@ -1,12 +1,47 @@
 # Google Colab execution plan (Milestone 1 onward)
 
-**Status (2026-11-07):**
+**Status (2026-11-08, Milestone 1A):**
 
-- **Written:** this plan.
-- **Done and tested locally (Windows, CPU):** `src/env.py`, which handles device selection, seeding and the environment snapshot.
-- **Scaffold only:** `notebooks/colab_runner.ipynb`. It has **not** been run on Colab.
-- **Not verified on Colab or Linux:** nothing here has been executed there.
-- **No data uploaded:** no dataset, checkpoint or private file has been uploaded anywhere (D-015).
+- **Implemented and tested locally (Windows, CPU):**
+  - the AE-XGBoost runner `src/experiments/ae_xgb.py`, with resumable stages, never overwriting a finished run, and identity checks;
+  - `src/env.py`;
+  - the notebook workflow `notebooks/colab_runner.ipynb`, statically checked.
+- **Not executed on Colab or Linux yet.** GPU behaviour, Colab package versions and Drive I/O are unverified.
+- **No data uploaded:** no dataset, checkpoint or private file has gone anywhere. D-015 Amendment 1 is *proposed* in the decision log, not authorized.
+
+## First real run — exact steps (AE-XGBoost, D-008 scope, track B)
+
+**You do, once:**
+
+1. Record **D-015 Amendment 1** as authorized in `docs/decision_log.md` (the exact text is there) and ask Claude to commit it. Claude reports the commit hash `H`.
+2. On the laptop, from the repository folder:
+
+   ```
+   git archive --format=zip -o cnet_code_<first 12 chars of H>.zip H
+   ```
+
+   The bundle stores `H` inside the zip and contains no data.
+3. In Google Drive (free 15 GB is enough), create the private folders `MyDrive/cnet-data/` and `MyDrive/cnet-runs/`. Upload into `cnet-data/`:
+   - the bundle;
+   - `data/raw/cicids2017_original/MachineLearningCSV.zip` (235,102,953 bytes; the only dataset file needed).
+
+**You do, each session:**
+
+4. Open `notebooks/colab_runner.ipynb` in Colab (File → Upload notebook, or from the bundle). Runtime → Change runtime type → T4 GPU.
+5. In cell 1, set `D015_AMENDMENT_1_RECORDED = True` and `EXPECTED_COMMIT = "H"`. Run all cells and approve the Drive prompt.
+   - Cell 3 runs the test suite on Colab's packages: the first real Colab verification.
+   - Cell 4 verifies the archive's sha256 and MD5.
+   - Cell 5 is a one-minute GPU benchmark.
+   - Cell 6 is the run.
+6. After a disconnect, run all cells again: the run resumes from the last AE epoch checkpoint, or later stage, and a finished run prints "already complete".
+7. Download `MyDrive/cnet-runs/runs/<run_id>/` into the laptop's `results/runs/` so Claude can review the measured results.
+
+**Run identity:**
+
+- `run_id = ae_xgb_d008_trackB-seed0-cuda-<config hash>`.
+- Outputs go to `MyDrive/cnet-runs/runs/<run_id>/`, plus `MyDrive/cnet-runs/splits/ae_xgb_d008_trackB-split.json` (written once, then verified on every run).
+
+**Expected cost:** the laptop benchmark projects ≤ 1.5 min of AE training and ≤ 0.3 min of XGBoost on CPU (decision log D-016). The GPU benchmark in cell 5 gives the real Colab figure.
 
 Architecture decision: D-016 in `docs/decision_log.md`.
 
@@ -110,7 +145,7 @@ Architecture decision: D-016 in `docs/decision_log.md`.
   - no extracted CSVs on Drive (slow and large).
 - **Each session:**
   - copy the archive from Drive to the VM's local disk at `/content/cnet/data/raw/<dataset id>/`;
-  - verify it (§6), then extract it locally (`python -m src.data.acquire extract <dataset id>`).
+  - verify it (§6). The runner then extracts **only** the Friday DDoS member (77 MB) and checks its CRC; there is no need to unpack all 8 day files (844 MB).
   - Extracting the 235 MB archive takes seconds to a minute and avoids any repeated download from CIC, which would need the registration form again.
 
 **Other sources:**
@@ -123,7 +158,7 @@ Architecture decision: D-016 in `docs/decision_log.md`.
 Run the same command as locally:
 
 ```
-python -m src.data.acquire verify cicids2017_original
+python -m src.data.acquire verify cicids2017_original --file MachineLearningCSV.zip
 ```
 
 **What it checks:**
@@ -140,58 +175,48 @@ A file that fails is not used.
 python -m pytest tests/test_real_data_smoke.py -k friday
 ```
 
-## 7. Where outputs persist across disconnections
+## 7. Where outputs persist across disconnections (implemented)
 
-**Layout per run:** each run writes to `results/runs/<run_id>/`:
+**Storage root:** set with `--storage` (or the `CNET_STORAGE` variable). Locally it defaults to `results/`, which is Git-ignored for runs, splits and benchmarks; on Colab it is `MyDrive/cnet-runs`.
 
-| File | Contents |
+**Layout:**
+
+| Path under the storage root | Contents |
 |---|---|
-| `run_record.json` | Effective config, split fingerprint and source, preprocessor state, metrics summary |
-| `environment.json` | `python -m src.env` snapshot |
-| `split.json` | Saved split, with record digest (§8) |
-| `checkpoints/` | Model state |
-| `log.txt` | Run log |
-| `metrics.json` | Final metrics |
-| `figures/` | Plots |
-| `DONE` | Written last, atomically |
+| `splits/<experiment>-split.json` | Split indices + provenance + record digest; written once, verified on every later run |
+| `runs/<run_id>/identity.json` | Config hash, device, Git commit, dataset sha256s |
+| `runs/<run_id>/effective_config.json` | base.yaml + experiment file, as used |
+| `runs/<run_id>/environment-<time>.json` | `src/env.py` snapshot per session (hardware, packages, commit, seed, dataset hashes) |
+| `runs/<run_id>/data_report.json` | Recomputed counts: raw, per-rule, excluded source rows, sentinels, conflicts, partitions, overlaps |
+| `runs/<run_id>/preprocessor.json` | Fitted train-only state (constants, medians, min/max, input dimension, overlap re-check) |
+| `runs/<run_id>/checkpoints/ae_last.pt` | Model + optimizer + epoch + early-stopping state + RNG states + config |
+| `runs/<run_id>/checkpoints/ae_best.pt` | Best weights by validation reconstruction MSE |
+| `runs/<run_id>/ae_done.json` | AE training history |
+| `runs/<run_id>/latent.npz` | Latent codes for train / val / test (so XGBoost never forces AE retraining) |
+| `runs/<run_id>/xgb_model.json` | XGBoost model (early-stopped) |
+| `runs/<run_id>/predictions_val.csv.gz`, `predictions_test.csv.gz` | `source_row`, true label, P(DDoS), predicted label |
+| `runs/<run_id>/metrics.json` | Train (diagnostic only), validation and test metrics |
+| `runs/<run_id>/run_record.json` | Summary: identity, split fingerprint, input dimension, AE/XGBoost outcome, augmentation decision, timings |
+| `runs/<run_id>/log.txt` | Run log |
+| `runs/<run_id>/DONE` | Written last |
 
-**On Colab (after the amendment):**
+**Writes:** every file is written atomically (`*.tmp`, then `os.replace`). A disconnect never leaves a half-written file under its real name.
 
-- `results/runs/` is a symlink to a private Drive folder, e.g. `MyDrive/cnet-runs/`, so it survives disconnection.
-- Checkpoints and logs are written there **atomically**: write `name.tmp`, then `os.replace`. A disconnect mid-write never leaves a half-written file under the real name.
+**Size:** a full run is tens of MB, mostly `latent.npz` and predictions, which fits the free 15 GB Drive.
 
-**Locally:** `results/runs/` is Git-ignored (it may hold checkpoints).
+**What goes into Git:** only small, reviewed summaries, copied in deliberately.
 
-**What goes into Git:** only small, reviewed summaries (tables, figures, run records without checkpoints), copied into the repository deliberately.
+## 8. Resuming interrupted experiments safely (implemented)
 
-## 8. Resuming interrupted experiments safely
+`run_id = <experiment>-seed<model_seed>-<device>-<first 8 hex of the config hash>`. The same config, seed and device always map to the same folder.
 
-**Run identity:** each run gets a deterministic id:
-
-    run_id = <experiment>-<track>-seed<model_seed>-<first 8 hex of sha256(effective config)>
-
-The same config and seed always map to the same folder.
-
-**Before starting, the runner:**
-
-1. Skips the run if `DONE` exists. No duplicate work.
-2. If the folder exists without `DONE`, checks that the saved record matches the current run:
-   - effective-config hash;
-   - **Git commit**;
-   - dataset sha256s;
-   - split record digest (`load_split(..., expected_source=..., n_rows=...)` refuses edited or mismatched splits).
-
-   If anything differs, it refuses to resume and asks for a new run id. Code or data changed, so the results would mix.
-3. Otherwise resumes from the newest complete checkpoint:
-   - **AE:** per epoch (model, optimizer, early-stopping state, RNG states);
-   - **XGBoost:** continue boosting from the saved booster, or retrain (it is fast) and document which.
-
-**During the run:**
-
-- Checkpoint at least every N epochs **or** every ~10 minutes, whichever comes first.
-- `DONE` is written only after `metrics.json` and the final model are complete.
-
-**Status:** this logic is Milestone 1 work and is **not implemented yet.** The building blocks exist: `save_split` / `load_split` with provenance checks, `write_run_record`, `src/env.py`.
+| Situation | Behaviour |
+|---|---|
+| `DONE` exists | Nothing is recomputed or overwritten |
+| Folder exists without `DONE` | Config hash, device and dataset hashes must match, or the run refuses to start. A different Git commit is refused unless `--allow-code-change` is given (recorded) |
+| AE interrupted | Resumes from `ae_last.pt`. Epoch e uses a batch order seeded by (seed, e), so a resumed run is **bit-identical** to an uninterrupted one on CPU (tested) |
+| Interrupted after the AE | `latent.npz` and the best weights are reused; only later stages run (tested) |
+| Different config | A different `run_id`; the saved split is verified and reused, so the evaluation population is the same (tested) |
 
 ## 9. CPU or CUDA at runtime
 
@@ -230,19 +255,6 @@ On this machine it prints Python 3.11.9, `Windows-10-10.0.26200-SP0` (build 2620
 
 ---
 
-## First Colab session checklist (Milestone 1)
+## First Colab session checklist
 
-**Do not start before all three are done:**
-
-- D-015 Amendment 1 recorded;
-- GitHub remote configured;
-- D-007 fully signed off.
-
-**Then:**
-
-1. Open the notebook, select a GPU runtime, and run the GPU check cell.
-2. Clone the repository at the agreed commit and install only the missing packages.
-3. Run `python -m pytest -q` on Colab and record the result. This is the first real verification of Colab compatibility.
-4. Mount Drive, copy the archive, run `python -m src.data.acquire verify cicids2017_original`, then `extract`.
-5. Run `python -m src.env --dataset cicids2017_original --json results/runs/env_check/environment.json`.
-6. Only then start the Milestone 1 experiment command (not yet written).
+Superseded by **First real run — exact steps** at the top of this document.

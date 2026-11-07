@@ -21,7 +21,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import GroupShuffleSplit, train_test_split
+from sklearn.model_selection import train_test_split
 
 PARTS = ("train", "val", "test")
 
@@ -70,31 +70,67 @@ def stratified_split(labels, fractions=(0.70, 0.15, 0.15), seed: int = 42) -> Sp
 
 
 def group_split(groups, fractions=(0.70, 0.15, 0.15), seed: int = 42) -> Split:
-    """Fractions apply to groups, not rows; class balance is not guaranteed (check it)."""
+    """Whole groups per partition; fractions apply to groups, not rows (measure row/class shares).
+
+    Groups are shuffled with NumPy's legacy RandomState, whose stream is frozen across
+    NumPy versions, so the same groups and seed give the same split on every machine
+    (e.g. Windows locally and Colab), independent of scikit-learn's version.
+    """
     _check_fractions(fractions)
-    groups = np.asarray(groups)
-    idx = np.arange(len(groups))
-    train_f, val_f, test_f = fractions
-    outer = GroupShuffleSplit(n_splits=1, train_size=train_f, random_state=seed)
-    train, rest = next(outer.split(idx, groups=groups))
-    if val_f == 0:
-        val, test = np.array([], dtype=int), rest
-    else:
-        inner = GroupShuffleSplit(n_splits=1, test_size=test_f / (val_f + test_f), random_state=seed)
-        v, t = next(inner.split(rest, groups=groups[rest]))
-        val, test = rest[v], rest[t]
-    return Split(np.sort(train), np.sort(val), np.sort(test), "group", seed, {"fractions": list(fractions)})
+    _, codes = np.unique(np.asarray(groups), return_inverse=True)
+    codes = codes.reshape(-1)
+    n_groups = codes.max() + 1 if len(codes) else 0
+    order = np.random.RandomState(seed).permutation(n_groups)
+    n_train = int(round(fractions[0] * n_groups))
+    n_val = int(round(fractions[1] * n_groups))
+    part_of_group = np.empty(n_groups, dtype=np.int8)
+    part_of_group[order[:n_train]] = 0
+    part_of_group[order[n_train:n_train + n_val]] = 1
+    part_of_group[order[n_train + n_val:]] = 2
+    part = part_of_group[codes]
+    return Split(*(np.flatnonzero(part == p) for p in range(3)), "group", seed,
+                 {"fractions": list(fractions), "n_groups": int(n_groups)})
 
 
 def content_groups(df: pd.DataFrame, feature_cols: list[str]) -> np.ndarray:
     """One group id per distinct feature vector, for duplicate-aware `group_split`.
 
     Rows with identical values on `feature_cols` get the same id, so a group split
-    cannot place a vector on both sides. A 64-bit hash collision would only merge
-    two groups (coarser grouping), never separate identical rows. Recompute when
-    the model input columns change: fewer columns can make more rows identical.
+    cannot place a vector on both sides. For all-numeric, NaN-free columns the id is
+    the rank of the row among the sorted distinct rows: exact (no hashing) and
+    independent of library versions. Otherwise a pandas row hash is used (a 64-bit
+    collision could only merge groups, never separate identical rows). Recompute
+    when the model input columns change: fewer columns can make more rows identical.
     """
-    return pd.util.hash_pandas_object(df[feature_cols], index=False).to_numpy()
+    values = df[feature_cols]
+    if all(pd.api.types.is_numeric_dtype(t) for t in values.dtypes):
+        arr = values.to_numpy(dtype=np.float64) + 0.0   # + 0.0 turns -0.0 into 0.0
+        if not np.isnan(arr).any():
+            _, inverse = np.unique(arr, axis=0, return_inverse=True)
+            return inverse.reshape(-1).astype(np.int64)
+    hashed = pd.util.hash_pandas_object(values, index=False).to_numpy()
+    return np.unique(hashed, return_inverse=True)[1].reshape(-1).astype(np.int64)
+
+
+def conflicting_groups(groups, labels) -> np.ndarray:
+    """Group ids whose rows carry more than one label (identical inputs, different targets)."""
+    frame = pd.DataFrame({"g": np.asarray(groups), "y": np.asarray(labels)})
+    n_labels = frame.groupby("g")["y"].nunique()
+    return n_labels.index[n_labels > 1].to_numpy()
+
+
+def partition_overlap(groups, split: Split) -> dict[str, int]:
+    """For every partition pair, rows of the second partition whose group also occurs in the first.
+
+    With content_groups this counts exact feature-vector duplicates across partitions;
+    a duplicate-aware split must give 0 for all three pairs.
+    """
+    groups = np.asarray(groups)
+    parts = split.parts()
+    out = {}
+    for a, b in (("train", "val"), ("train", "test"), ("val", "test")):
+        out[f"{a}_{b}"] = int(np.isin(groups[parts[b]], groups[parts[a]]).sum())
+    return out
 
 
 def temporal_split(times, fractions=(0.70, 0.15, 0.15)) -> Split:

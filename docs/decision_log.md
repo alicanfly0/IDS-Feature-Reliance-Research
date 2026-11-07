@@ -24,16 +24,17 @@ Status values: OPEN · APPROVED (team decision) · PARTIALLY APPROVED · DEFERRE
 | D-004 | Which corrected CICIDS2017 | OPEN |
 | D-005 | Original vs corrected comparison | OPEN |
 | D-006 | Cross-dataset schemas | OPEN |
-| D-007 | Evaluation design | **PARTIALLY APPROVED**; exact procedure documented and demonstrated, awaiting sign-off |
+| D-007 | Evaluation design | **PARTIALLY APPROVED**; track-B split approved and implemented; statistics and track A pending |
 | D-008 | First baseline dataset | **APPROVED** |
 | D-009 | Fang subset and split | OPEN |
 | D-010 | MES-DNN scale | OPEN |
 | D-011 | Invalid rows | **APPROVED** for the initial DDoS experiment |
-| D-012 | Artifact registry evidence levels | OPEN |
+| D-012 | Artifact registry evidence levels | OPEN; Destination Port retained in the first baseline |
 | D-013 | Unverifiable Phase II citations | OPEN |
 | D-014 | Python environment | DECIDED |
-| D-015 | Storage location (local only) | DECIDED; no amendments |
-| D-016 | Compute: local CPU + Google Colab GPU | DECIDED (team requirement) |
+| D-015 | Storage location (local only) | DECIDED; Amendment 1 PROPOSED, not authorized |
+| D-016 | Compute: local CPU + Google Colab GPU | DECIDED (team requirement); benchmark note added |
+| D-017 | AE-XGBoost adaptations vs the paper | DOCUMENTED (Milestone 1A) |
 
 ---
 
@@ -180,36 +181,54 @@ Status values: OPEN · APPROVED (team decision) · PARTIALLY APPROVED · DEFERRE
 - **Train-only fitting:** preprocessing and augmentation (e.g. Nezhadsistani's latent-space oversampling) are fitted on training data only.
 - **No fold-based statistics:** dependent cross-validation folds are never treated as independent statistical observations.
 
-**Before D-007 is marked fully decided,** the team signs off on the exact procedure below. It is a proposal, documented and demonstrated on real data, not yet approved.
+**Status of the parts (2026-11-08):**
 
-### Proposed exact procedure — Track B (leakage-resistant)
+- **Track B split: APPROVED and IMPLEMENTED** (Milestone 1A brief: fixed, reproducible, duplicate-aware 70/15/15, seed 42, zero duplicates across all three partition pairs).
+- **Track B statistics** (seed count, bootstrap) and **track A**: still proposals. One model seed is run first; more seeds, track A and ablations come after the first results are reviewed.
 
-1. **Rows:** the D-008 scope after the D-011 row rules: 225,709 rows, original source positions kept.
-2. **Feature set for duplicate detection:** exactly the columns the model receives. Today that is all 78 CICFlowMeter features. If D-012 removes any column (e.g. `Destination Port`) from the input, the groups must be recomputed, because fewer columns can make more rows identical.
-3. **Duplicate policy:** keep all rows, but group identical feature vectors (`split.content_groups`, a 64-bit row hash). Every vector then lives in exactly one partition. Duplicates within a partition are kept, which preserves the class and traffic frequencies.
-   - Groups whose identical vectors carry different labels are listed and excluded from all partitions. There are none in the D-008 scope.
+### Track B (leakage-resistant) — exact procedure
+
+1. **Rows:** the D-008 scope after the D-011 row rules, original CSV row positions kept as `source_row`.
+2. **Feature set for duplicate detection:** exactly the columns the model receives. For the first baseline that is all 78 CICFlowMeter features, **including `Destination Port`** (D-012). If a later experiment removes a column, the groups must be recomputed, because fewer columns can make more rows identical.
+3. **Duplicate policy:** keep all rows, but give identical feature vectors one group id (`split.content_groups`).
+   - The id is the row's rank among the sorted distinct rows: exact (no hashing) and independent of library versions; `-0.0` is treated as `0.0`.
+   - Every vector lives in exactly one partition; duplicates within a partition are kept, which preserves frequencies.
    - Within-partition deduplication is a sensitivity analysis, not the primary result.
-4. **Splitting algorithm:** `split.group_split(groups, fractions=(0.70, 0.15, 0.15), seed=42)`. This runs scikit-learn `GroupShuffleSplit` twice: 70% of groups to train, then the remaining groups split 50/50 into validation and test.
-   - Fractions apply to groups, so row fractions and class shares are measured and reported, not assumed.
-5. **Grouping strategy:** content groups, because MachineLearningCVE has no host, session or time keys. A host/session or time-based grouping using `TrafficLabelling` identifiers is a later sensitivity analysis. It needs a join between the two CSV releases, which is not built.
-6. **Seeds:**
-   - **Partition seed:** 42, one fixed train/val/test partition shared by all comparable experiments and ablations.
-   - **Model seeds:** {0, 1, 2, 3, 4} for initialisation, augmentation and XGBoost randomness. The number 5 is a proposal.
-7. **Statistical comparison:**
-   - Report each metric as mean ± SD across the 5 model seeds, descriptively.
-   - To compare two conditions (e.g. full vs ablated features), compute paired differences on the fixed test set per model seed.
-   - Give a 95% CI from a **cluster bootstrap over test content groups** (resampling groups, not rows; 2,000 resamples proposed).
-   - No Wilcoxon test over folds or seeds treated as independent samples.
-8. **Leakage check per run:** `cross_split_duplicates` must be 0 for validation and test. A run with a non-zero value is invalid unless the exception is documented.
+4. **Conflicting labels:** groups whose identical vectors carry different labels are excluded from all partitions, with the count logged (`split.conflicting_groups`). The D-008 scope has none.
+5. **Splitting algorithm:** `split.group_split(groups, fractions=(0.70, 0.15, 0.15), seed=42)`.
+   - Distinct groups are shuffled with NumPy's legacy `RandomState(42).permutation` (stream frozen across NumPy versions).
+   - The first 70% of groups go to train, the next 15% to validation, the rest to test.
+   - Fractions apply to groups; row and class shares are measured and reported.
+   - This replaced an earlier scikit-learn `GroupShuffleSplit` version, whose output is not guaranteed across library versions. Local and Colab runs must see the same test population.
+6. **Leakage checks per run:**
+   - `split.partition_overlap` must be 0 for train–val, train–test **and** val–test, on the raw features and again on the preprocessed model inputs.
+   - The runner refuses to continue otherwise.
+7. **Pinning:** the split fingerprint is fixed in `configs/experiments/ae_xgb_d008_trackB.yaml` (`expected_fingerprint`), and the split file is saved once per storage location (`<storage>/splits/`). Every later run and ablation must reproduce it exactly.
+8. **Grouping strategy:** content groups, because MachineLearningCVE has no host, session or time keys. Host/session/time grouping via `TrafficLabelling` is a later sensitivity analysis.
+9. **Seeds (proposal for later runs):**
+   - partition seed 42, fixed;
+   - model seeds {0, 1, 2, 3, 4}; the first run uses seed 0 only.
+10. **Statistical comparison (proposal):**
+    - mean ± SD across model seeds, descriptively;
+    - paired differences on the fixed test set per seed, with a 95% CI from a cluster bootstrap over test content groups (2,000 resamples);
+    - no Wilcoxon test over folds or seeds treated as independent samples.
 
-**Demonstration on real data** (`tests/test_real_data_smoke.py::test_friday_ddos_row_rules_and_duplicate_aware_split`, passing):
+**Measured on the real file** (`ddos.prepare`, asserted in `tests/test_real_data_smoke.py`):
 
-- **Groups:** 223,080 distinct feature vectors among the 225,709 rows (3,934 rows sit in duplicate groups; the largest group has 118 rows); no conflicting labels.
-- **Track-B split, seed 42:**
-  - 157,994 / 33,819 / 33,896 rows (70.0 / 15.0 / 15.0%);
-  - DDoS share 0.568 / 0.564 / 0.568 against 0.567 overall;
-  - **0 validation and 0 test rows share a feature vector with training.**
-- **Contrast:** a row-stratified random split of the same rows (seed 42) leaks **498** validation and **486** test rows with exact training twins.
+- **Before the split:**
+  - 225,745 rows → 36 invalid → 225,709 kept (DDoS 128,025 / BENIGN 97,684);
+  - 223,080 distinct vectors (3,934 rows in duplicate groups);
+  - 0 conflicting-label groups.
+- **Partitions:**
+
+  | | Train | Validation | Test |
+  |---|---|---|---|
+  | Rows | 157,998 (70.0%) | 33,834 (15.0%) | 33,877 (15.0%) |
+  | DDoS | 89,577 | 19,215 | 19,233 |
+
+  - Shared feature vectors: **0 / 0 / 0** for train–val / train–test / val–test.
+  - Fingerprint: `50bd994880abbe151738993e299b90a6e50fb5ffae235a72677bb7813c447f44`.
+- **Contrast:** a row-stratified random split of the same rows shares 900+ exact vectors between partitions (asserted).
 
 ### Proposed exact procedure — Track A (paper-comparable, Nezhadsistani)
 
@@ -329,6 +348,7 @@ Extending to the full multi-class corpus would be a separate, declared extension
 - No UNSW-NB15 artifact has been established by the uploaded papers.
 - **Decision required:** registry schema and evidence levels (`direct_error` / `shortcut_indicator` / `hypothesis`). Build the registry before any ARR@K is computed.
 - **Interaction with D-007:** removing a column from the model input changes the duplicate groups.
+- **First baseline (team instruction, 2026-11-08):** `Destination Port` is **retained** in the AE-XGBoost input as a candidate shortcut feature. Removing it is a later controlled experiment, not an established correction.
 
 ## D-013 Unverifiable Phase II citations — OPEN
 
@@ -357,9 +377,25 @@ All three are Git-ignored. **No dataset, checkpoint or private file is uploaded 
 
 **Note.** The folder's path is under `OneDrive\Desktop`. Whether OneDrive syncs it depends on the user's OneDrive settings, which are outside this repository.
 
-**Amendments:** none.
+**Amendments:** none in effect.
 
-- `docs/COLAB_EXECUTION_PLAN.md` §5 proposes a Google Drive arrangement for Colab runs. It takes effect only when the user authorizes it and records it here as **D-015 Amendment 1**: what is stored, where, who can access it, and the date.
+### D-015 Amendment 1 — PROPOSED, NOT AUTHORIZED
+
+To run the first AE-XGBoost baseline on Google Colab Free, the following would be transferred. **Nothing has been uploaded.**
+
+| What | Size | Where | Purpose |
+|---|---|---|---|
+| `MachineLearningCSV.zip` (CICIDS2017 original; sha256 `c3f26274…727928`) | 235,102,953 B | your Google Drive, private, unshared folder `MyDrive/cnet-data/` | copied to the Colab VM each session, verified, Friday DDoS member extracted there |
+| Code bundle `cnet_code_<hash>.zip` (`git archive` of one commit; no data) | < 1 MB | same folder | exact code for the run |
+| Run outputs: split file, checkpoints, latent codes, models, predictions, metrics, logs | tens of MB per run | `MyDrive/cnet-runs/` | survive Colab disconnections |
+
+**Effects:**
+
+- The dataset is processed on Google's Colab VMs and stored in your Drive.
+- No other dataset, no GeneratedLabelledFlows/PCAPs, and no personal files are transferred.
+- Nothing is shared or re-hosted. CIC's terms ask for citation and do not permit re-hosting, so the folder must stay private.
+
+**To authorize:** change this heading to "AUTHORIZED", add the date and who authorized it, and commit. Then set `D015_AMENDMENT_1_RECORDED = True` in the notebook.
 
 ## D-016 Compute architecture: local CPU development + Google Colab GPU — DECIDED (2026-11-08, team requirement)
 
@@ -377,5 +413,39 @@ All three are Git-ignored. **No dataset, checkpoint or private file is uploaded 
 
 - The plan is written (`docs/COLAB_EXECUTION_PLAN.md`).
 - An environment recorder exists (`src/env.py`, tested locally).
-- A notebook scaffold exists (`notebooks/colab_runner.ipynb`).
+- A notebook exists (`notebooks/colab_runner.ipynb`); Milestone 1A made it a runnable workflow.
 - **Colab execution has not been run or verified.**
+
+**Benchmark note (Milestone 1A, measured 2026-11-08 on the laptop CPU, real 157,998-row training partition):**
+
+| Measured | Projected upper bound |
+|---|---|
+| AE: 0.92 s per epoch (618 batches of 256, input dimension 68) | 100 epochs ≈ 1.5 min |
+| XGBoost: 9 ms per round on 40 latent features | 2,000 rounds ≈ 0.3 min |
+| Data verify + rules + split + preprocessing: 12.8 s | — |
+
+- **The full single-seed baseline therefore costs minutes of CPU.** The GPU benefit for this baseline is likely small, and session start-up plus transfer may dominate.
+- **Decision for the team:** keep Colab as instructed, or authorize full runs of small baselines on the laptop CPU. The latter needs no cloud transfer, so no D-015 amendment.
+- **Not changed unilaterally:** no full run has been made locally.
+
+## D-017 AE-XGBoost reproduction: adaptations and gaps vs Nezhadsistani et al. 2026 — DOCUMENTED (2026-11-08)
+
+**Wording.** Our model is a **documented adaptation**, not an exact reproduction. It differs in scope (one CICIDS2017 file, binary), input width and evaluation protocol.
+
+| Element | Paper (section) | Ours | Type |
+|---|---|---|---|
+| Data scope | CIC-IDS2017 DDoS subset of 225,745 samples, trained jointly with 5G-NIDD and a 5G dataset (§4.1, Table 6) | Friday DDoS file only; 36 invalid rows removed (D-011) | Scope deviation |
+| Preprocessing | Min-max scaling; one-hot/label encoding; missing values removed or imputed (§3.1) | D-011 row rules; train-only median imputation (no NaN remains after the rules), constant removal and min-max scaling | Consistent; train-only fitting is ours |
+| AE input | 120 (numeric + one-hot, three datasets) (§4.2.1) | 68 = 78 features − 10 constant-on-train columns (measured on the full training partition) | Required adaptation (D-003) |
+| AE widths | 120 → 80 → 40 → 80 → 120 | 68 → 80 → 40 → 80 → 68 (first layer widens, not compresses) | Paper hidden/latent widths kept |
+| Activations | ReLU "in all layers" | ReLU hidden and latent; **linear output** | Gap: output activation unstated (test values can fall outside [0, 1]) |
+| Optimizer | Adam, lr 0.001, batch 256 | Same | Paper |
+| Epochs and stopping | "50–100 epochs", early stopping (§4.2.1) | max 100, patience 10 on validation reconstruction MSE, best weights restored | Gap: patience/monitor unstated |
+| Loss | squared reconstruction error (Eq. 3) | MSE | Paper |
+| Latent augmentation | Eq. 4 for minority-class **attacks**; σ, count and acceptance threshold unstated (§3.3) | Implemented, training-only, σ = 0.1 × per-dimension latent std, balance to 1:1, keep within the 95th percentile of real reconstruction errors, latent = E(x̃). **Disabled**: DDoS is the majority class (56.7% of training rows), so the paper's rule selects nothing | Gaps filled with labelled choices; not applied |
+| XGBoost | Grid search over Table 5 ranges; selected values and tree count not reported | Fixed a priori inside Table 5: lr 0.11 (on the paper's grid), depth 6, α 0, λ 1, subsample 0.8, colsample 0.8; trees by validation early stopping (50 rounds, cap 2,000) | Gap: no grid search (compute and leakage-risk minimisation) |
+| Validation | 5-fold CV (Table 7), also testing on synthetic samples (Table 6) | Track B: duplicate-aware 70/15/15 hold-out; validation for early stopping only; test untouched until evaluation; no synthetic test data | Deliberate deviation (D-007) |
+| Threshold / positive class | not stated | 0.5 fixed a priori; DDoS = 1 | Ours |
+| Metrics | Accuracy, precision, recall, F1, AUC | Plus macro-F1, MCC, confusion matrix, per-partition class counts | Superset |
+
+**Comparisons:** author-reported numbers (e.g. CIC-IDS2017 F1 0.9993, Table 6) are quoted only as author-reported and are not directly comparable to track-B results.

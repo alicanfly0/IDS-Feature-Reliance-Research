@@ -18,21 +18,27 @@ The planned baselines are:
 | MES-DNN | Wardana et al. 2026 |
 | SHAP-selected DCNN + self-attention | Fang et al. 2026 |
 
-**Status: Milestone 0 complete.** No model has been trained and no
-experimental result exists.
+**Status: Milestone 1A implemented; first real training run not yet executed.**
+No full model has been trained and no experimental result exists. Local runs
+were tiny smoke runs and timing benchmarks only.
 
 | Capability | State |
 |---|---|
 | Dataset manifest, download / verify / extract (all 4 datasets downloaded and verified locally) | Implemented |
 | Dataset inspection (28 descriptive reports in `results/inspection/`) | Implemented |
-| Invalid-row rules, train-only preprocessing, splits incl. duplicate-aware split, leakage checks | Implemented; unit tests + real-data tests |
+| Invalid-row rules, train-only preprocessing, duplicate-aware split (0 shared vectors across all 3 partition pairs), leakage checks | Implemented; unit + real-data tests |
 | Config-driven runs (`src/config.py`), environment/device/seed recording (`src/env.py`) | Implemented; tested on Windows CPU |
-| Google Colab GPU execution (`docs/COLAB_EXECUTION_PLAN.md`, `notebooks/colab_runner.ipynb`) | Planned; scaffold only, **not run on Colab** |
-| AE-XGBoost, MES-DNN, DCNN + self-attention baselines | Planned (Milestone 1+) |
-| SHAP attribution, artifact registry, ARR@K, ablations, metrics, statistics | Planned |
+| **AE-XGBoost baseline** (`src/experiments/ae_xgb.py`; D-008 scope, D-007 track B): resumable AE, latent augmentation (disabled, see D-017), XGBoost, metrics | Implemented; tested on synthetic data + a tiny real-data CPU smoke run |
+| Google Colab execution (`notebooks/colab_runner.ipynb`, `docs/COLAB_EXECUTION_PLAN.md`) | Workflow ready; **not executed on Colab**; needs D-015 Amendment 1 |
+| MES-DNN, DCNN + self-attention baselines | Planned |
+| SHAP attribution, artifact registry, ARR@K, ablations, repeated seeds, statistics | Planned |
 
-- **Research decisions:** in `docs/decision_log.md`. Approved: D-001, D-003, D-008, D-011. D-007 partially approved. D-002 deferred.
-- **Checks:** in `docs/milestone0_checklist.md`.
+- **Research decisions:** in `docs/decision_log.md`.
+  - Approved: D-001, D-003, D-008, D-011.
+  - D-007: track-B split approved and implemented.
+  - D-002: deferred.
+  - D-017: lists every deviation from the AE-XGBoost paper.
+- **Checks:** Milestone 0 checks in `docs/milestone0_checklist.md`; Milestone 1A handover in `docs/MILESTONE_1A_HANDOVER.md`.
 
 ## Layout
 
@@ -45,10 +51,12 @@ data/raw/     original datasets, one folder per manifest id (Git-ignored)
 data/processed/
 src/config.py effective run config (base.yaml + experiment), preprocessor factory, leakage assertion
 src/env.py    CPU/CUDA selection, seeding, environment + provenance snapshot (python -m src.env)
-src/data/     manifest.py, acquire.py, load.py, inspection.py, preprocess.py, split.py
-src/models/   baselines (Milestone 1+)
-src/audit/    SHAP, artifact registry, ARR@K (Milestone 1+)
-src/evaluation/  metrics, ablations, statistics (Milestone 1+)
+src/data/     manifest.py, acquire.py, load.py, inspection.py, preprocess.py, split.py,
+              ddos.py (D-008 scope: verified file, D-011 rules, track-B split)
+src/models/   autoencoder.py (resumable), augment.py (latent Gaussian), xgb.py
+src/experiments/  ae_xgb.py (runner: stages, resume, benchmark)
+src/audit/    SHAP, artifact registry, ARR@K (later)
+src/evaluation/  metrics.py (binary metrics, DDoS = positive)
 tests/        synthetic-data unit tests + real-data tests (skip without data)
 scripts/      setup_env.ps1, inspect_all.ps1 (Windows conveniences)
 notebooks/    colab_runner.ipynb (thin Colab launcher; scaffold, not yet run)
@@ -188,6 +196,17 @@ Two safety checks:
 ```powershell
 .\run.cmd -m pytest tests\test_real_data_smoke.py -v
 ```
+
+### AE-XGBoost baseline
+
+The tiny local smoke run takes seconds; its results are meaningless by design. The timing benchmark uses the real training partition and does not train.
+
+```powershell
+.\run.cmd -m src.experiments.ae_xgb --config configs/experiments/ae_xgb_d008_smoke.yaml
+.\run.cmd -m src.experiments.ae_xgb --config configs/experiments/ae_xgb_d008_trackB.yaml --device cpu --benchmark
+```
+
+The real run is on Colab: see `docs/COLAB_EXECUTION_PLAN.md`, "First real run".
 
 **Environment record** (Python, OS, CPU, RAM, GPU, package versions, Git commit, dataset hashes):
 

@@ -1,15 +1,23 @@
-# Milestone 0 core: data loading, inspection, preprocessing, splitting, tests.
-# Pinned to the versions this repository was validated against (Python 3.11.9).
+# Local Windows development and tests (Python 3.11.9). Pinned to the versions this
+# repository was validated against. Install with scripts\setup_env.ps1.
 numpy==1.26.4
 pandas==2.3.3
 scikit-learn==1.9.0
 PyYAML==6.0.3
 pytest==9.1.1
 
-# Milestone 1+ (not yet installed or validated; pin when first used):
-# xgboost        - AE-XGBoost baseline (Nezhadsistani et al. 2026)
-# lightgbm       - SHAP feature selector for SHAP-DCNN (Fang et al. 2026)
-# torch          - autoencoder, MES-DNN, DCNN + self-attention
-# shap           - TreeExplainer / DeepExplainer / KernelExplainer
-# scipy          - paired statistical tests
-# matplotlib     - figures
+# Milestone 1A: AE-XGBoost.
+# On Windows, PyPI's torch wheel is the CPU build (no CUDA on this laptop).
+torch==2.15.0
+xgboost==3.2.0
+
+# Google Colab: do NOT install this file there (downgrading numpy can break Colab's
+# preinstalled torch). The notebook uses Colab's stack, installs only what is missing,
+# requires xgboost>=2.0 (device="cuda" API), runs the test suite, and every run records
+# the exact versions it used (src/env.py).
+
+# Later milestones (not installed yet; pin when first used):
+# lightgbm  - SHAP feature selector for SHAP-DCNN (Fang et al. 2026)
+# shap      - attribution (D-002, deferred)
+# scipy     - already present as a scikit-learn dependency; pin if used directly
+# matplotlib

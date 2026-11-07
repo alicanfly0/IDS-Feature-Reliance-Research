@@ -170,16 +170,22 @@ def cmd_extract(manifest: dict, target: str, root: Path = ROOT) -> int:
     return 0
 
 
-def cmd_verify(manifest: dict, target: str, root: Path = ROOT) -> int:
-    failures = 0
+def cmd_verify(manifest: dict, target: str, root: Path = ROOT, only_file: str | None = None) -> int:
+    failures, checked = 0, 0
     for ds_id, ds in _selected(manifest, target).items():
         for entry in ds.get("files") or []:
             if not entry.get("name") or not (entry.get("download") or entry.get("sha256") or entry.get("publisher_md5")):
                 continue
+            if only_file and entry["name"] != only_file:
+                continue
+            checked += 1
             path = root / ds["local_dir"] / entry["name"]
             problems = check_file(path, entry)
             print(f"{ds_id:<30} {entry['name']:<34} {'OK' if not problems else '; '.join(problems)}")
             failures += bool(problems)
+    if only_file and not checked:
+        print(f"{only_file}: not listed in the manifest for {target}")
+        return 1
     return 1 if failures else 0
 
 
@@ -188,13 +194,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("command", choices=("download", "extract", "verify"))
     parser.add_argument("dataset", help="dataset id from configs/datasets.yaml, or 'all'")
     parser.add_argument("--force", action="store_true", help="re-download even if a verified copy exists")
+    parser.add_argument("--file", help="verify only this file of the dataset (e.g. on Colab, where only it was copied)")
     args = parser.parse_args(argv)
     manifest = load_manifest()
     if args.command == "download":
         return cmd_download(manifest, args.dataset, force=args.force)
     if args.command == "extract":
         return cmd_extract(manifest, args.dataset)
-    return cmd_verify(manifest, args.dataset)
+    return cmd_verify(manifest, args.dataset, only_file=args.file)
 
 
 if __name__ == "__main__":

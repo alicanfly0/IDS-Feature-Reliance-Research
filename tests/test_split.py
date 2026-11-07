@@ -5,8 +5,8 @@ import pandas as pd
 import pytest
 
 from src.data.split import (
-    check_disjoint, class_proportions, conflicting_groups, content_groups, cross_split_duplicates, group_overlap,
-    group_split, partition_overlap,
+    check_disjoint, class_proportions, conflicting_groups, content_groups, cross_split_duplicates,
+    exclude_eval_twins, group_overlap, group_split, partition_overlap,
     load_split, predefined_split, save_split, stratified_split, temporal_split,
 )
 
@@ -79,6 +79,17 @@ def test_conflicting_groups_and_pairwise_overlap():
     assert partition_overlap(groups, split) == {"train_val": 1, "train_test": 0, "val_test": 1}
     clean = group_split(groups, seed=0)
     assert partition_overlap(groups, clean) == {"train_val": 0, "train_test": 0, "val_test": 0}
+
+
+def test_exclude_eval_twins_removes_only_evaluation_duplicates():
+    groups = np.array([0, 1, 2, 3, 0, 4, 1, 5, 4, 6])
+    split = predefined_split(["train", "train", "train", "train", "val", "val", "test", "test", "test", "test"])
+    reduced, info = exclude_eval_twins(groups, split)
+    assert reduced.train.tolist() == split.train.tolist()                       # training rows unchanged
+    assert reduced.val.tolist() == [5] and info["val_excluded_positions"] == [4]   # val twin of train
+    assert reduced.test.tolist() == [7, 9] and info["test_excluded_positions"] == [6, 8]  # twins of train / val
+    assert partition_overlap(groups, reduced) == {"train_val": 0, "train_test": 0, "val_test": 0}
+    assert reduced.params["base_fingerprint"] == split.fingerprint()
 
 
 def test_temporal_split_orders_and_keeps_ties_together():

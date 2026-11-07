@@ -133,6 +133,25 @@ def partition_overlap(groups, split: Split) -> dict[str, int]:
     return out
 
 
+def exclude_eval_twins(groups, split: Split) -> tuple[Split, dict]:
+    """Drop evaluation rows that duplicate an earlier partition in a (reduced) feature view.
+
+    Used when a feature-removal experiment keeps the original split but its smaller input
+    makes some vectors identical: validation rows whose group occurs in train, and test rows
+    whose group occurs in train or validation, are removed. Training rows never change.
+    """
+    groups = np.asarray(groups)
+    parts = split.parts()
+    seen_train = np.isin(groups[parts["val"]], groups[parts["train"]])
+    seen_before = np.isin(groups[parts["test"]], np.concatenate([groups[parts["train"]], groups[parts["val"]]]))
+    reduced = Split(parts["train"], parts["val"][~seen_train], parts["test"][~seen_before],
+                    f"{split.strategy}+eval_twins_excluded", split.seed, {**split.params, "base_fingerprint": split.fingerprint()})
+    info = {"val_excluded": int(seen_train.sum()), "test_excluded": int(seen_before.sum()),
+            "val_excluded_positions": parts["val"][seen_train].tolist(),
+            "test_excluded_positions": parts["test"][seen_before].tolist()}
+    return reduced, info
+
+
 def temporal_split(times, fractions=(0.70, 0.15, 0.15)) -> Split:
     """Rows ordered by time; ties stay together so no timestamp spans two parts."""
     _check_fractions(fractions)

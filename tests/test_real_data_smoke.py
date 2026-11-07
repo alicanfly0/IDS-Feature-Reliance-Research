@@ -118,3 +118,23 @@ def test_friday_ddos_row_rules_and_duplicate_aware_split():
     # Contrast: a row-stratified random split of the same rows leaks identical vectors.
     random_split = stratified_split(prep.y, seed=42)
     assert sum(cross_split_duplicates(prep.frame.reset_index(drop=True), random_split, feats).values()) > 900
+
+
+@needs_ddos
+def test_destination_port_removal_overlap_and_common_population():
+    """D-018: what removing Destination Port does to the pinned split (no training)."""
+    from src.experiments.shortcut_diagnostics import port_association, removal_overlap
+    csv, _ = ddos.verified_csv()
+    prep = ddos.prepare(ddos.load(csv), TRACK_B["data"]["label_map"], tuple(TRACK_B["experiment"]["split"]["fractions"]),
+                        TRACK_B["experiment"]["split"]["seed"], tuple(TRACK_B["data"]["nonnegative_cols"]))
+    r = removal_overlap(prep, ["Destination Port"])
+    assert r["n_features"] == 77 and r["conflicting_label_groups"] == 0
+    assert r["partition_overlap"] == {"train_val": 357, "train_test": 364, "val_test": 163}
+    assert r["rows_with_train_twin"]["test"] == {"rows_with_train_twin": 364, "ddos": 0, "benign": 364}
+    e = r["exclude_eval_twins"]
+    assert (e["val_excluded"], e["test_excluded"]) == (357, 391)
+    assert e["evaluation_population"]["test"] == {"rows": 33486, "ddos": 19233, "benign": 14253}
+    assert e["evaluation_population"]["train"]["rows"] == 157998          # training rows unchanged
+    port = port_association(prep)
+    assert port["per_class"]["ddos"]["top_ports"]["80"] == 128022
+    assert port["rule_port80_is_ddos"]["test"]["confusion_matrix"] == {"tn": 13344, "fp": 1300, "fn": 1, "tp": 19232}

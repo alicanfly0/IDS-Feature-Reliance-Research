@@ -35,6 +35,7 @@ Status values: OPEN · APPROVED (team decision) · PARTIALLY APPROVED · DEFERRE
 | D-015 | Storage location (local only) | DECIDED; Amendment 1 PROPOSED, not authorized |
 | D-016 | Compute: local CPU + Google Colab GPU | DECIDED; Amendment 1: first baseline run on laptop CPU (done) |
 | D-017 | AE-XGBoost adaptations vs the paper | DOCUMENTED (Milestone 1A) |
+| D-018 | Destination Port ablation: comparison design | PROPOSED (Milestone 1B); awaiting review before training |
 
 ---
 
@@ -485,3 +486,52 @@ To run the first AE-XGBoost baseline on Google Colab Free, the following would b
 | Metrics | Accuracy, precision, recall, F1, AUC | Plus macro-F1, MCC, confusion matrix, per-partition class counts | Superset |
 
 **Comparisons:** author-reported numbers (e.g. CIC-IDS2017 F1 0.9993, Table 6) are quoted only as author-reported and are not directly comparable to track-B results.
+
+## D-018 Destination Port ablation: fair comparison design — PROPOSED (2026-11-08), awaiting review
+
+**Question.** How much of the AE-XGBoost baseline's performance depends on `Destination Port`? This is a controlled removal, not a correction: the port's artifact status stays open (D-012).
+
+**Evidence:** `docs/DIAGNOSTIC_D008_SHORTCUTS.md`.
+
+- DDoS ≈ port 80 (99.998%); benign port 80 is 9.1%.
+- The rule "port = 80 → DDoS" reaches test MCC 0.924.
+- Removing the port creates new cross-partition duplicates under the original split: 357 train–val, 364 train–test, 163 val–test. All are BENIGN, and none have conflicting labels.
+
+**Constraint.** The original test population cannot be kept unchanged for the ablated model. 364 of its test rows (plus 27 that duplicate validation rows) would be vectors the ablated model has effectively seen.
+
+**Proposed design:**
+
+1. **Same split, rows and labels.** The pinned split `50bd9948…` is kept, and the **training rows are identical**. Labels are unchanged, and there are no conflicts in either view.
+2. **One rule for both models.** No validation or test row may duplicate an earlier partition **in the model's own input view** (`run.exclude_eval_twins`, `split.exclude_eval_twins`).
+   - The full model satisfies this with its original partitions (0 overlaps).
+   - The ablated model excludes 357 validation rows (early-stopping set 33,477) and 391 test rows.
+3. **Common test population.** Both models are scored on the ablated model's test set: **33,486 rows (19,233 DDoS / 14,253 BENIGN)**, evaluation fingerprint `0435302b…`.
+   - The full model is **not retrained**; its saved predictions are restricted to these rows.
+   - Its metrics on the full original test set are reported alongside.
+4. **Everything else fixed.**
+   - Fixed: architecture, hyperparameters, seed 0, threshold 0.5, train-only preprocessing, device CPU (same as the baseline run).
+   - Changes: only the input dimension (68 → 67, measured at run time) and the evaluation exclusion.
+5. **Reporting** (`python -m src.experiments.compare_ablation`):
+   - both models' metrics on the common rows, and the deltas;
+   - paired discordant counts with an exact McNemar p-value, as descriptive evidence (one seed; D-007 statistics still pending);
+   - input dimensions;
+   - exclusion counts.
+
+**Known asymmetry.** The full model's early stopping used all 33,834 validation rows, while the ablated model uses 33,477. The 357 removed rows are BENIGN and are duplicates *for the ablated model only*. Retraining the full model on the reduced validation set would remove the asymmetry at about 1.5 CPU minutes; this is optional, for the reviewer to decide.
+
+**Not addressed by this design:**
+
+- near-duplicate and session leakage;
+- multiple seeds;
+- other candidate features.
+
+**Command (not yet run):**
+
+```
+python -m src.experiments.ae_xgb --config configs/experiments/ae_xgb_d008_trackB_noDstPort.yaml
+```
+
+Then compare with `python -m src.experiments.compare_ablation --full results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e --ablated results/runs/<new run>`.
+
+**Cost:** about 1.5 min on the laptop CPU, so no Colab GPU (D-016 Amendment 1).
+

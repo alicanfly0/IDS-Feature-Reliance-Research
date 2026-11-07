@@ -207,7 +207,22 @@ The tiny local smoke run takes seconds; its results are meaningless by design. T
 .\run.cmd -m src.experiments.ae_xgb --config configs/experiments/ae_xgb_d008_trackB.yaml --device cpu --benchmark
 ```
 
-The real run is on Colab: see `docs/COLAB_EXECUTION_PLAN.md`, "First real run".
+The first full run was made on the laptop CPU (D-016 Amendment 1). GPU workloads go to Colab: see `docs/COLAB_EXECUTION_PLAN.md`.
+
+### Shortcut diagnostics and the Destination Port ablation (Milestone 1B)
+
+The diagnostics are read-only and take about 25 s. They write `results/diagnostics/…-shortcuts.json`; the findings are in `docs/DIAGNOSTIC_D008_SHORTCUTS.md`.
+
+```powershell
+.\run.cmd -m src.experiments.shortcut_diagnostics --config configs/experiments/ae_xgb_d008_trackB.yaml --baseline-run results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e
+```
+
+The ablation design (D-018) is **prepared but not yet run, pending review**:
+
+```powershell
+.\run.cmd -m src.experiments.ae_xgb --config configs/experiments/ae_xgb_d008_trackB_noDstPort.yaml
+.\run.cmd -m src.experiments.compare_ablation --full results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e --ablated results/runs/<ablation run id>
+```
 
 **Environment record** (Python, OS, CPU, RAM, GPU, package versions, Git commit, dataset hashes):
 

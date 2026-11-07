@@ -225,6 +225,60 @@ def test_runner_end_to_end_resume_and_no_overwrite(tmp_path, capsys):
         ae_xgb.run(cfg, "cpu", tmp_path, loader=_loader)
 
 
+def _port_twin_loader():
+    """As _loader, plus benign flows that differ ONLY in Destination Port (as in the real data)."""
+    df = _flows()
+    benign = df[(df["Label"] == "BENIGN") & df["Flow Bytes/s"].notna() & np.isfinite(df["Flow Bytes/s"])
+                & (df["Flow Duration"] >= 0)].iloc[:80].copy()
+    benign["Destination Port"] = 9999
+    return pd.concat([df, benign], ignore_index=True), {"archive": "synthetic", "csv_sha256": "synthetic-twins"}
+
+
+def test_feature_removal_run_excludes_eval_twins_and_compares_on_common_rows(tmp_path):
+    from src.experiments import compare_ablation
+    _loader = _port_twin_loader          # noqa: F811 (shadow on purpose for this test)
+    full_cfg = _tiny_cfg()
+    abl_cfg = _tiny_cfg()
+    abl_cfg["experiment"].update(name="synthetic_noport", extra_drop_cols=["Destination Port"])
+    abl_cfg["run"]["exclude_eval_twins"] = True
+    full_dir = ae_xgb.run(full_cfg, "cpu", tmp_path, loader=_loader)
+
+    # Without the option, a removal that creates cross-partition duplicates is refused.
+    strict = _tiny_cfg()
+    strict["experiment"].update(name="synthetic_noport_strict", extra_drop_cols=["Destination Port"])
+    with pytest.raises(AssertionError, match="shared across partitions"):
+        ae_xgb.run(strict, "cpu", tmp_path, loader=_loader)
+
+    abl_dir = ae_xgb.run(abl_cfg, "cpu", tmp_path, loader=_loader)
+    full_rec = json.loads((full_dir / "run_record.json").read_text())
+    abl_rec = json.loads((abl_dir / "run_record.json").read_text())
+    report = json.loads((abl_dir / "data_report.json").read_text())["eval_twin_exclusion"]
+    assert report["test_excluded"] > 0 and report["dropped_features"] == ["Destination Port"]
+    assert abl_rec["input_dim"] == full_rec["input_dim"] - 1
+    assert abl_rec["split_fingerprint"] == full_rec["split_fingerprint"]           # same pinned split
+    assert abl_rec["evaluation_fingerprint"] != full_rec["evaluation_fingerprint"]
+    assert json.loads((abl_dir / "preprocessor.json").read_text())["processed_partition_overlap"] == {
+        "train_val": 0, "train_test": 0, "val_test": 0}
+    full_train = pd.read_csv(full_dir / "predictions_test.csv.gz")
+    abl_test = pd.read_csv(abl_dir / "predictions_test.csv.gz")
+    assert len(abl_test) == len(full_train) - report["test_excluded"]
+    assert not set(report["test_excluded_source_rows"]) & set(abl_test.source_row)
+
+    result = compare_ablation.compare(full_dir, abl_dir)
+    assert result["common_test_rows"] == len(abl_test)
+    assert result["full_on_full_test"]["f1"] == json.loads((full_dir / "metrics.json").read_text())["test"]["f1"]
+    p = result["paired"]
+    assert sum(p[k] for k in ("both_correct", "only_full_correct", "only_ablated_correct", "both_wrong")) == len(abl_test)
+    assert 0 <= p["mcnemar_exact_p"] <= 1
+
+
+def test_mcnemar_exact_values():
+    from src.experiments.compare_ablation import mcnemar_exact
+    assert mcnemar_exact(0, 0) == 1.0
+    assert mcnemar_exact(0, 5) == pytest.approx(2 / 32)
+    assert mcnemar_exact(3, 3) == 1.0
+
+
 def test_config_change_gives_a_new_run_and_split_is_reused(tmp_path):
     cfg = _tiny_cfg()
     first = ae_xgb.run(cfg, "cpu", tmp_path, loader=_loader)

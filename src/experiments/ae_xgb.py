@@ -28,7 +28,7 @@ import torch
 from src import env
 from src.config import ROOT, check_no_leaky_outputs, load_config, make_preprocessor
 from src.data import ddos
-from src.data.split import Split, content_groups, load_split, partition_overlap, save_split
+from src.data.split import Split, content_groups, exclude_eval_twins, load_split, partition_overlap, save_split
 from src.evaluation.metrics import binary_metrics
 from src.models import augment as aug
 from src.models import autoencoder as ae
@@ -98,6 +98,22 @@ def prepare_data(cfg: dict, storage: Path, log, root: Path = ROOT, loader=None):
     expected = s.get("expected_fingerprint")
     if expected and loader is None and prep.split.fingerprint() != expected:
         raise RuntimeError(f"split fingerprint {prep.split.fingerprint()} != expected {expected}")
+    prep.report["split_fingerprint"] = prep.split.fingerprint()
+    if cfg["run"].get("exclude_eval_twins"):
+        # Feature-removal runs: same split and training rows, but validation/test rows whose
+        # vector duplicates an earlier partition IN THIS MODEL'S INPUT VIEW are not evaluated.
+        drop = cfg["experiment"].get("extra_drop_cols", [])
+        view = [c for c in prep.feature_cols if c not in drop]
+        reduced, info = exclude_eval_twins(content_groups(prep.frame, view), prep.split)
+        rows = prep.frame.index.to_numpy()
+        prep.report["eval_twin_exclusion"] = {
+            "feature_view": len(view), "dropped_features": drop,
+            "val_excluded": info["val_excluded"], "test_excluded": info["test_excluded"],
+            "val_excluded_source_rows": rows[info["val_excluded_positions"]].tolist(),
+            "test_excluded_source_rows": rows[info["test_excluded_positions"]].tolist(),
+        }
+        prep.split = reduced
+        log(f"evaluation twins excluded in the {len(view)}-feature view: val {info['val_excluded']}, test {info['test_excluded']}")
     if cfg["run"].get("sample"):
         prep = ddos.subsample(prep, cfg["run"]["sample"], cfg["run"]["model_seed"])
         log(f"SMOKE subsample: {prep.report['subsample']}")
@@ -233,7 +249,9 @@ def run(cfg: dict, device: str, storage: Path, allow_code_change: bool = False, 
 
     record = {
         "identity": identity, "split_file": split_file.name, "split_source": source,
-        "split_fingerprint": prep.split.fingerprint(), "data_report_file": "data_report.json",
+        "split_fingerprint": prep.report["split_fingerprint"],     # the pinned split (before any exclusion)
+        "evaluation_fingerprint": prep.split.fingerprint(),        # population actually trained/evaluated
+        "data_report_file": "data_report.json",
         "preprocessor_file": "preprocessor.json", "input_dim": pre_state["input_dim"],
         "autoencoder": {"best_epoch": ae_state["best_epoch"], "best_val_mse": ae_state["best_val"],
                         "epochs_run": ae_state["epoch"], "stopped": ae_state["stopped"]},

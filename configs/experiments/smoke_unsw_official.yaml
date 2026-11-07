@@ -1,0 +1,17 @@
+# Plumbing check on real data (audit F4). NOT a baseline experiment and not a
+# decided protocol: it uses the publisher's own train/test partition, which
+# needs no split decision, to exercise load -> split -> train-only fit ->
+# transform -> leakage checks. Run: .\run.cmd -m pytest tests\test_real_data_smoke.py -v
+
+experiment:
+  name: smoke_unsw_official
+  dataset: unsw_nb15
+  files:
+    train: UNSW_NB15_training-set.csv
+    test: UNSW_NB15_testing-set.csv
+  label: label
+  label_cols: [label, attack_cat]
+  identifier_cols: [id]          # row number in the official partition files
+  categorical_cols: [proto, service, state]
+  split:
+    strategy: predefined         # publisher's partition

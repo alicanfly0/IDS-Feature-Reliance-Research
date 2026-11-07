@@ -1,4 +1,4 @@
-﻿file: C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation\data\raw\nf_unsw_nb15_v2\extracted\fe6cb615d161452c_MOHANAD_A4706\data\NF-UNSW-NB15-v2.csv  (encoding utf-8-sig, nrows limit None)
+file: data/raw/nf_unsw_nb15_v2/extracted/fe6cb615d161452c_MOHANAD_A4706/data/NF-UNSW-NB15-v2.csv  (encoding utf-8-sig, nrows limit None)
 column names from: header
 shape: 2390275 rows x 45 columns
 

@@ -570,7 +570,7 @@
   ],
   "files": [
     {
-      "path": "C:\\Users\\aliwa\\OneDrive\\Desktop\\FAST NUCES\\semester 7\\CNET\\cnet project implementation\\data\\raw\\cicids2017_original\\extracted\\TrafficLabelling\\Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+      "path": "data/raw/cicids2017_original/extracted/TrafficLabelling/Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
       "encoding": "cp1252",
       "utf8_bom": false,
       "nrows_limit": null,

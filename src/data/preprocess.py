@@ -7,6 +7,10 @@ Two kinds of step, kept apart on purpose:
 * `TrainOnlyPreprocessor` learns everything (constant columns, medians,
   min/max, category vocabularies) from the training partition only and then
   applies the same mapping to validation/test. Input frames are never mutated.
+
+Every kept column must be either declared categorical or numeric. A value that
+does not parse as a number in an undeclared column is an error, not a silent
+NaN, and transform() refuses to return non-finite output.
 """
 from __future__ import annotations
 
@@ -50,8 +54,21 @@ class TrainOnlyPreprocessor:
     maxs_: dict[str, float] = field(default_factory=dict, init=False)
     categories_: dict[str, list] = field(default_factory=dict, init=False)
 
-    def _numeric(self, df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
-        return df[cols].apply(pd.to_numeric, errors="coerce").replace([np.inf, -np.inf], np.nan)
+    def _numeric(self, df: pd.DataFrame, cols: list[str], stage: str) -> pd.DataFrame:
+        parsed = df[cols].apply(pd.to_numeric, errors="coerce")
+        bad = {}
+        for c in cols:
+            # Textual missing markers ("nan", "") are missing data, not unparseable text.
+            given = df[c].notna() & ~df[c].astype(str).str.strip().str.lower().isin(("nan", ""))
+            n_bad = int((given & parsed[c].isna()).sum())
+            if n_bad:
+                bad[c] = n_bad
+        if bad:
+            raise TypeError(
+                f"{stage}: non-numeric values in columns not declared categorical {bad}; "
+                "add them to categorical_cols or drop_cols"
+            )
+        return parsed.replace([np.inf, -np.inf], np.nan)
 
     def fit(self, train: pd.DataFrame) -> "TrainOnlyPreprocessor":
         missing = [c for c in (*self.drop_cols, *self.categorical_cols) if c not in train.columns]
@@ -64,7 +81,7 @@ class TrainOnlyPreprocessor:
 
         cats = [c for c in self.categorical_cols if c in kept]
         self.numeric_cols_ = [c for c in kept if c not in cats]
-        num = self._numeric(train, self.numeric_cols_)
+        num = self._numeric(train, self.numeric_cols_, "fit")
         self.medians_ = num.median().to_dict()
         filled = num.fillna(self.medians_)
         self.mins_ = filled.min().to_dict()
@@ -77,7 +94,7 @@ class TrainOnlyPreprocessor:
     def transform(self, df: pd.DataFrame) -> pd.DataFrame:
         if not self.fitted_:
             raise RuntimeError("fit() must be called on the training partition first")
-        num = self._numeric(df, self.numeric_cols_).fillna(self.medians_)
+        num = self._numeric(df, self.numeric_cols_, "transform").fillna(self.medians_)
         lo = pd.Series(self.mins_)
         span = pd.Series(self.maxs_) - lo
         span = span.where(span != 0, 1.0)
@@ -91,7 +108,12 @@ class TrainOnlyPreprocessor:
                 {f"{col}={v}": (values == v).astype(np.float64) for v in vocab}, index=df.index
             )
             parts.append(onehot)
-        return pd.concat(parts, axis=1)
+        out = pd.concat(parts, axis=1)
+        nonfinite = out.columns[~np.isfinite(out.to_numpy()).all(axis=0)].tolist()
+        if nonfinite:
+            # e.g. a column that was entirely missing in train (median is NaN)
+            raise ValueError(f"transform produced non-finite values in {nonfinite}")
+        return out
 
     def fit_transform(self, train: pd.DataFrame) -> pd.DataFrame:
         return self.fit(train).transform(train)

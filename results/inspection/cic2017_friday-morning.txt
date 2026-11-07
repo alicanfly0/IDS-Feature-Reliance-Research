@@ -1,4 +1,4 @@
-﻿file: C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation\data\raw\cicids2017_original\extracted\MachineLearningCVE\Friday-WorkingHours-Morning.pcap_ISCX.csv  (encoding utf-8-sig, nrows limit None)
+file: data/raw/cicids2017_original/extracted/MachineLearningCVE/Friday-WorkingHours-Morning.pcap_ISCX.csv  (encoding utf-8-sig, nrows limit None)
 column names from: header
 column names stripped of whitespace: 65
 duplicated column names (renamed .N): ['Fwd Header Length']

@@ -75,6 +75,35 @@ def test_missing_configured_column_raises(toy_flows):
         TrainOnlyPreprocessor(drop_cols=("not_a_column",)).fit(toy_flows)
 
 
+def test_undeclared_text_column_fails_in_fit():
+    # Audit F1: this used to become an all-NaN output column without any error.
+    train = pd.DataFrame({"x": [1.0, 2.0, 3.0], "unexpected_string": ["a", "b", "a"]})
+    with pytest.raises(TypeError, match="unexpected_string"):
+        TrainOnlyPreprocessor().fit(train)
+    out = TrainOnlyPreprocessor(categorical_cols=("unexpected_string",)).fit_transform(train)
+    assert np.isfinite(out.to_numpy()).all()
+
+
+def test_unparseable_value_at_transform_time_fails():
+    train = pd.DataFrame({"port": [80, 443, 22]})
+    pre = TrainOnlyPreprocessor().fit(train)
+    with pytest.raises(TypeError, match="port"):
+        pre.transform(pd.DataFrame({"port": ["0x000b", "80", "-"]}))  # UNSW-style port text
+
+
+def test_numeric_text_and_missing_markers_are_accepted():
+    train = pd.DataFrame({"x": ["1", "2", "Infinity", "nan", None]})
+    out = TrainOnlyPreprocessor().fit_transform(train)
+    assert np.isfinite(out.to_numpy()).all()
+
+
+def test_nonfinite_output_is_refused():
+    train = pd.DataFrame({"empty": [np.nan, np.nan, np.nan], "x": [1.0, 2.0, 3.0]})
+    pre = TrainOnlyPreprocessor(drop_constant=False).fit(train)  # median of 'empty' is NaN
+    with pytest.raises(ValueError, match="empty"):
+        pre.transform(train)
+
+
 def test_invalid_row_mask_reports_without_dropping(toy_flows):
     mask = invalid_row_mask(toy_flows, nonnegative_cols=("Flow Duration",))
     assert len(mask) == len(toy_flows)

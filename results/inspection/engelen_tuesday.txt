@@ -1,4 +1,4 @@
-﻿file: C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation\data\raw\cicids2017_engelen_wtmc2021\extracted\Tuesday-WorkingHours.csv  (encoding utf-8-sig, nrows limit None)
+file: data/raw/cicids2017_engelen_wtmc2021/extracted/Tuesday-WorkingHours.csv  (encoding utf-8-sig, nrows limit None)
 column names from: header
 shape: 322003 rows x 84 columns
 

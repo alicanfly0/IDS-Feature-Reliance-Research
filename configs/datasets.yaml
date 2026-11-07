@@ -37,8 +37,8 @@ datasets:
         email, organization, job title, country. After submitting, a session
         cookie unlocks browse.php -> CIC-IDS-2017/CSVs/ (MachineLearningCSV.zip,
         GeneratedLabelledFlows.zip, each with a publisher .md5) and
-        CIC-IDS-2017/PCAPs/. The server sends no Content-Length. Registered
-        2026-11-07 (A. Abbasi, FAST NUCES).
+        CIC-IDS-2017/PCAPs/. The server sends no Content-Length. Downloaded
+        2026-11-07 after registering (registrant details deliberately not recorded).
     version: null  # no version identifier or DOI published on the landing page
     files:
       - name: MachineLearningCSV.zip

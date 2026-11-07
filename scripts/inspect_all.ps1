@@ -50,7 +50,7 @@ foreach ($job in $Jobs) {
     if (-not (Test-Path $path)) { Write-Host "skip $($job.name): $path not found"; continue }
     Write-Host "inspecting $($job.name) ..."
     $json = Join-Path $Out "$($job.name).json"
-    & $Py -I -m src.data.inspection $path @($job.args) --json $json | Out-File -Encoding utf8 (Join-Path $Out "$($job.name).txt")
+    & $Py -I -m src.data.inspection $path @($job.args) --json $json --txt (Join-Path $Out "$($job.name).txt") | Out-Null
     if ($LASTEXITCODE -ne 0) { throw "inspection failed for $($job.name)" }
 }
 Write-Host "reports in $Out"

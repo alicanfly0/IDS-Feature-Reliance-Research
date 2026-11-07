@@ -1,9 +1,11 @@
+import json
+
 import numpy as np
 import pandas as pd
 import pytest
 
 from src.data.split import (
-    check_disjoint, class_proportions, cross_split_duplicates, group_overlap, group_split,
+    check_disjoint, class_proportions, content_groups, cross_split_duplicates, group_overlap, group_split,
     load_split, predefined_split, save_split, stratified_split, temporal_split,
 )
 
@@ -37,6 +39,19 @@ def test_random_split_leaks_groups_that_group_split_does_not():
     groups = np.repeat(np.arange(100), 10)
     labels = np.tile(["A"] * 8 + ["B"] * 2, 100)
     assert group_overlap(groups, stratified_split(labels, seed=3))["test"] > 0
+
+
+def test_content_groups_keep_identical_vectors_on_one_side():
+    rng = np.random.default_rng(0)
+    base = pd.DataFrame({"a": rng.integers(0, 5, 300), "b": rng.integers(0, 3, 300)})  # many repeats
+    df = base.assign(label=rng.integers(0, 2, 300))
+    feats = ["a", "b"]
+    groups = content_groups(df, feats)
+    assert len(np.unique(groups)) == len(base.drop_duplicates())
+    split = group_split(groups, seed=1)
+    check_disjoint(split, len(df))
+    assert cross_split_duplicates(df, split, feats) == {"val": 0, "test": 0}
+    assert sum(cross_split_duplicates(df, stratified_split(df["label"], seed=1), feats).values()) > 0
 
 
 def test_temporal_split_orders_and_keeps_ties_together():
@@ -85,3 +100,33 @@ def test_save_load_roundtrip_and_tamper_detection(tmp_path):
     path.write_text(text)
     with pytest.raises(ValueError):
         load_split(path)
+
+
+SOURCE = {"dataset": "toy", "files": {"toy.csv": "a" * 64}, "n_rows": 1000}
+
+
+def _saved(tmp_path):
+    path = tmp_path / "split.json"
+    save_split(stratified_split(LABELS, seed=5), path, source=SOURCE)
+    return path
+
+
+@pytest.mark.parametrize("field,value", [("seed", 6), ("source", {**SOURCE, "files": {"toy.csv": "b" * 64}})])
+def test_edited_provenance_is_detected(tmp_path, field, value):
+    # Audit F2: edits to seed or source metadata used to load without complaint.
+    path = _saved(tmp_path)
+    payload = json.loads(path.read_text())
+    payload[field] = value
+    path.write_text(json.dumps(payload))
+    with pytest.raises(ValueError, match="modified"):
+        load_split(path)
+
+
+def test_load_checks_expected_dataset_and_row_count(tmp_path):
+    path = _saved(tmp_path)
+    split = load_split(path, expected_source={"dataset": "toy", "files": SOURCE["files"]}, n_rows=1000)
+    assert split.source == SOURCE and split.seed == 5
+    with pytest.raises(ValueError, match="files"):
+        load_split(path, expected_source={"files": {"toy.csv": "c" * 64}})
+    with pytest.raises(ValueError, match="rows"):
+        load_split(path, n_rows=1200)

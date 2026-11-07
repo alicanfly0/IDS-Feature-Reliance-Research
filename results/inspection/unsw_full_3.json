@@ -230,7 +230,7 @@
   ],
   "files": [
     {
-      "path": "C:\\Users\\aliwa\\OneDrive\\Desktop\\FAST NUCES\\semester 7\\CNET\\cnet project implementation\\data\\raw\\unsw_nb15\\UNSW-NB15_3.csv",
+      "path": "data/raw/unsw_nb15/UNSW-NB15_3.csv",
       "encoding": "utf-8-sig",
       "utf8_bom": false,
       "nrows_limit": null,

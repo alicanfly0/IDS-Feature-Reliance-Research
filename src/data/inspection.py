@@ -19,6 +19,7 @@ import numpy as np
 import pandas as pd
 
 from src.data.load import read_flow_csv, read_names_file
+from src.data.manifest import ROOT
 
 # Name patterns for fields that identify hosts, sessions or capture time.
 IDENTIFIER_PATTERNS = {
@@ -178,6 +179,15 @@ def format_report(report: dict, notes: dict | None = None) -> str:
     return "\n".join(lines)
 
 
+def portable_path(path: str | Path) -> str:
+    """Repository-relative POSIX path for reports; just the file name for files outside the repo."""
+    path = Path(path).resolve()
+    try:
+        return path.relative_to(ROOT).as_posix()
+    except ValueError:
+        return path.name
+
+
 def _csv_paths(target: Path) -> list[Path]:
     return sorted(target.glob("*.csv")) if target.is_dir() else [target]
 
@@ -191,6 +201,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--names-from", type=Path,
                         help="descriptor CSV with a 'Name' column giving column names (implies --no-header)")
     parser.add_argument("--json", type=Path, help="also write the report as JSON")
+    parser.add_argument("--txt", type=Path, help="also write the printed report as UTF-8 text")
     args = parser.parse_args(argv)
     # CICIDS2017 labels contain U+FFFD; a cp1252 console cannot print it.
     sys.stdout.reconfigure(errors="backslashreplace")
@@ -200,6 +211,7 @@ def main(argv: list[str] | None = None) -> int:
     frames, all_notes = [], []
     for path in _csv_paths(args.path):
         df, notes = read_flow_csv(path, nrows=args.nrows, header=header, names=names)
+        notes["path"] = portable_path(path)  # no absolute local paths in saved reports
         frames.append(df)
         all_notes.append(notes)
     if not frames:
@@ -211,9 +223,12 @@ def main(argv: list[str] | None = None) -> int:
 
     report = inspect_frame(df, args.label)
     report["files"] = all_notes
-    for notes in all_notes[1:]:
-        print(f"also read: {notes['path']} (encoding {notes['encoding']})")
-    print(format_report(report, all_notes[0]))
+    text = "".join(f"also read: {n['path']} (encoding {n['encoding']})\n" for n in all_notes[1:])
+    text += format_report(report, all_notes[0])
+    print(text)
+    if args.txt:
+        args.txt.parent.mkdir(parents=True, exist_ok=True)
+        args.txt.write_text(text + "\n", encoding="utf-8")
     if args.json:
         args.json.parent.mkdir(parents=True, exist_ok=True)
         args.json.write_text(json.dumps(report, indent=2), encoding="utf-8")

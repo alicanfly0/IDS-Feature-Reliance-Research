@@ -1,4 +1,4 @@
-﻿file: C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation\data\raw\unsw_nb15\UNSW_NB15_training-set.csv  (encoding utf-8-sig, nrows limit None)
+file: data/raw/unsw_nb15/UNSW_NB15_training-set.csv  (encoding utf-8-sig, nrows limit None)
 column names from: header; UTF-8 BOM present
 shape: 175341 rows x 45 columns
 

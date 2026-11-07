@@ -232,7 +232,7 @@
   ],
   "files": [
     {
-      "path": "C:\\Users\\aliwa\\OneDrive\\Desktop\\FAST NUCES\\semester 7\\CNET\\cnet project implementation\\data\\raw\\nf_unsw_nb15_v2\\extracted\\fe6cb615d161452c_MOHANAD_A4706\\data\\NF-UNSW-NB15-v2.csv",
+      "path": "data/raw/nf_unsw_nb15_v2/extracted/fe6cb615d161452c_MOHANAD_A4706/data/NF-UNSW-NB15-v2.csv",
       "encoding": "utf-8-sig",
       "utf8_bom": false,
       "nrows_limit": null,

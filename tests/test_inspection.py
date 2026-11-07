@@ -1,3 +1,5 @@
+import json
+
 import pandas as pd
 import pytest
 
@@ -105,7 +107,17 @@ def test_cli_runs_on_directory(tmp_path, toy_flows, capsys):
     toy_flows.to_csv(tmp_path / "a.csv", index=False)
     toy_flows.to_csv(tmp_path / "b.csv", index=False)
     out_json = tmp_path / "report.json"
-    assert main([str(tmp_path), "--label", "Label", "--json", str(out_json)]) == 0
+    out_txt = tmp_path / "report.txt"
+    assert main([str(tmp_path), "--label", "Label", "--json", str(out_json), "--txt", str(out_txt)]) == 0
     text = capsys.readouterr().out
     assert "shape: 800 rows" in text
-    assert out_json.exists()
+    assert "shape: 800 rows" in out_txt.read_text(encoding="utf-8")
+    # Files outside the repository are reported by name only (audit F5: no local paths).
+    paths = [f["path"] for f in json.loads(out_json.read_text(encoding="utf-8"))["files"]]
+    assert paths == ["a.csv", "b.csv"]
+
+
+def test_portable_path_is_repository_relative():
+    from src.data.inspection import portable_path
+    from src.data.manifest import ROOT
+    assert portable_path(ROOT / "data" / "raw" / "x" / "f.csv") == "data/raw/x/f.csv"

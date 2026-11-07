@@ -1,4 +1,4 @@
-﻿file: C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation\data\raw\cicids2017_original\extracted\MachineLearningCVE\Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv  (encoding utf-8-sig, nrows limit None)
+file: data/raw/cicids2017_original/extracted/MachineLearningCVE/Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv  (encoding utf-8-sig, nrows limit None)
 column names from: header
 column names stripped of whitespace: 65
 duplicated column names (renamed .N): ['Fwd Header Length']
@@ -87,9 +87,9 @@ schema (column: dtype / inferred type)
 
 label counts (Label)
   BENIGN: 168186 (98.7204%)
-  Web Attack \ufffd Brute Force: 1507 (0.8846%)
-  Web Attack \ufffd XSS: 652 (0.3827%)
-  Web Attack \ufffd Sql Injection: 21 (0.0123%)
+  Web Attack � Brute Force: 1507 (0.8846%)
+  Web Attack � XSS: 652 (0.3827%)
+  Web Attack � Sql Injection: 21 (0.0123%)
 
 missing values: 20 in 1 columns
   Flow Bytes/s: 20

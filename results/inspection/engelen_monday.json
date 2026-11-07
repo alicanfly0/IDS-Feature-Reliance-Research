@@ -331,7 +331,7 @@
   ],
   "files": [
     {
-      "path": "C:\\Users\\aliwa\\OneDrive\\Desktop\\FAST NUCES\\semester 7\\CNET\\cnet project implementation\\data\\raw\\cicids2017_engelen_wtmc2021\\extracted\\Monday-WorkingHours.csv",
+      "path": "data/raw/cicids2017_engelen_wtmc2021/extracted/Monday-WorkingHours.csv",
       "encoding": "utf-8-sig",
       "utf8_bom": false,
       "nrows_limit": null,

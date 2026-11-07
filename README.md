@@ -18,37 +18,55 @@ The planned baselines are:
 | MES-DNN | Wardana et al. 2026 |
 | SHAP-selected DCNN + self-attention | Fang et al. 2026 |
 
-**Status: Milestone 0.** This milestone covers the repository, dataset
-provenance and acquisition, inspection, train-only preprocessing and split
-utilities.
+**Status: Milestone 0 complete.** No model has been trained and no
+experimental result exists.
 
-- **Data:** all four datasets are downloaded from their official sources and
-  verified: CICIDS2017 (original), Engelen's corrected CICIDS2017
-  (WTMC2021), UNSW-NB15 and NF-UNSW-NB15-v2.
-- **Inspection:** reports for every downloaded file are in
-  `results/inspection/`. They describe the data only.
-- **Not yet done:** no model has been trained and no experimental result
-  exists.
+| Capability | State |
+|---|---|
+| Dataset manifest, download / verify / extract (all 4 datasets downloaded and verified locally) | Implemented |
+| Dataset inspection (28 descriptive reports in `results/inspection/`) | Implemented |
+| Invalid-row rules, train-only preprocessing, splits incl. duplicate-aware split, leakage checks | Implemented; unit tests + real-data tests |
+| Config-driven runs (`src/config.py`), environment/device/seed recording (`src/env.py`) | Implemented; tested on Windows CPU |
+| Google Colab GPU execution (`docs/COLAB_EXECUTION_PLAN.md`, `notebooks/colab_runner.ipynb`) | Planned; scaffold only, **not run on Colab** |
+| AE-XGBoost, MES-DNN, DCNN + self-attention baselines | Planned (Milestone 1+) |
+| SHAP attribution, artifact registry, ARR@K, ablations, metrics, statistics | Planned |
 
-See `docs/milestone0_checklist.md` and `docs/decision_log.md`.
+- **Research decisions:** in `docs/decision_log.md`. Approved: D-001, D-003, D-008, D-011. D-007 partially approved. D-002 deferred.
+- **Checks:** in `docs/milestone0_checklist.md`.
 
 ## Layout
 
 ```
 configs/      base.yaml (paths, seed, split/preprocessing policy)
               datasets.yaml (acquisition manifest)
+configs/experiments/  one YAML per experiment, overlaid on base.yaml by src/config.py
 .venv/        Python environment, created by scripts/setup_env.ps1 (Git-ignored)
 data/raw/     original datasets, one folder per manifest id (Git-ignored)
 data/processed/
-src/data/     manifest.py, load.py, inspection.py, preprocess.py, split.py
+src/config.py effective run config (base.yaml + experiment), preprocessor factory, leakage assertion
+src/env.py    CPU/CUDA selection, seeding, environment + provenance snapshot (python -m src.env)
+src/data/     manifest.py, acquire.py, load.py, inspection.py, preprocess.py, split.py
 src/models/   baselines (Milestone 1+)
 src/audit/    SHAP, artifact registry, ARR@K (Milestone 1+)
 src/evaluation/  metrics, ablations, statistics (Milestone 1+)
-tests/        synthetic-data tests for everything in src/data
-docs/         decision_log.md, milestone0_checklist.md
+tests/        synthetic-data unit tests + real-data tests (skip without data)
+scripts/      setup_env.ps1, inspect_all.ps1 (Windows conveniences)
+notebooks/    colab_runner.ipynb (thin Colab launcher; scaffold, not yet run)
+docs/         decision_log.md, milestone0_checklist.md, COLAB_EXECUTION_PLAN.md
 results/      figures, tables, run metadata
 paper/        IEEE LaTeX manuscript
 ```
+
+## Platforms
+
+| Machine | Role |
+|---|---|
+| Windows 11 laptop, CPU only (i7-1265U, 16 GB RAM, no CUDA) | Development and tests |
+| Google Colab GPU runtimes | Heavy training and evaluation, from Milestone 1 (D-016) |
+
+- **Same commands everywhere:** every step is a `python -m src.<module>` call, which works the same on Linux/Colab.
+- **Windows conveniences only:** `run.cmd` and `scripts/*.ps1`.
+- **Data and Colab:** no data goes to Google Drive or Colab until D-015 is amended (see `docs/COLAB_EXECUTION_PLAN.md`).
 
 ## Setup (Windows, one time)
 
@@ -136,14 +154,45 @@ Extraction refuses archive entries that would land outside the target folder.
 
 ### Preprocessing and splitting
 
-```python
-from src.data.split import stratified_split, check_disjoint, cross_split_duplicates
-from src.data.preprocess import TrainOnlyPreprocessor
+Runs are driven by a config:
 
-split = stratified_split(df["Label"], seed=42)   # or group_split / temporal_split / predefined_split
+- `configs/base.yaml` holds project defaults.
+- One file in `configs/experiments/` overlays them per experiment.
+- `src/config.py` rejects any setting the code does not implement and builds the preprocessor from the config.
+
+```python
+from src.config import load_config, make_preprocessor, check_no_leaky_outputs, write_run_record
+from src.data.split import stratified_split, check_disjoint, save_split, load_split
+
+cfg = load_config("configs/experiments/<experiment>.yaml")
+split = stratified_split(df[cfg["experiment"]["label"]], seed=cfg["seed"])   # or group / temporal / predefined
 check_disjoint(split, len(df))
-pre = TrainOnlyPreprocessor(drop_cols=(...), categorical_cols=(...)).fit(df.iloc[split.train])
+save_split(split, "results/runs/<run>/split.json", source={"dataset": ..., "files": {...}, "n_rows": len(df)})
+pre = make_preprocessor(cfg)            # drops the config's label + identifier columns
+X_train = pre.fit_transform(df.iloc[split.train])   # statistics from train only
 X_test = pre.transform(df.iloc[split.test])
+check_no_leaky_outputs(pre.output_columns, cfg)
+write_run_record(cfg, "results/runs/<run>", extra={"split_fingerprint": split.fingerprint()})
+```
+
+Two safety checks:
+
+- **Undeclared text columns fail.** A column that is neither declared categorical nor numeric raises an error instead of becoming NaN.
+- **Edited split files are refused.** `load_split` rejects a split file whose indices, seed or source were edited. It also checks the expected dataset and row count you pass in.
+
+**Real-data checks.** `tests/test_real_data_smoke.py` runs two checks. Each one skips when its data isn't downloaded.
+
+1. **UNSW-NB15 official partition:** the full chain through `configs/experiments/smoke_unsw_official.yaml`.
+2. **CICIDS2017 Friday DDoS scope (D-008):** the D-011 row rules with logged counts, then the D-007 duplicate-aware split (`content_groups` + `group_split`). It shows 0 cross-split duplicates, against 486 test-row leaks for a random split.
+
+```powershell
+.\run.cmd -m pytest tests\test_real_data_smoke.py -v
+```
+
+**Environment record** (Python, OS, CPU, RAM, GPU, package versions, Git commit, dataset hashes):
+
+```powershell
+.\run.cmd -m src.env --dataset cicids2017_original
 ```
 
 ## Ground rules
@@ -154,8 +203,8 @@ X_test = pre.transform(df.iloc[split.test])
 - **Train-only fitting.** Everything that is fitted (imputation, scaling,
   vocabularies, feature selection, oversampling, thresholds) uses the training
   partition only.
-- **No universal split.** A random row split is not assumed to be safe. The
-  split strategy is chosen per dataset (D-007) and checked for duplicates and
-  group overlap.
+- **No universal split.** A random row split is not assumed to be safe.
+  D-007 has two tracks: a paper-comparable protocol and a leakage-resistant,
+  duplicate-aware split. Both report cross-split duplicate rates.
 - **Paper figures are not our results.** Numbers from the papers are labelled
   author-reported. Our own results come only from logged runs.

@@ -244,7 +244,7 @@
   ],
   "files": [
     {
-      "path": "C:\\Users\\aliwa\\OneDrive\\Desktop\\FAST NUCES\\semester 7\\CNET\\cnet project implementation\\data\\raw\\unsw_nb15\\UNSW-NB15_1.csv",
+      "path": "data/raw/unsw_nb15/UNSW-NB15_1.csv",
       "encoding": "utf-8-sig",
       "utf8_bom": true,
       "nrows_limit": null,

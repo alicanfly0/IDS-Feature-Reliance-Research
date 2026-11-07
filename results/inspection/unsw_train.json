@@ -193,7 +193,7 @@
   ],
   "files": [
     {
-      "path": "C:\\Users\\aliwa\\OneDrive\\Desktop\\FAST NUCES\\semester 7\\CNET\\cnet project implementation\\data\\raw\\unsw_nb15\\UNSW_NB15_training-set.csv",
+      "path": "data/raw/unsw_nb15/UNSW_NB15_training-set.csv",
       "encoding": "utf-8-sig",
       "utf8_bom": true,
       "nrows_limit": null,

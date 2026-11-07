@@ -367,7 +367,7 @@
   ],
   "files": [
     {
-      "path": "C:\\Users\\aliwa\\OneDrive\\Desktop\\FAST NUCES\\semester 7\\CNET\\cnet project implementation\\data\\raw\\cicids2017_original\\extracted\\TrafficLabelling\\Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+      "path": "data/raw/cicids2017_original/extracted/TrafficLabelling/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
       "encoding": "utf-8-sig",
       "utf8_bom": false,
       "nrows_limit": null,

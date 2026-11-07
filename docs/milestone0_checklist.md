@@ -8,7 +8,7 @@ numbers below are descriptive facts about the released files, measured by
 Status values: PASS (checked, with the command) · BLOCKED (needs data or a
 decision) · TODO.
 
-Last run: 2026-11-07, Python 3.11.9 (python.org build in the project venv, see D-014).
+Last run: 2026-11-08, Python 3.11.9 (python.org build in the project venv, see D-014). **Milestone 0: complete.**
 
 ## Repository
 
@@ -43,8 +43,32 @@ Last run: 2026-11-07, Python 3.11.9 (python.org build in the project venv, see D
 | T3 | Preprocessing statistics from the training partition only; source never mutated; unseen categories safe; row rules report only | PASS | `tests/test_preprocess.py` |
 | T4 | Splits deterministic, disjoint, complete; group / temporal / predefined; cross-split duplicate and group-overlap checks; fingerprinted save/load | PASS | `tests/test_split.py` |
 | T5 | Download/verify/extract: size, sha256 and publisher MD5 checks; zip path-traversal refused; Windows-unsafe names (trailing spaces) sanitized and logged | PASS | `tests/test_acquire.py` |
-| T6 | Full suite | PASS | `.\run.cmd -m pytest`: 54 passed |
+| T6 | Full suite | PASS | `.\run.cmd -m pytest -q -rs -W default`: **79 passed** (77 unit tests + 2 real-data tests), 0 skipped, 0 warnings. On a copy without data: 77 passed, 2 skipped. Independent reviewer, before finalization: 72 passed, 1 skipped |
 | T7 | Setup and every step reproducible without assistance | PASS | `scripts\setup_env.ps1`, `run.cmd`, `src.data.acquire`, `scripts\inspect_all.ps1` |
+
+## Independent audit corrective pass (2026-11-07)
+
+Findings from `CNET_MILESTONE_0_INDEPENDENT_AUDIT.md` (verdict: pass with conditions):
+
+| # | Finding | Status | Fix and evidence |
+|---|---|---|---|
+| F1 | Undeclared text feature silently became an all-NaN column | FIXED | `TrainOnlyPreprocessor` raises `TypeError` naming the column, at fit and at transform; `transform` refuses non-finite output. 4 regression tests in `tests/test_preprocess.py` |
+| F2 | `load_split` accepted edited seed/source metadata | FIXED | Saved splits carry a digest over the whole record; `load_split(expected_source=…, n_rows=…)` also checks dataset identity and row count. 3 regression tests in `tests/test_split.py`. Integrity check, not authenticity |
+| F3 | `configs/base.yaml` not connected to execution | FIXED | `src/config.py` overlays an experiment file on `base.yaml`, rejects unimplemented settings, builds the preprocessor, asserts no label/identifier reaches the input, writes a run record. `tests/test_config.py` (10) |
+| F4 | Real-data smoke check not in the repository | FIXED | `tests/test_real_data_smoke.py` + `configs/experiments/smoke_unsw_official.yaml`: checksum-verified UNSW official partition → saved/reloaded split → train-only fit → transform → finite/schema/leakage assertions; skips without data |
+| F5 | Absolute local paths in reports; personal registration metadata in manifest | FIXED | Inspection writes repo-relative paths and its own UTF-8 `.txt` (`--txt`). The 28 existing reports were rewritten in place; only path lines changed, no data re-read. Registrant name removed from `configs/datasets.yaml` |
+
+## Finalization (2026-11-08)
+
+| # | Check | Status | Evidence |
+|---|---|---|---|
+| Z1 | Approved decisions recorded (D-001, D-003, D-008, D-011 APPROVED; D-007 PARTIALLY APPROVED; D-002 DEFERRED; D-016 added) | PASS | `docs/decision_log.md` summary table |
+| Z2 | D-011 rules on the D-008 scope: 36 rows excluded with logged counts, source positions kept, `-1` sentinels kept | PASS | `test_friday_ddos_row_rules_and_duplicate_aware_split` |
+| Z3 | D-007 track B: duplicate-aware split gives 0 cross-split duplicates (random split: 498 / 486) | PASS | same test; `split.content_groups` + `group_split` |
+| Z4 | Environment, device and seed recording works on Windows CPU; no Windows-only requirement for Colab | PASS | `tests/test_env.py`; `python -m src.env` |
+| Z5 | Colab execution plan and notebook scaffold | PASS (written) / **NOT VERIFIED on Colab** | `docs/COLAB_EXECUTION_PLAN.md`, `notebooks/colab_runner.ipynb` (Drive/data cells disabled pending D-015 Amendment 1) |
+| Z6 | All 13 data files re-verified (size, sha256, publisher MD5); manifest valid | PASS | `src.data.acquire verify all`, `src.data.manifest` (0 problems) |
+| Z7 | Committed/zipped files contain no datasets, binaries, secrets, registration details or local absolute paths | PASS | Scan of 98 files: 0 problems; largest file 36 KB |
 
 ## Checks on the real data
 
@@ -76,9 +100,11 @@ Last run: 2026-11-07, Python 3.11.9 (python.org build in the project venv, see D
   - 2,100,814 rows (25.8% fewer than the original) and 25 labels including 10 "Attempted" classes.
   - Many columns are renamed relative to the original release, so a hand-checked column map is required.
 
-## Decisions required before Milestone 1
+## Remaining before the first Milestone 1 run (AE-XGBoost, D-008 scope)
 
-D-001 (adopt 39 inputs), D-002, D-004, D-005, D-007, D-009 (official
-partition?), D-008 (DDoS subset scope) and D-010 (see `docs/decision_log.md`).
-D-003, D-006, D-011, D-012 and D-013 can be decided during Milestone 1, but
-before the experiments that depend on them.
+1. **D-007 sign-off.** The exact track-A/B procedure is documented and demonstrated, but not yet approved.
+2. **D-015 Amendment 1.** Any data on Colab/Drive needs it. **GitHub remote** configured by the team.
+3. **D-012 decision on `Destination Port`** in the model input. It changes the duplicate groups (D-007).
+4. **Packages:** pin and install xgboost and torch locally (CPU). Run the test suite on Colab once (first real Colab verification).
+
+Still OPEN for later experiments: D-004, D-005, D-006, D-009, D-010, D-012, D-013. D-002 is deferred to the SHAP milestone.

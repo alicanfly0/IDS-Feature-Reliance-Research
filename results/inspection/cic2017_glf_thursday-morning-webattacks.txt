@@ -1,4 +1,4 @@
-﻿file: C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation\data\raw\cicids2017_original\extracted\TrafficLabelling\Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv  (encoding cp1252, nrows limit None)
+file: data/raw/cicids2017_original/extracted/TrafficLabelling/Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv  (encoding cp1252, nrows limit None)
 column names from: header
 column names stripped of whitespace: 70
 duplicated column names (renamed .N): ['Fwd Header Length']
@@ -94,9 +94,9 @@ schema (column: dtype / inferred type)
 label counts (Label)
   nan: 288602 (62.8806%)
   BENIGN: 168186 (36.6444%)
-  Web Attack � Brute Force: 1507 (0.3283%)
-  Web Attack � XSS: 652 (0.1421%)
-  Web Attack � Sql Injection: 21 (0.0046%)
+  Web Attack – Brute Force: 1507 (0.3283%)
+  Web Attack – XSS: 652 (0.1421%)
+  Web Attack – Sql Injection: 21 (0.0046%)
 
 missing values: 24531190 in 85 columns
   Flow ID: 288602

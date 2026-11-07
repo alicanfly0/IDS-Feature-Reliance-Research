@@ -1,0 +1,262 @@
+# Forensic artifact registry — CICIDS2017 (decision log D-012), Milestone 2A.
+#
+# A registry entry records EVIDENCE about a candidate problem; it is not a verdict.
+# Evidence levels (most to least direct):
+#   direct_extraction_error  a source documents a mechanism that makes the recorded values of this
+#                            feature (or this flow / label) wrong for the affected rows
+#   shortcut_indicator       a source shows models use this feature to separate classes or flow subsets
+#                            through properties unrelated to the attack semantics; the values are not
+#                            claimed to be wrong
+#   unverified_hypothesis    proposed (e.g. in our Phase II text) without direct support in the sources
+#                            we hold; may describe a legitimate attack characteristic
+# target: what the issue concerns — feature | flow | label | generation_process
+# Page numbers are PHYSICAL pages of the PDFs in ../project/ (paper7 = Engelen et al. 2021,
+# paper8 = Lanvin et al. 2023). Column names are the MachineLearningCVE schema used by the model
+# (src/data/ddos.py); every name is checked against the data by tests/test_registry.py.
+
+registry_version: 1
+dataset: cicids2017_original (MachineLearningCVE CSV release)
+evidence_levels: [direct_extraction_error, shortcut_indicator, unverified_hypothesis]
+targets: [feature, flow, label, generation_process]
+
+sources:
+  engelen2021: {file: paper7.pdf, citation: "G. Engelen, V. Rimmer, W. Joosen, Troubleshooting an Intrusion Detection Dataset: the CICIDS2017 Case Study, IEEE SPW 2021"}
+  lanvin2023: {file: paper8.pdf, citation: "M. Lanvin et al., Errors in the CICIDS2017 Dataset and the Significant Differences in Detection Performances It Makes, CRiSIS 2022 (LNCS 13857, 2023)"}
+  phase2: {file: i232630_i232562_PHASE_II_CNET.pdf, citation: "our Phase II methodology, Step 4 (artifact registry A_meta / A_bug / A_dup); a proposal, not evidence"}
+  local: {file: docs/DIAGNOSTIC_D008_SHORTCUTS.md, citation: "our measurements on the D-008 scope (Friday DDoS file) and the D-018 ablation"}
+
+features:
+  - id: R01
+    name: Destination Port
+    columns: [Destination Port]
+    source_names: {engelen2021: Destination Port}
+    phase2_category: A_meta
+    evidence_level: unverified_hypothesis
+    target: generation_process
+    scope: all CICIDS2017 files; in D-008 the DDoS attack targets one web service
+    mechanism: >
+      The capture design (one victim web server, one attack tool) makes the destination port almost
+      a label proxy in this scope. Port can also legitimately describe an HTTP flood, so its use is
+      "up for debate" rather than an established defect.
+    sources:
+      - {ref: engelen2021, section: "III-D Feature extraction", page: 4, finding: "using the destination port as a NIDS feature is up for debate (other identifiers should be excluded)"}
+      - {ref: phase2, section: "Step 4", finding: "listed as a session/OS metadata shortcut without direct evidence"}
+    local_evidence: >
+      D-008 scope: 128,022 of 128,025 DDoS flows use port 80 vs 9.1% of benign flows; the rule
+      "port 80 -> DDoS" gives test MCC 0.924. D-018: removing it changed F1 0.999870 -> 0.999818 on the
+      common rows (exact McNemar p = 0.625, one seed): no measurable dependence of this model.
+    validation_required: cross-capture / cross-dataset evaluation; additional seeds for the D-018 ablation
+
+  - id: R02
+    name: Init_Win_bytes_forward
+    columns: [Init_Win_bytes_forward]
+    source_names: {engelen2021: Init Win bytes Fwd}
+    phase2_category: A_meta
+    evidence_level: shortcut_indicator
+    target: flow
+    scope: TCP appendix flows (Engelen) across attack classes; their share in D-008 is unknown (no row mapping, D-005)
+    mechanism: >
+      One of four features an RF used to separate TCP-appendix flows of different classes; reflects the
+      attack tools' TCP stacks, not the malicious activity. Values are not claimed to be wrong.
+    sources:
+      - {ref: engelen2021, section: "IV-B.1 TCP appendix impact", page: 5, finding: "four prominent but largely irrelevant features to crisply differentiate between appendices of different classes"}
+    local_evidence: "-1 ('not observed') sentinel in 32,925 of 225,745 D-008 rows (kept, D-011)"
+    validation_required: group ablation; evaluation on Engelen-corrected flows (appendices reunited)
+
+  - id: R03
+    name: Init_Win_bytes_backward
+    columns: [Init_Win_bytes_backward]
+    source_names: {}
+    phase2_category: A_meta
+    evidence_level: unverified_hypothesis
+    target: generation_process
+    scope: all CICIDS2017 files
+    mechanism: >
+      Phase II hypothesis: the initial window of the responding host fingerprints the testbed machines'
+      operating systems. The sources we hold name only the forward initial window (R02).
+    sources:
+      - {ref: phase2, section: "Step 4", finding: "listed under A_meta (OS fingerprint) without direct evidence"}
+    local_evidence: "-1 sentinel in 88,299 of 225,745 D-008 rows (kept, D-011)"
+    validation_required: evidence that host OS settings, not attack behaviour, drive the values; ablation
+
+  - id: R04
+    name: min_seg_size_forward
+    columns: [min_seg_size_forward]
+    source_names: {engelen2021: Min Seg Size Fwd}
+    phase2_category: A_bug
+    evidence_level: shortcut_indicator
+    target: flow
+    scope: TCP appendix flows (Engelen)
+    mechanism: One of the four appendix-class separators (as R02).
+    sources:
+      - {ref: engelen2021, section: "IV-B.1 TCP appendix impact", page: 5, finding: "Min Seg Size Fwd among the four appendix-separating features"}
+    local_evidence: "negative values in 35 rows across the CICIDS2017 day files (D-011); none in the Friday DDoS (D-008) file"
+    validation_required: group ablation; corrected-flow evaluation
+
+  - id: R05
+    name: Fwd Header Length
+    columns: [Fwd Header Length, Fwd Header Length.1]
+    source_names: {engelen2021: Fwd Header Len}
+    phase2_category: A_bug
+    evidence_level: shortcut_indicator
+    target: flow
+    scope: TCP appendix flows (Engelen); the column appears twice in MachineLearningCVE
+    mechanism: >
+      One of the four appendix-class separators (as R02). Separately, the release contains this column
+      twice with identical values (a schema duplication; measured), so attributions split across the
+      two copies and must be merged when ranking.
+    sources:
+      - {ref: engelen2021, section: "IV-B.1 TCP appendix impact", page: 5, finding: "Fwd Header Len among the four appendix-separating features"}
+    local_evidence: "'Fwd Header Length.1' equals 'Fwd Header Length' in every D-008 row"
+    validation_required: group ablation (both copies together); corrected-flow evaluation
+
+  - id: R06
+    name: Total Fwd Packets
+    columns: [Total Fwd Packets]
+    source_names: {engelen2021: Total Fwd Pkt}
+    phase2_category: none
+    evidence_level: shortcut_indicator
+    target: flow
+    scope: TCP appendix flows (Engelen)
+    mechanism: One of the four appendix-class separators (as R02); not listed in Phase II.
+    sources:
+      - {ref: engelen2021, section: "IV-B.1 TCP appendix impact", page: 5, finding: "Total Fwd Pkt among the four appendix-separating features"}
+    validation_required: group ablation; corrected-flow evaluation
+
+  - id: R07
+    name: SYN Flag Count
+    columns: [SYN Flag Count]
+    source_names: {engelen2021: SYN Flag Count}
+    phase2_category: A_bug
+    evidence_level: shortcut_indicator
+    target: flow
+    scope: TCP appendix flows vs regular flows (Engelen)
+    mechanism: One of two features an RF used to separate appendices from regular flows of the same class.
+    sources:
+      - {ref: engelen2021, section: "IV-B.1 TCP appendix impact", page: 5, finding: "mainly two features (SYN Flag Count, Bwd Pkt Len Mean) to separate appendices from regular flows"}
+    validation_required: group ablation; corrected-flow evaluation
+
+  - id: R08
+    name: Bwd Packet Length Mean
+    columns: [Bwd Packet Length Mean]
+    source_names: {engelen2021: Bwd Pkt Len Mean}
+    phase2_category: A_bug
+    evidence_level: shortcut_indicator
+    target: flow
+    scope: TCP appendix flows vs regular flows (Engelen)
+    mechanism: As R07.
+    sources:
+      - {ref: engelen2021, section: "IV-B.1 TCP appendix impact", page: 5, finding: "Bwd Pkt Len Mean separates appendices from regular flows"}
+    validation_required: group ablation; corrected-flow evaluation
+
+  - id: R09
+    name: Flow IAT Min
+    columns: [Flow IAT Min]
+    source_names: {lanvin2023: Flow IAT Min}
+    phase2_category: A_dup
+    evidence_level: direct_extraction_error
+    target: feature
+    scope: "flows containing duplicated capture packets (Friday capture: 4.67% of packets duplicated); which D-008 rows are affected is unknown"
+    mechanism: Duplicated packets arrive almost simultaneously, which sharply lowers the minimum inter-arrival time.
+    sources:
+      - {ref: lanvin2023, section: "3.3 Dealing with data duplication; Table 5", page: "8-9", finding: "on average >497,000 duplicated packets per day (4.5%); Friday 466,448 (4.67%)"}
+      - {ref: lanvin2023, section: "4.2 Experiments results, Q3", page: 15, finding: "duplication directly impacts Flow IAT Min, Flow IAT Mean, Bwd Packets/s and Flow Packets/s"}
+    validation_required: re-extraction from deduplicated PCAP (not available); ablation of the duplication-affected group
+
+  - id: R10
+    name: Flow IAT Mean
+    columns: [Flow IAT Mean]
+    source_names: {lanvin2023: Flow IAT Mean}
+    phase2_category: none
+    evidence_level: direct_extraction_error
+    target: feature
+    scope: as R09
+    mechanism: As R09 (lowers the mean inter-arrival time). Not listed in Phase II.
+    sources:
+      - {ref: lanvin2023, section: "4.2 Experiments results, Q3", page: 15, finding: "named among the four duplication-affected features"}
+    validation_required: as R09
+
+  - id: R11
+    name: Flow Packets/s
+    columns: [Flow Packets/s]
+    source_names: {lanvin2023: Flow Packets/s}
+    phase2_category: A_dup
+    evidence_level: direct_extraction_error
+    target: feature
+    scope: as R09
+    mechanism: Each duplicated packet is counted, roughly doubling packets per second for affected flows.
+    sources:
+      - {ref: lanvin2023, section: "4.2 Experiments results, Q3", page: 15, finding: "the number of packets per second is doubled"}
+    validation_required: as R09
+
+  - id: R12
+    name: Bwd Packets/s
+    columns: [Bwd Packets/s]
+    source_names: {lanvin2023: Bwd Packets/s}
+    phase2_category: A_dup
+    evidence_level: direct_extraction_error
+    target: feature
+    scope: as R09
+    mechanism: As R11 for the backward direction.
+    sources:
+      - {ref: lanvin2023, section: "4.2 Experiments results, Q3", page: 15, finding: "the backward number of packets per second is doubled"}
+    validation_required: as R09
+
+# Problems with whole flows, labels or the generation process. They have no single column, so they
+# are NOT part of ARR@K; they bound what any feature-level analysis can conclude.
+non_feature_issues:
+  - id: F01
+    name: TCP appendix flows
+    evidence_level: direct_extraction_error
+    target: flow
+    mechanism: CICFlowMeter ends a TCP flow at the first FIN; the rest of the connection becomes separate meaningless flows (and timed-out flows split similarly).
+    sources:
+      - {ref: engelen2021, section: "III-A Flow construction", page: 3, finding: "TCP appendices make up 25.9 percent of the entire dataset"}
+    d008_relevance: "Engelen's regenerated Friday file has 95,123 DDoS flows vs 128,027 in this release (25.7% fewer); rows cannot be mapped one to one (D-005)"
+  - id: F02
+    name: RST not terminating flows
+    evidence_level: direct_extraction_error
+    target: flow
+    mechanism: RST packets were not treated as flow termination.
+    sources:
+      - {ref: engelen2021, section: "III-A Flow construction (3) Ignoring RST", page: 3, finding: "RST should be a valid way to terminate a TCP flow"}
+  - id: F03
+    name: Swapped flow direction
+    evidence_level: direct_extraction_error
+    target: flow
+    mechanism: Timed-out appendices and misordered frames can make a flow's source and destination swapped, which also swaps port-dependent features.
+    sources:
+      - {ref: engelen2021, section: "III-A Flow construction", page: 3, finding: "Source and Destination features of the flow are swapped"}
+      - {ref: lanvin2023, section: "3.1 CICFlowMeter issue with misordered packets", page: "6-7", finding: "Friday capture: 7,094 misordered frames (0.071%)"}
+    d008_relevance: "3 DDoS flows with ephemeral destination ports would be consistent with swapped direction (unverified)"
+  - id: F04
+    name: Duplicated capture packets
+    evidence_level: direct_extraction_error
+    target: generation_process
+    mechanism: Packets duplicated in the capture distort counts, rates and inter-arrival times (R09-R12 are the features shown).
+    sources:
+      - {ref: lanvin2023, section: "3.3 Dealing with data duplication", page: "8-9", finding: "4.5% of packets per day duplicated"}
+  - id: L01
+    name: Attempted attacks labelled as attacks
+    evidence_level: direct_extraction_error
+    target: label
+    mechanism: Payload-less attack attempts carry the attack label.
+    sources:
+      - {ref: engelen2021, section: "III-B.2 Attempted attack flows", page: 3, finding: "attack flows without payload labelled as successful attacks"}
+    d008_relevance: "Engelen lists 0 attempted DDoS flows: little relevance to the D-008 scope"
+  - id: L02
+    name: Unlabelled port scan
+    evidence_level: direct_extraction_error
+    target: label
+    mechanism: A port scan during the Thursday infiltration was not labelled.
+    sources:
+      - {ref: lanvin2023, section: "3.4 Attack omission", page: 9, finding: "port scan flows missing from the official labels"}
+    d008_relevance: "Thursday capture: outside the D-008 scope"
+  - id: I01
+    name: Flow identifiers
+    evidence_level: unverified_hypothesis
+    target: feature
+    mechanism: Flow ID, IPs, source port and timestamp could let a model tie hosts or time windows to classes.
+    sources:
+      - {ref: engelen2021, section: "III-D Feature extraction", page: 4, finding: "these attributes should be excluded from the feature representation during training"}
+    d008_relevance: "absent from MachineLearningCVE, so not in the model input"

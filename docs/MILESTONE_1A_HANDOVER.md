@@ -1,12 +1,15 @@
-# Milestone 1A handover — AE-XGBoost baseline, Colab-first
+# Milestone 1A handover — AE-XGBoost baseline
 
-Date: 2026-11-08. Continues Milestone 0 commit `98620bd`. The commit hash of this work is reported with the delivery; a file cannot contain its own commit hash.
+Date: 2026-11-08. Continues Milestone 0 commit `98620bd`. Implementation commit: `6fed9b0`.
 
-**What does not exist yet:**
+**Status:**
 
-- no full training run has been made, locally or on Colab;
-- **no experimental result exists**;
-- every metric printed so far comes from a tiny smoke run (3,000 training rows, 3 epochs) and is meaningless by design.
+| Item | State |
+|---|---|
+| **First full training run** | **Done on the laptop CPU** (user decision, D-016 Amendment 1): one model seed, D-008 scope, D-007 track B. Results in §2b; they are our only experimental result so far |
+| **Colab GPU execution** | **Not done.** The Colab workflow is prepared and statically checked but has never been executed; nothing has been uploaded to Google (D-015) |
+| Tiny smoke run | Also made (3,000 training rows, 3 epochs); its metrics are meaningless by design and are not results |
+| Not started | Additional seeds, the paper-comparable track A, ablations, SHAP |
 
 ## 1. Implemented
 
@@ -19,7 +22,7 @@ Date: 2026-11-08. Continues Milestone 0 commit `98620bd`. The commit hash of thi
 | `src/models/xgb.py` | XGBoost on latent codes (`device` cpu/cuda, `hist`), validation early stopping, values checked against the paper's Table 5 ranges |
 | `src/evaluation/metrics.py` | Accuracy, precision, recall, F1 (DDoS = positive), macro-F1, AUROC, MCC, confusion matrix, class counts |
 | `src/experiments/ae_xgb.py` | Runner with resumable stages, never overwriting a finished run, and identity checks (config hash, device, dataset hash, Git commit). Saves split, preprocessing state, checkpoints, latent codes, model, predictions, metrics and run record. Timing benchmark with projection |
-| `configs/experiments/ae_xgb_d008_trackB.yaml` / `ae_xgb_d008_smoke.yaml` | Real experiment (seed 0, cuda) / tiny smoke run (cpu, subsample) |
+| `configs/experiments/ae_xgb_d008_trackB.yaml` / `ae_xgb_d008_smoke.yaml` | Real experiment (seed 0; config default device `cuda`, the completed run used `--device cpu`) / tiny smoke run (cpu, subsample) |
 | `src/env.py` | Commit from a code bundle (`CNET_GIT_COMMIT`) when there is no `.git` |
 | `src/data/acquire.py` | `verify <dataset> --file <name>`, to verify only the transferred archive |
 | `notebooks/colab_runner.ipynb` | Runnable thin workflow: GPU check → D-015 switch → code bundle (or token-safe GitHub) → missing packages + tests → copy and verify one archive → GPU benchmark → run → results |
@@ -46,24 +49,45 @@ Date: 2026-11-08. Continues Milestone 0 commit `98620bd`. The commit hash of thi
 - **`tests/test_ae_xgb.py`:** labels and rules; conflicting groups; split reproducibility; AE dimensions and finiteness; latent extraction; bit-identical resume after a simulated crash; early stopping restoring the best weights; augmentation rule and determinism; XGBoost fit/predict/save/load; metrics with the positive class; CUDA request failing without a GPU; runner end to end, including no-overwrite, AE not retrained after an XGBoost-stage disconnect, refusal to resume under a different commit, and split reuse across configs.
 - **`tests/test_split.py`:** pinned frozen-RNG split; exact groups; all-pair overlap.
 
-## 3. Not verified until a real Colab run
+## 2b. First full run — laptop CPU (user decision, D-016 Amendment 1)
+
+| Item | Value |
+|---|---|
+| Run | `ae_xgb_d008_trackB-seed0-cpu-565a8b9e` |
+| Commit | `6fed9b0` |
+| Duration | 1.45 min |
+| Command | `.\run.cmd -m src.experiments.ae_xgb --config configs/experiments/ae_xgb_d008_trackB.yaml --device cpu` |
+| Config hash / split fingerprint | `565a8b9e62065f93…` / `50bd994880abbe15…` (pinned) |
+| Summary files | `results/baselines/<run>/` (checkpoints, latent codes and model stay in Git-ignored `results/runs/`) |
+| Model outcome | Input dimension 68; AE early-stopped at epoch 60 (best 50); XGBoost 204 trees; augmentation not applicable; 0 / 0 / 0 partition overlap |
+| **Test (33,877 rows)** | Accuracy 0.999852, precision 0.999844, recall 0.999896, **F1 0.999870**, macro-F1 0.999850, AUROC 0.999992, **MCC 0.999699** |
+| Test confusion matrix (TN / FP / FN / TP) | 14,641 / 3 / 2 / 19,231 |
+| Validation | F1 0.999870, MCC 0.999699 |
+
+**Limits:**
+
+- One model seed only.
+- Not comparable to the paper's author-reported numbers (different protocol, D-017).
+- Shortcut reliance is untested until the ablations run.
+
+## 3. Not verified, because Colab has never been executed
 
 - Colab's package versions and the test suite there.
 - CUDA execution of the AE and of XGBoost (`device="cuda"`).
 - GPU timing.
 - Drive I/O and checkpointing to Drive.
-- Real disconnect/resume on Colab.
-- **The first real training run and its metrics.**
+- Real disconnect/resume on Colab. Resume is verified locally by tests only.
+- Whether a GPU run reproduces the CPU run's metrics. Not expected to be bit-identical; to be compared when a GPU run exists.
 
-## 4. First real run
+## 4. Colab GPU run (prepared, not executed)
 
-Follow `docs/COLAB_EXECUTION_PLAN.md`, "First real run — exact steps". The command the notebook runs is:
+Only needed for GPU workloads (D-016 Amendment 1). Follow `docs/COLAB_EXECUTION_PLAN.md`, "First real run — exact steps", after authorizing D-015 Amendment 1. The notebook runs:
 
     python -m src.experiments.ae_xgb --config configs/experiments/ae_xgb_d008_trackB.yaml --device cuda --storage /content/drive/MyDrive/cnet-runs
 
-**Outputs:**
+**Outputs would be:**
 
-- `MyDrive/cnet-runs/runs/ae_xgb_d008_trackB-seed0-cuda-<hash>/`: metrics.json, predictions, run_record.json, checkpoints, log.
+- `MyDrive/cnet-runs/runs/ae_xgb_d008_trackB-seed0-cuda-<hash>/`: a separate run id from the CPU run.
 - `MyDrive/cnet-runs/splits/ae_xgb_d008_trackB-split.json`.
 
 ## 5. Scientifically significant deviations from the paper
@@ -79,7 +103,7 @@ Full table: **D-017**.
 
 ## 6. Blockers and decisions for you
 
-1. **D-015 Amendment 1** (proposed text in the decision log). Authorize it before any data or code reaches Google.
-2. **Where to run the first baseline.** The CPU benchmark says the full single-seed run takes minutes on the laptop. Colab is kept as instructed, but running small baselines locally would need no cloud transfer at all. Your call (D-016 note).
+1. **Decided:** the first baseline ran on the laptop CPU (D-016 Amendment 1).
+2. **D-015 Amendment 1** (proposed text in the decision log) is still needed before any Colab GPU run. Nothing has reached Google.
 3. **GitHub remote:** optional. The code-bundle path works without one.
-4. **After the first results:** additional seeds, track A (paper-comparable 5-fold), the Destination Port ablation and SHAP (D-002) need approval.
+4. **Next experiments need approval:** additional seeds, track A (paper-comparable 5-fold), the Destination Port ablation, and SHAP (D-002).

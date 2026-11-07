@@ -94,7 +94,7 @@ def prepare_data(cfg: dict, storage: Path, log, root: Path = ROOT, loader=None):
     else:
         split_file.parent.mkdir(parents=True, exist_ok=True)
         save_split(prep.split, split_file, source=source)
-        log(f"split saved to {split_file}")
+        log(f"split saved to splits/{split_file.name}")   # no absolute paths in logs (audit F5)
     expected = s.get("expected_fingerprint")
     if expected and loader is None and prep.split.fingerprint() != expected:
         raise RuntimeError(f"split fingerprint {prep.split.fingerprint()} != expected {expected}")
@@ -244,7 +244,7 @@ def run(cfg: dict, device: str, storage: Path, allow_code_change: bool = False, 
     }
     _write_json(run_dir / "run_record.json", record)
     _write_json(run_dir / "DONE", {"completed": time.strftime("%Y-%m-%dT%H:%M:%S"), "run_id": run_id})
-    log(f"DONE -> {run_dir}")
+    log(f"DONE -> runs/{run_id}")
     return run_dir
 
 

@@ -1,0 +1,4 @@
+partition,tn,fp,fn,tp,n,negative_benign_0,positive_ddos_1,threshold
+train,68421,0,3,89574,157998,68421,89577,0.5
+val,14615,4,1,19214,33834,14619,19215,0.5
+test,14641,3,2,19231,33877,14644,19233,0.5

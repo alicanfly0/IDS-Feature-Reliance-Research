@@ -33,7 +33,7 @@ Status values: OPEN · APPROVED (team decision) · PARTIALLY APPROVED · DEFERRE
 | D-013 | Unverifiable Phase II citations | OPEN |
 | D-014 | Python environment | DECIDED |
 | D-015 | Storage location (local only) | DECIDED; Amendment 1 PROPOSED, not authorized |
-| D-016 | Compute: local CPU + Google Colab GPU | DECIDED (team requirement); benchmark note added |
+| D-016 | Compute: local CPU + Google Colab GPU | DECIDED; Amendment 1: first baseline run on laptop CPU (done) |
 | D-017 | AE-XGBoost adaptations vs the paper | DOCUMENTED (Milestone 1A) |
 
 ---
@@ -426,7 +426,43 @@ To run the first AE-XGBoost baseline on Google Colab Free, the following would b
 
 - **The full single-seed baseline therefore costs minutes of CPU.** The GPU benefit for this baseline is likely small, and session start-up plus transfer may dominate.
 - **Decision for the team:** keep Colab as instructed, or authorize full runs of small baselines on the laptop CPU. The latter needs no cloud transfer, so no D-015 amendment.
-- **Not changed unilaterally:** no full run has been made locally.
+
+### D-016 Amendment 1 — DECIDED (2026-11-08, user decision "Laptop CPU instead")
+
+**Decision.** The first full single-seed AE-XGBoost baseline runs on the **laptop CPU**, not Colab.
+
+- **Why:** the CPU benchmark showed it costs minutes. No data leaves the laptop, so D-015 Amendment 1 is not needed for this run.
+- **Colab:** stays the venue for workloads that need a GPU. The Colab workflow is unchanged and still unexecuted.
+
+**Run made:** `ae_xgb_d008_trackB-seed0-cpu-565a8b9e`.
+
+- **Code and config:**
+  - commit `6fed9b0`; the code tree equals that commit. `dirty: true` is due only to the untracked `MILESTONE_0_HANDOVER.md`;
+  - config `ae_xgb_d008_trackB.yaml` with `--device cpu`;
+  - torch 2.15.0 CPU, XGBoost 3.2.0.
+- **Duration:** 1.45 min wall clock (data 13.0 s, AE 65.2 s, XGBoost 3.2 s).
+- **Summary files:** `results/baselines/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/`. Checkpoints, latent codes and predictions stay in the Git-ignored `results/runs/`.
+
+**Model outcome:**
+
+- Input dimension 68.
+- AE early-stopped at epoch 60, best epoch 50 (validation MSE 3.6e-6).
+- XGBoost best iteration 204.
+- Augmentation not applicable (89,577 attack vs 68,421 benign training rows).
+- Partition overlap 0 / 0 / 0, before and after preprocessing.
+
+**Measured results** (ours, one model seed; validation chose the model, test was used once):
+
+| Partition | Accuracy | Precision | Recall | F1 | Macro-F1 | AUROC | MCC | TN / FP / FN / TP |
+|---|---|---|---|---|---|---|---|---|
+| Validation (33,834) | 0.999852 | 0.999792 | 0.999948 | 0.999870 | 0.999849 | 1.000000 | 0.999699 | 14,615 / 4 / 1 / 19,214 |
+| Test (33,877) | 0.999852 | 0.999844 | 0.999896 | 0.999870 | 0.999850 | 0.999992 | 0.999699 | 14,641 / 3 / 2 / 19,231 |
+
+**Interpretation limits:**
+
+- **One model seed:** no variance estimate yet.
+- **Not comparable to the paper:** the paper's CIC-IDS2017 F1 of 0.9993 (Table 6) is author-reported under a different protocol, joint training with two 5G datasets and 5-fold CV.
+- **Duplicates excluded, shortcuts not:** near-perfect separation persists under the duplicate-aware split. Whether it rests on candidate shortcut features (e.g. `Destination Port`, D-012) is exactly what the planned ablations test. It is not established by this run.
 
 ## D-017 AE-XGBoost reproduction: adaptations and gaps vs Nezhadsistani et al. 2026 — DOCUMENTED (2026-11-08)
 

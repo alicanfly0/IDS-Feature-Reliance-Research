@@ -1,0 +1,41 @@
+{
+  "utc_time": "2026-11-07T20:26:30+00:00",
+  "python": "3.11.9",
+  "os": "Windows-10-10.0.26200-SP0",
+  "machine": "AMD64",
+  "cpu": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+  "cpu_count": 12,
+  "ram_bytes": 16579715072,
+  "in_colab": false,
+  "device": "cpu",
+  "gpu": {
+    "torch_cuda_available": false,
+    "devices": [],
+    "torch_cuda_version": null,
+    "nvidia_smi": null
+  },
+  "packages": {
+    "numpy": "1.26.4",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.9.0",
+    "PyYAML": "6.0.3",
+    "pytest": "9.1.1",
+    "torch": "2.15.0",
+    "xgboost": "3.2.0",
+    "lightgbm": null,
+    "shap": null
+  },
+  "git": {
+    "commit": "6fed9b06b85170e00ebc0c2e0e1fadbea42e0d4e",
+    "dirty": true,
+    "source": "git"
+  },
+  "seed": 0,
+  "dataset": {
+    "id": "cicids2017_original",
+    "sha256": {
+      "MachineLearningCSV.zip": "c3f26274b36c837ccf28ffd2dbf4582941c30b3ee70a635c6e5b2f87c4727928",
+      "GeneratedLabelledFlows.zip": "7bdbef286f8893f31c6db12105fa097fa5c2dcc6733179037a08129d150ea27a"
+    }
+  }
+}

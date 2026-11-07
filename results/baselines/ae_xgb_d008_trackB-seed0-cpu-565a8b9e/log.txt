@@ -1,0 +1,69 @@
+[01:26:30] new run ae_xgb_d008_trackB-seed0-cpu-565a8b9e
+[01:26:33] split verified against ae_xgb_d008_trackB-split.json
+[01:26:43] preprocessing: 10 constant-on-train columns dropped -> input dim 68
+[01:26:45] epoch   0  train 0.00373023  val 0.000265734  0.8s  *
+[01:26:46] epoch   1  train 0.000152599  val 0.000104862  0.9s  *
+[01:26:47] epoch   2  train 8.39161e-05  val 7.09748e-05  1.0s  *
+[01:26:48] epoch   3  train 6.05443e-05  val 5.49569e-05  0.9s  *
+[01:26:49] epoch   4  train 4.67419e-05  val 4.548e-05  1.1s  *
+[01:26:50] epoch   5  train 3.88964e-05  val 5.18522e-05  0.9s
+[01:26:51] epoch   6  train 3.29504e-05  val 3.12338e-05  1.0s  *
+[01:26:52] epoch   7  train 2.81673e-05  val 3.98184e-05  1.0s
+[01:26:53] epoch   8  train 2.45798e-05  val 2.35843e-05  0.9s  *
+[01:26:54] epoch   9  train 2.14205e-05  val 2.75719e-05  0.9s
+[01:26:55] epoch  10  train 1.93557e-05  val 3.09843e-05  1.0s
+[01:26:55] epoch  11  train 1.80634e-05  val 1.70321e-05  0.9s  *
+[01:26:57] epoch  12  train 1.60509e-05  val 1.52359e-05  1.2s  *
+[01:26:58] epoch  13  train 1.53687e-05  val 1.86849e-05  1.0s
+[01:26:59] epoch  14  train 1.48094e-05  val 2.10783e-05  1.0s
+[01:27:00] epoch  15  train 1.33258e-05  val 1.24512e-05  1.0s  *
+[01:27:01] epoch  16  train 1.23903e-05  val 1.27458e-05  1.0s
+[01:27:02] epoch  17  train 1.27644e-05  val 1.41032e-05  1.0s
+[01:27:03] epoch  18  train 1.11065e-05  val 2.43274e-05  1.0s
+[01:27:04] epoch  19  train 1.16248e-05  val 1.00055e-05  1.0s  *
+[01:27:05] epoch  20  train 1.0198e-05  val 1.00986e-05  1.0s
+[01:27:06] epoch  21  train 1.03408e-05  val 8.48795e-06  1.0s  *
+[01:27:07] epoch  22  train 1.01005e-05  val 1.01416e-05  1.0s
+[01:27:08] epoch  23  train 9.39265e-06  val 1.06665e-05  1.0s
+[01:27:09] epoch  24  train 9.34284e-06  val 9.62225e-06  1.1s
+[01:27:10] epoch  25  train 8.87518e-06  val 8.04998e-06  1.1s  *
+[01:27:11] epoch  26  train 8.83758e-06  val 7.52211e-06  1.0s  *
+[01:27:12] epoch  27  train 8.21454e-06  val 6.89952e-06  1.1s  *
+[01:27:13] epoch  28  train 7.96757e-06  val 8.68359e-06  1.1s
+[01:27:14] epoch  29  train 7.67308e-06  val 7.51694e-06  1.0s
+[01:27:15] epoch  30  train 7.80357e-06  val 1.48741e-05  0.9s
+[01:27:16] epoch  31  train 7.38002e-06  val 8.01636e-06  1.0s
+[01:27:17] epoch  32  train 7.04504e-06  val 7.44887e-06  1.1s
+[01:27:18] epoch  33  train 7.44697e-06  val 7.38419e-05  1.1s
+[01:27:19] epoch  34  train 8.05391e-06  val 0.000111611  1.0s
+[01:27:20] epoch  35  train 7.56267e-06  val 5.0067e-06  1.1s  *
+[01:27:21] epoch  36  train 6.37083e-06  val 1.43834e-05  1.1s
+[01:27:22] epoch  37  train 5.83218e-06  val 1.09274e-05  1.0s
+[01:27:23] epoch  38  train 6.17257e-06  val 7.98376e-06  1.0s
+[01:27:25] epoch  39  train 6.42111e-06  val 5.56217e-06  1.1s
+[01:27:26] epoch  40  train 5.85713e-06  val 5.45595e-06  1.1s
+[01:27:27] epoch  41  train 5.6285e-06  val 5.36991e-06  1.0s
+[01:27:28] epoch  42  train 5.61288e-06  val 6.53108e-06  1.2s
+[01:27:29] epoch  43  train 5.60709e-06  val 4.68125e-06  1.0s  *
+[01:27:30] epoch  44  train 5.63385e-06  val 4.287e-06  1.0s  *
+[01:27:31] epoch  45  train 5.51192e-06  val 4.9257e-06  1.1s
+[01:27:32] epoch  46  train 5.20083e-06  val 4.97034e-06  1.1s
+[01:27:33] epoch  47  train 5.55164e-06  val 1.22605e-05  1.1s
+[01:27:34] epoch  48  train 5.30281e-06  val 4.77622e-06  1.1s
+[01:27:36] epoch  49  train 5.62794e-06  val 4.78065e-06  1.1s
+[01:27:37] epoch  50  train 4.89345e-06  val 3.59517e-06  1.1s  *
+[01:27:38] epoch  51  train 5.14657e-06  val 4.23095e-06  1.2s
+[01:27:39] epoch  52  train 5.04646e-06  val 3.76492e-06  1.1s
+[01:27:40] epoch  53  train 4.89962e-06  val 4.37877e-06  1.2s
+[01:27:41] epoch  54  train 5.21529e-06  val 3.62358e-06  1.1s
+[01:27:42] epoch  55  train 4.80928e-06  val 4.5405e-06  1.1s
+[01:27:44] epoch  56  train 4.8843e-06  val 4.94254e-06  1.2s
+[01:27:45] epoch  57  train 4.63352e-06  val 3.74732e-06  1.1s
+[01:27:46] epoch  58  train 4.61383e-06  val 6.64215e-06  1.1s
+[01:27:47] epoch  59  train 4.65693e-06  val 4.6359e-06  1.2s
+[01:27:48] epoch  60  train 4.79641e-06  val 6.4653e-06  1.1s
+[01:27:50] augmentation: {'enabled': False, 'applicable': False, 'n_new': 0, 'reason': 'attack class is not the minority in training data (89577 attack vs 68421 benign)'}
+[01:27:53] XGBoost best iteration 204
+[01:27:54] validation: {"f1": 0.9998699034683736, "macro_f1": 0.9998494377954148, "auroc": 0.9999996902857429, "mcc": 0.9996988919099905}
+[01:27:54] test:       {"f1": 0.9998700184573791, "macro_f1": 0.9998496471226357, "auroc": 0.9999922633940319, "mcc": 0.9996992960534733}
+[01:27:54] DONE -> runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e

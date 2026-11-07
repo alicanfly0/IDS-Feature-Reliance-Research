@@ -1,0 +1,93 @@
+{
+  "raw_rows": 225745,
+  "raw_class_counts": {
+    "DDoS": 128027,
+    "BENIGN": 97718
+  },
+  "rule_rows": {
+    "missing": 4,
+    "infinite": 34,
+    "negative:Flow Duration": 2
+  },
+  "invalid_rows": 36,
+  "invalid_class_counts": {
+    "BENIGN": 34,
+    "DDoS": 2
+  },
+  "invalid_source_rows": [
+    65,
+    1767,
+    1890,
+    3375,
+    6796,
+    8057,
+    8405,
+    13313,
+    13716,
+    14739,
+    15047,
+    18253,
+    33330,
+    55551,
+    61529,
+    88091,
+    130668,
+    148284,
+    174379,
+    174394,
+    189925,
+    194128,
+    200349,
+    200991,
+    201237,
+    203979,
+    204238,
+    204640,
+    208999,
+    209728,
+    213594,
+    214432,
+    214453,
+    215026,
+    216496,
+    224100
+  ],
+  "sentinel_minus1_Init_Win_bytes_forward": {
+    "total": 32925,
+    "kept": 32925
+  },
+  "sentinel_minus1_Init_Win_bytes_backward": {
+    "total": 88299,
+    "kept": 88274
+  },
+  "conflicting_label_groups": 0,
+  "conflicting_label_rows_excluded": 0,
+  "kept_rows": 225709,
+  "kept_class_counts": {
+    "DDoS": 128025,
+    "BENIGN": 97684
+  },
+  "n_features": 78,
+  "distinct_vectors": 223080,
+  "rows_in_duplicate_groups": 3934,
+  "partition_rows": {
+    "train": 157998,
+    "val": 33834,
+    "test": 33877
+  },
+  "partition_fraction": {
+    "train": 0.70001,
+    "val": 0.1499,
+    "test": 0.15009
+  },
+  "partition_positive": {
+    "train": 89577,
+    "val": 19215,
+    "test": 19233
+  },
+  "partition_overlap": {
+    "train_val": 0,
+    "train_test": 0,
+    "val_test": 0
+  }
+}

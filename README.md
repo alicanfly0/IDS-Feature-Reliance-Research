@@ -18,9 +18,10 @@ The planned baselines are:
 | MES-DNN | Wardana et al. 2026 |
 | SHAP-selected DCNN + self-attention | Fang et al. 2026 |
 
-**Status: Milestone 1A implemented; first real training run not yet executed.**
-No full model has been trained and no experimental result exists. Local runs
-were tiny smoke runs and timing benchmarks only.
+**Status: Milestone 1A complete; first AE-XGBoost baseline run (one seed, laptop CPU).**
+The one measured result so far is AE-XGBoost on the CICIDS2017 Friday DDoS file, leakage-resistant split,
+model seed 0. Summary: `results/baselines/`; details and interpretation limits: D-016 Amendment 1 in
+`docs/decision_log.md`. No other model has been trained.
 
 | Capability | State |
 |---|---|
@@ -28,8 +29,8 @@ were tiny smoke runs and timing benchmarks only.
 | Dataset inspection (28 descriptive reports in `results/inspection/`) | Implemented |
 | Invalid-row rules, train-only preprocessing, duplicate-aware split (0 shared vectors across all 3 partition pairs), leakage checks | Implemented; unit + real-data tests |
 | Config-driven runs (`src/config.py`), environment/device/seed recording (`src/env.py`) | Implemented; tested on Windows CPU |
-| **AE-XGBoost baseline** (`src/experiments/ae_xgb.py`; D-008 scope, D-007 track B): resumable AE, latent augmentation (disabled, see D-017), XGBoost, metrics | Implemented; tested on synthetic data + a tiny real-data CPU smoke run |
-| Google Colab execution (`notebooks/colab_runner.ipynb`, `docs/COLAB_EXECUTION_PLAN.md`) | Workflow ready; **not executed on Colab**; needs D-015 Amendment 1 |
+| **AE-XGBoost baseline** (`src/experiments/ae_xgb.py`; D-008 scope, D-007 track B): resumable AE, latent augmentation (disabled, see D-017), XGBoost, metrics | Implemented; tested; **first full run done on laptop CPU** (seed 0) |
+| Google Colab execution (`notebooks/colab_runner.ipynb`, `docs/COLAB_EXECUTION_PLAN.md`) | Workflow ready; **not executed on Colab**; needed only for GPU workloads (D-016) |
 | MES-DNN, DCNN + self-attention baselines | Planned |
 | SHAP attribution, artifact registry, ARR@K, ablations, repeated seeds, statistics | Planned |
 

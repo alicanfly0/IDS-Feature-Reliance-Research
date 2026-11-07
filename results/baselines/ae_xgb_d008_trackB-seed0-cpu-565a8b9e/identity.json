@@ -1,0 +1,10 @@
+{
+  "run_id": "ae_xgb_d008_trackB-seed0-cpu-565a8b9e",
+  "config_hash": "565a8b9e62065f93ce62198b059432dab7ab4030d7abcd8d252d593679f5571f",
+  "device": "cpu",
+  "git_commit": "6fed9b06b85170e00ebc0c2e0e1fadbea42e0d4e",
+  "dataset_sha256": {
+    "MachineLearningCSV.zip": "c3f26274b36c837ccf28ffd2dbf4582941c30b3ee70a635c6e5b2f87c4727928",
+    "GeneratedLabelledFlows.zip": "7bdbef286f8893f31c6db12105fa097fa5c2dcc6733179037a08129d150ea27a"
+  }
+}

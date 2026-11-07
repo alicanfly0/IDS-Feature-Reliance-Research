@@ -82,7 +82,7 @@ paper/        IEEE LaTeX manuscript
 
 - **Same commands everywhere:** every step is a `python -m src.<module>` call, which works the same on Linux/Colab.
 - **Windows conveniences only:** `run.cmd` and `scripts/*.ps1`.
-- **Data and Colab:** no data goes to Google Drive or Colab until D-015 is amended (see `docs/COLAB_EXECUTION_PLAN.md`).
+- **Data and Colab:** D-015 Amendment 1 is authorized: the CICIDS2017 zip may go to your private Google Drive for Colab runs (see `docs/COLAB_EXECUTION_PLAN.md`). Nothing else is uploaded.
 
 ## Setup (Windows, one time)
 

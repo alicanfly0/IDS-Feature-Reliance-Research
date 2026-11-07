@@ -7,7 +7,7 @@
   - `src/env.py`;
   - the notebook workflow `notebooks/colab_runner.ipynb`, statically checked.
 - **Not executed on Colab or Linux yet.** GPU behaviour, Colab package versions and Drive I/O are unverified.
-- **No data uploaded:** no dataset, checkpoint or private file has gone anywhere. D-015 Amendment 1 is *proposed* in the decision log, not authorized.
+- **D-015 Amendment 1 authorized (2026-11-08).** No upload has happened yet; you upload the zip to your private Drive yourself (step 3 below).
 
 ## First real run — exact steps (AE-XGBoost, D-008 scope, track B)
 

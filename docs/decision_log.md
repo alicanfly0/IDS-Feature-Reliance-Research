@@ -32,7 +32,7 @@ Status values: OPEN · APPROVED (team decision) · PARTIALLY APPROVED · DEFERRE
 | D-012 | Artifact registry evidence levels | Registry built (Milestone 2A, `configs/artifact_registry.yaml`); levels to be confirmed by the team |
 | D-013 | Unverifiable Phase II citations | OPEN |
 | D-014 | Python environment | DECIDED |
-| D-015 | Storage location (local only) | DECIDED; Amendment 1 PROPOSED, not authorized |
+| D-015 | Storage location | DECIDED (local); Amendment 1 (private Google Drive + Colab Free) **AUTHORIZED** 2026-11-08 |
 | D-016 | Compute: local CPU + Google Colab GPU | DECIDED; Amendment 1: first baseline run on laptop CPU (done) |
 | D-017 | AE-XGBoost adaptations vs the paper | DOCUMENTED (Milestone 1A) |
 | D-018 | Destination Port ablation: comparison design | APPROVED and EXECUTED (seed 0, CPU); no measurable effect |
@@ -392,9 +392,11 @@ All three are Git-ignored. **No dataset, checkpoint or private file is uploaded 
 
 **Amendments:** none in effect.
 
-### D-015 Amendment 1 — PROPOSED, NOT AUTHORIZED
+### D-015 Amendment 1 — AUTHORIZED (2026-11-08, by the user: "for all of the heavy lifting i will need colab")
 
-To run the first AE-XGBoost baseline on Google Colab Free, the following would be transferred. **Nothing has been uploaded.**
+Authorized scope: the transfers in the table below, for heavy runs on Google Colab Free (PKR 0). The user uploads the dataset to their own private Drive and signs in to Colab; Claude does not upload anything or sign in. **As of this entry nothing has been uploaded.** Anything beyond this table (other datasets, sharing the folder, paid tiers) still needs its own approval.
+
+Originally proposed for the first AE-XGBoost baseline; the following is transferred:
 
 | What | Size | Where | Purpose |
 |---|---|---|---|

@@ -21,9 +21,9 @@
    ```
 
    The bundle stores `H` inside the zip and contains no data.
-3. In Google Drive (free 15 GB is enough), create the private folders `MyDrive/cnet-data/` and `MyDrive/cnet-runs/`. Upload into `cnet-data/`:
-   - the bundle;
-   - `data/raw/cicids2017_original/MachineLearningCSV.zip` (235,102,953 bytes; the only dataset file needed).
+3. In Google Drive (free 15 GB is enough), create the private folders `MyDrive/cnet-data/`, `MyDrive/cnet-data/cicids2017_original/` and `MyDrive/cnet-runs/`. Upload:
+   - the bundle to `MyDrive/cnet-data/cnet_code_<first 12 chars of H>.zip`;
+   - `data/raw/cicids2017_original/MachineLearningCSV.zip` (235,102,953 bytes; the only dataset file needed) to **`MyDrive/cnet-data/cicids2017_original/MachineLearningCSV.zip`**. This is the path the notebook's `ARCHIVE` setting reads.
 
 **You do, each session:**
 
@@ -110,7 +110,7 @@ Architecture decision: D-016 in `docs/decision_log.md`.
 | Once | Create the GitHub repository (private recommended) and tell Claude its URL; authorize pushing (e.g. `gh auth login` in your own terminal). |
 | Once | If the repository is private: create a fine-grained, read-only token and add it to Colab Secrets as `GITHUB_TOKEN`. |
 | Once | Decide and record **D-015 Amendment 1** (§5) before any dataset reaches Google. |
-| Once, after the amendment | Upload `data/raw/cicids2017_original/MachineLearningCSV.zip` (235,102,953 bytes) to a **private, unshared** Drive folder, e.g. `MyDrive/cnet-data/cicids2017_original/`. |
+| Once, after the amendment | Upload `data/raw/cicids2017_original/MachineLearningCSV.zip` (235,102,953 bytes) to the **private, unshared** Drive folder `MyDrive/cnet-data/cicids2017_original/`. |
 | Every session | Sign in to Google in the browser and open `notebooks/colab_runner.ipynb` from GitHub (File → Open notebook → GitHub). |
 | Every session | Runtime → Change runtime type → choose a GPU. Not guaranteed on free tier. |
 | Every session | Run the Drive-mount cell and approve Google's authorization prompt. |

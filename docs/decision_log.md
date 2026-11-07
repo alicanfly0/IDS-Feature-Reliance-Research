@@ -385,7 +385,7 @@ To run the first AE-XGBoost baseline on Google Colab Free, the following would b
 
 | What | Size | Where | Purpose |
 |---|---|---|---|
-| `MachineLearningCSV.zip` (CICIDS2017 original; sha256 `c3f26274…727928`) | 235,102,953 B | your Google Drive, private, unshared folder `MyDrive/cnet-data/` | copied to the Colab VM each session, verified, Friday DDoS member extracted there |
+| `MachineLearningCSV.zip` (CICIDS2017 original; sha256 `c3f26274…727928`) | 235,102,953 B | your Google Drive, private, unshared: `MyDrive/cnet-data/cicids2017_original/MachineLearningCSV.zip` | copied to the Colab VM each session, verified, Friday DDoS member extracted there |
 | Code bundle `cnet_code_<hash>.zip` (`git archive` of one commit; no data) | < 1 MB | same folder | exact code for the run |
 | Run outputs: split file, checkpoints, latent codes, models, predictions, metrics, logs | tens of MB per run | `MyDrive/cnet-runs/` | survive Colab disconnections |
 

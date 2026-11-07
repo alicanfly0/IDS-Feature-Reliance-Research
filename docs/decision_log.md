@@ -19,7 +19,7 @@ Status values: OPEN · APPROVED (team decision) · PARTIALLY APPROVED · DEFERRE
 | ID | Topic | Status |
 |---|---|---|
 | D-001 | NetFlow 43 / 40 / 39 | **APPROVED** |
-| D-002 | AE-XGBoost feature attribution | **DEFERRED** to the SHAP milestone |
+| D-002 | AE-XGBoost feature attribution | **DECIDED** (Milestone 2A): option (a), composite-model explanation |
 | D-003 | AE-XGBoost input dimensionality | **APPROVED** |
 | D-004 | Which corrected CICIDS2017 | OPEN |
 | D-005 | Original vs corrected comparison | OPEN |
@@ -29,13 +29,14 @@ Status values: OPEN · APPROVED (team decision) · PARTIALLY APPROVED · DEFERRE
 | D-009 | Fang subset and split | OPEN |
 | D-010 | MES-DNN scale | OPEN |
 | D-011 | Invalid rows | **APPROVED** for the initial DDoS experiment |
-| D-012 | Artifact registry evidence levels | OPEN; Destination Port retained in the first baseline |
+| D-012 | Artifact registry evidence levels | Registry built (Milestone 2A, `configs/artifact_registry.yaml`); levels to be confirmed by the team |
 | D-013 | Unverifiable Phase II citations | OPEN |
 | D-014 | Python environment | DECIDED |
 | D-015 | Storage location (local only) | DECIDED; Amendment 1 PROPOSED, not authorized |
 | D-016 | Compute: local CPU + Google Colab GPU | DECIDED; Amendment 1: first baseline run on laptop CPU (done) |
 | D-017 | AE-XGBoost adaptations vs the paper | DOCUMENTED (Milestone 1A) |
 | D-018 | Destination Port ablation: comparison design | APPROVED and EXECUTED (seed 0, CPU); no measurable effect |
+| D-019 | Original-feature SHAP method and ARR@K settings | DECIDED (Milestone 2A); pilot run |
 
 ---
 
@@ -83,6 +84,8 @@ Status values: OPEN · APPROVED (team decision) · PARTIALLY APPROVED · DEFERRE
 - **(c) Latent-code SHAP only.** No raw-feature claims; not sufficient for ARR@K.
 
 **Rule regardless of the choice:** latent SHAP values are never relabelled with raw feature names.
+
+**Milestone 2A (2026-11-08): option (a) chosen**, as the Milestone 2A brief requires (explain the composite model raw features → preprocessing → AE → 40-dim latent → XGBoost; no retraining). The method details are in D-019. Options (b) and (c) are not used.
 
 **Also recorded: Phase II's description of Paper 1's findings**
 
@@ -351,6 +354,15 @@ Extending to the full multi-class corpus would be a separate, declared extension
 - **Interaction with D-007:** removing a column from the model input changes the duplicate groups.
 - **First baseline (team instruction, 2026-11-08):** `Destination Port` is **retained** in the AE-XGBoost input as a candidate shortcut feature. Removing it is a later controlled experiment, not an established correction.
 
+**Milestone 2A (2026-11-08): registry built** in `configs/artifact_registry.yaml` (loaded and validated by `src/audit/registry.py`; summary in `docs/MILESTONE_2A_REPORT.md`). Evidence levels were assigned from the papers' text with section and page, conservatively:
+
+- `direct_extraction_error` (feature values wrong for affected flows): `Flow IAT Min`, `Flow IAT Mean`, `Flow Packets/s`, `Bwd Packets/s` (Lanvin §3.3 pp. 8–9 and §4.2 p. 15, duplicated packets).
+- `shortcut_indicator` (values correct, but they mark artifact flows): `Init_Win_bytes_forward`, `min_seg_size_forward`, `Fwd Header Length` (+ its duplicate `Fwd Header Length.1`), `Total Fwd Packets`, `SYN Flag Count`, `Bwd Packet Length Mean` (Engelen §IV-B.1 p. 5).
+- `unverified_hypothesis`: `Destination Port` (Engelen §III-D p. 4 leaves it open; D-018 found no measurable effect of removing it) and `Init_Win_bytes_backward` (Phase II only).
+- Seven flow-, label- and generation-level issues (TCP appendix, RST handling, direction swap, duplicated packets, attempted-attack labels, unlabelled scan, identifiers) are recorded separately; they do not map to one column and do not enter ARR@K.
+
+Validation rules enforced in code: a level above `unverified_hypothesis` needs a paged source (Phase II or local notes alone are not enough); every source needs a section and a finding; no column is mapped twice. **Still open for the team:** confirm the levels, and whether the Lanvin features apply to the Friday DDoS file (Lanvin reports duplication rates per day, Table 5; the affected flows have not been identified here).
+
 ## D-013 Unverifiable Phase II citations — OPEN
 
 - No full text was available for Bilal et al. [4], Wang et al. [5] or Ebrahimi et al. [6].
@@ -486,6 +498,33 @@ To run the first AE-XGBoost baseline on Google Colab Free, the following would b
 | Metrics | Accuracy, precision, recall, F1, AUC | Plus macro-F1, MCC, confusion matrix, per-partition class counts | Superset |
 
 **Comparisons:** author-reported numbers (e.g. CIC-IDS2017 F1 0.9993, Table 6) are quoted only as author-reported and are not directly comparable to track-B results.
+
+## D-019 Original-feature SHAP for AE-XGBoost: method and settings — DECIDED (2026-11-08, Milestone 2A)
+
+**Function explained.** The completed baseline `ae_xgb_d008_trackB-seed0-cpu-565a8b9e` as one function of the 78 raw CICFlowMeter columns: saved train-only preprocessing (median imputation of non-finite values, train min–max scaling, 10 constant-on-train columns ignored) → saved AE encoder (68 → 80 → 40) → saved XGBoost (204 trees). Built from saved artifacts only (`src/audit/composite.py`); nothing is retrained. Checked against the saved run: float32 test probabilities match to 8.6e-8 and latent codes to 4.8e-7.
+
+**Explainer.** `shap.explainers.Permutation` (shap 0.49.1), chosen because:
+
+- it is model-agnostic and needs only the prediction function, so it explains the composite model, not a proxy;
+- with antithetic permutations its attributions add up exactly (sum of values + base value = output), which is checked;
+- the cost is predictable: `permutations × (2·78 + 1)` evaluations of the function per explained row, each on every background row;
+- Kernel SHAP would need a regression per row and more evaluations for the same accuracy; TreeExplainer cannot see through the AE.
+
+**Settings.**
+
+- **Output scale:** XGBoost margin (log-odds of DDoS). Probabilities are saturated near 0 and 1 for almost all flows, so probability-scale attributions would be close to zero and uninformative.
+- **Masking:** interventional, `shap.maskers.Independent`. A masked feature takes background values independently of the other features. This breaks feature dependence (e.g. packet-length statistics that move together) and can create flow vectors that never occur; attributions describe the model's response to such substitutions, not causal effects.
+- **Background:** class-proportional (stratified) sample of the **training** partition — the data the model and its preprocessing were fitted on. No test rows in the background.
+- **Explained rows:** class-proportional sample of the **test** partition for global importance (mean |SHAP|); the 5 misclassified test rows plus 2 correct rows per class for local explanations (kept out of the global importance).
+- **Precision:** the composite function is evaluated in **float64**. In float32 the CPU matrix products round differently with batch size (latent differences ~6e-7), which moved one background row across an XGBoost split (0.083 log-odds) depending on how SHAP batched it. The float64 evaluation of the same weights is batch-invariant (tested), keeps every test prediction identical to the saved run, and differs from the saved probabilities by at most 8.9e-4 (16 of 33,877 test rows lie near a split threshold).
+- **Seeds:** background seed, sample seed and explainer seed are recorded per variant; all variants are cached under `results/shap/<run>/` by a hash of their settings and never recomputed.
+- **Duplicate column:** `Fwd Header Length.1` equals `Fwd Header Length` on every row; importances are reported per column and merged (summed) for rankings and ARR@K.
+
+**ARR@K.** `ARR@K = Σ_{j ∈ TopK ∩ A} I_j / Σ_{j ∈ TopK} I_j` with `I_j` = mean |SHAP| (merged), K ∈ {2, 5, 10, 20}, computed separately for A = direct extraction errors, shortcut indicators, and all registered features (including hypotheses). NaN if the Top-K importance is zero; ties broken by name. An attribution indicator only, not proof of reliance or of an artifact.
+
+**Stability.** Results are reported only together with agreement across variants (background seed, sample seed, background size, number of permutations): rank correlation over the Top-20 union, Top-K intersections and the ARR@K range.
+
+**Compute.** CPU only (the permutation explainer's cost is the model calls; batch-invariant float64 inference on CPU is ~0.17 s per explained row with 100 background rows and 5 permutations). No Colab, no upload (D-015).
 
 ## D-018 Destination Port ablation: fair comparison design — APPROVED and EXECUTED (2026-11-08)
 

@@ -18,12 +18,13 @@ The planned baselines are:
 | MES-DNN | Wardana et al. 2026 |
 | SHAP-selected DCNN + self-attention | Fang et al. 2026 |
 
-**Status: Milestone 1B complete.**
+**Status: Milestone 2A complete** (artifact registry, original-feature SHAP pilot, ARR@K).
 
 | Run (one model seed, laptop CPU) | Summary | Details |
 |---|---|---|
 | AE-XGBoost baseline on the CICIDS2017 Friday DDoS file, leakage-resistant split | `results/baselines/` | D-016 Amendment 1 in `docs/decision_log.md` |
 | `Destination Port` ablation | `results/ablations/`, `results/comparisons/` | D-018 |
+| SHAP pilot on the baseline (no retraining; 6 variants × 200 test rows) | `results/shap/` | D-019, `docs/MILESTONE_2A_REPORT.md` |
 
 No other model has been trained. Shortcut diagnostics: `docs/DIAGNOSTIC_D008_SHORTCUTS.md`.
 
@@ -36,12 +37,14 @@ No other model has been trained. Shortcut diagnostics: `docs/DIAGNOSTIC_D008_SHO
 | **AE-XGBoost baseline** (`src/experiments/ae_xgb.py`; D-008 scope, D-007 track B): resumable AE, latent augmentation (disabled, see D-017), XGBoost, metrics | Implemented; tested; **first full run done on laptop CPU** (seed 0) |
 | Google Colab execution (`notebooks/colab_runner.ipynb`, `docs/COLAB_EXECUTION_PLAN.md`) | Workflow ready; **not executed on Colab**; needed only for GPU workloads (D-016) |
 | MES-DNN, DCNN + self-attention baselines | Planned |
-| SHAP attribution, artifact registry, ARR@K, ablations, repeated seeds, statistics | Planned |
+| Artifact registry (`configs/artifact_registry.yaml`), original-feature SHAP of AE-XGBoost (`src/audit/`), ARR@K | Implemented; tested; pilot run on laptop CPU |
+| Group ablations, repeated seeds, statistics | Planned |
 
 - **Research decisions:** in `docs/decision_log.md`.
   - Approved: D-001, D-003, D-008, D-011.
   - D-007: track-B split approved and implemented.
-  - D-002: deferred.
+  - D-002: decided in Milestone 2A (composite-model explanation; method in D-019).
+  - D-012: registry built; evidence levels await team confirmation.
   - D-017: lists every deviation from the AE-XGBoost paper.
 - **Checks:** Milestone 0 checks in `docs/milestone0_checklist.md`; Milestone 1A handover in `docs/MILESTONE_1A_HANDOVER.md`.
 
@@ -60,7 +63,7 @@ src/data/     manifest.py, acquire.py, load.py, inspection.py, preprocess.py, sp
               ddos.py (D-008 scope: verified file, D-011 rules, track-B split)
 src/models/   autoencoder.py (resumable), augment.py (latent Gaussian), xgb.py
 src/experiments/  ae_xgb.py (runner: stages, resume, benchmark)
-src/audit/    SHAP, artifact registry, ARR@K (later)
+src/audit/    registry.py, arr.py (ARR@K), composite.py (raw features -> AE -> XGBoost), shap_explain.py
 src/evaluation/  metrics.py (binary metrics, DDoS = positive)
 tests/        synthetic-data unit tests + real-data tests (skip without data)
 scripts/      setup_env.ps1, inspect_all.ps1 (Windows conveniences)
@@ -237,6 +240,15 @@ To reproduce it:
 ```powershell
 .\run.cmd -m src.experiments.ae_xgb --config configs/experiments/ae_xgb_d008_trackB_noDstPort.yaml
 .\run.cmd -m src.experiments.compare_ablation --full results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e --ablated results/runs/<ablation run id>
+```
+
+### Original-feature SHAP and ARR@K (Milestone 2A)
+
+Explains the saved baseline as one function of the 78 raw features (no retraining), CPU only, about 6 minutes for the pilot. Each variant is cached under `results/shap/<run>/` and never recomputed. Method and limits: D-019 and `docs/MILESTONE_2A_REPORT.md`.
+
+```powershell
+.\run.cmd -m src.audit.shap_explain --config configs/experiments/ae_xgb_d008_trackB.yaml --run results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e --background 100 --explain 200 --permutations 5 --variants 0:0 1:0 0:1 1:1
+.\run.cmd -m src.audit.shap_explain --config configs/experiments/ae_xgb_d008_trackB.yaml --run results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e --summarize
 ```
 
 **Environment record** (Python, OS, CPU, RAM, GPU, package versions, Git commit, dataset hashes):

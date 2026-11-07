@@ -1,0 +1,30 @@
+{
+  "variants": [
+    "variant-bg200x0-ex200x0-p5-572ea7658299"
+  ],
+  "stability": null,
+  "runtime_seconds": {
+    "variant-bg200x0-ex200x0-p5-572ea7658299": 91.0
+  },
+  "checks": {
+    "variant-bg200x0-ex200x0-p5-572ea7658299": {
+      "unused_columns_max_abs_shap": 0.0,
+      "shape": [
+        200,
+        78
+      ],
+      "finite": true,
+      "additivity_max_abs_error": 5.329070518200751e-15,
+      "base_value_equals_mean_background_margin": 4.440892098500626e-16
+    }
+  },
+  "settings": {
+    "background": 200,
+    "explain": 200,
+    "permutations": 5,
+    "variants": [
+      "0:0"
+    ],
+    "precision": "float64"
+  }
+}

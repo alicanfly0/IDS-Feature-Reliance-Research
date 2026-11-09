@@ -1,4 +1,4 @@
-# Forensic artifact registry — CICIDS2017 (decision log D-012), Milestone 2A.
+# Forensic artifact registry v2 — Milestone 2B (original v1 in configs/history/).
 #
 # A registry entry records EVIDENCE about a candidate problem; it is not a verdict.
 # Evidence levels (most to least direct):
@@ -12,14 +12,25 @@
 # target: what the issue concerns — feature | flow | label | generation_process
 # Page numbers are PHYSICAL pages of the PDFs in ../project/ (paper7 = Engelen et al. 2021,
 # paper8 = Lanvin et al. 2023). Column names are the MachineLearningCVE schema used by the model
-# (src/data/ddos.py); every name is checked against the data by tests/test_registry.py.
+# (src/data/ddos.py); every name is checked against the data by tests/test_audit.py and tests/test_milestone2b.py.
 
-registry_version: 1
+registry_version: 2
+provenance:
+  previous_registry: configs/history/artifact_registry_v1.yaml
+  correction: Milestone 2B, 2026-11-09
+  row_level_caveat: Documented extractor defects identify susceptible features, not
+    verified corruption of every row. No packet-level reconstruction was performed.
 dataset: cicids2017_original (MachineLearningCVE CSV release)
 evidence_levels: [direct_extraction_error, shortcut_indicator, unverified_hypothesis]
 targets: [feature, flow, label, generation_process]
 
 sources:
+  engelen_extended:
+    url: https://intrusion-detection.distrinet-research.be/WTMC2021/extended_doc.html
+    citation: Engelen, Rimmer and Joosen, official WTMC2021 extended documentation
+    accessed: '2026-11-09'
+    section: CICIDS2017 and CICFlowMeter tool / Flow Construction / TCP flag count
+    evidence_record: docs/evidence/engelen_extended_2026-11-09.md
   engelen2021: {file: paper7.pdf, citation: "G. Engelen, V. Rimmer, W. Joosen, Troubleshooting an Intrusion Detection Dataset: the CICIDS2017 Case Study, IEEE SPW 2021"}
   lanvin2023: {file: paper8.pdf, citation: "M. Lanvin et al., Errors in the CICIDS2017 Dataset and the Significant Differences in Detection Performances It Makes, CRiSIS 2022 (LNCS 13857, 2023)"}
   phase2: {file: i232630_i232562_PHASE_II_CNET.pdf, citation: "our Phase II methodology, Step 4 (artifact registry A_meta / A_bug / A_dup); a proposal, not evidence"}
@@ -136,6 +147,31 @@ features:
       - {ref: engelen2021, section: "IV-B.1 TCP appendix impact", page: 5, finding: "mainly two features (SYN Flag Count, Bwd Pkt Len Mean) to separate appendices from regular flows"}
     validation_required: group ablation; corrected-flow evaluation
 
+    mechanisms:
+    - evidence_level: shortcut_indicator
+      target: flow
+      mechanism: One of two features an RF used to separate appendices from regular flows
+        of the same class.
+      sources:
+      - ref: engelen2021
+        section: IV-B.1 TCP appendix impact
+        page: 5
+        finding: mainly two features (SYN Flag Count, Bwd Pkt Len Mean) to separate appendices
+          from regular flows
+    - evidence_level: direct_extraction_error
+      target: feature
+      mechanism: Only the first packet updates the aggregate flag counter; later flagged
+        packets are omitted. A binary first-packet indicator is not a per-flow flag count.
+      sources:
+      - ref: engelen_extended
+        url: https://intrusion-detection.distrinet-research.be/WTMC2021/extended_doc.html
+        section: Flow Construction / TCP flag count
+        finding: Aggregate TCP flag counters update for the first packet only; directional
+          PSH/URG counters also fail to increment correctly. The documentation states
+          that its findings apply to original CICIDS2017 CSVs.
+      row_corruption: Not individually established; single-packet flows or flows with
+        no later occurrences may have numerically correct values.
+
   - id: R08
     name: Bwd Packet Length Mean
     columns: [Bwd Packet Length Mean]
@@ -201,6 +237,240 @@ features:
     sources:
       - {ref: lanvin2023, section: "4.2 Experiments results, Q3", page: 15, finding: "the backward number of packets per second is doubled"}
     validation_required: as R09
+
+  - id: R13
+    name: FIN Flag Count
+    columns:
+    - FIN Flag Count
+    phase2_category: A_bug
+    scope: Original CICIDS2017 CSV representation, including Friday DDoS; row-level errors not identified.
+    validation_required: PCAP re-extraction with corrected counters to establish erroneous rows. Feature
+      removal tests dependence, not repair.
+    evidence_level: direct_extraction_error
+    target: feature
+    mechanism: Only the first packet updates the aggregate flag counter; later flagged packets are omitted.
+      A binary first-packet indicator is not a per-flow flag count.
+    sources:
+    - ref: engelen_extended
+      url: https://intrusion-detection.distrinet-research.be/WTMC2021/extended_doc.html
+      section: Flow Construction / TCP flag count
+      finding: Aggregate TCP flag counters update for the first packet only; directional PSH/URG counters
+        also fail to increment correctly. The documentation states that its findings apply to original CICIDS2017
+        CSVs.
+    row_corruption: Not individually established; single-packet flows or flows with no later occurrences
+      may have numerically correct values.
+  - id: R14
+    name: RST Flag Count
+    columns:
+    - RST Flag Count
+    phase2_category: A_bug
+    scope: Original CICIDS2017 CSV representation, including Friday DDoS; row-level errors not identified.
+    validation_required: PCAP re-extraction with corrected counters to establish erroneous rows. Feature
+      removal tests dependence, not repair.
+    evidence_level: direct_extraction_error
+    target: feature
+    mechanism: Only the first packet updates the aggregate flag counter; later flagged packets are omitted.
+      A binary first-packet indicator is not a per-flow flag count.
+    sources:
+    - ref: engelen_extended
+      url: https://intrusion-detection.distrinet-research.be/WTMC2021/extended_doc.html
+      section: Flow Construction / TCP flag count
+      finding: Aggregate TCP flag counters update for the first packet only; directional PSH/URG counters
+        also fail to increment correctly. The documentation states that its findings apply to original CICIDS2017
+        CSVs.
+    row_corruption: Not individually established; single-packet flows or flows with no later occurrences
+      may have numerically correct values.
+  - id: R15
+    name: PSH Flag Count
+    columns:
+    - PSH Flag Count
+    phase2_category: A_bug
+    scope: Original CICIDS2017 CSV representation, including Friday DDoS; row-level errors not identified.
+    validation_required: PCAP re-extraction with corrected counters to establish erroneous rows. Feature
+      removal tests dependence, not repair.
+    evidence_level: direct_extraction_error
+    target: feature
+    mechanism: Only the first packet updates the aggregate flag counter; later flagged packets are omitted.
+      A binary first-packet indicator is not a per-flow flag count.
+    sources:
+    - ref: engelen_extended
+      url: https://intrusion-detection.distrinet-research.be/WTMC2021/extended_doc.html
+      section: Flow Construction / TCP flag count
+      finding: Aggregate TCP flag counters update for the first packet only; directional PSH/URG counters
+        also fail to increment correctly. The documentation states that its findings apply to original CICIDS2017
+        CSVs.
+    row_corruption: Not individually established; single-packet flows or flows with no later occurrences
+      may have numerically correct values.
+  - id: R16
+    name: ACK Flag Count
+    columns:
+    - ACK Flag Count
+    phase2_category: A_bug
+    scope: Original CICIDS2017 CSV representation, including Friday DDoS; row-level errors not identified.
+    validation_required: PCAP re-extraction with corrected counters to establish erroneous rows. Feature
+      removal tests dependence, not repair.
+    evidence_level: direct_extraction_error
+    target: feature
+    mechanism: Only the first packet updates the aggregate flag counter; later flagged packets are omitted.
+      A binary first-packet indicator is not a per-flow flag count.
+    sources:
+    - ref: engelen_extended
+      url: https://intrusion-detection.distrinet-research.be/WTMC2021/extended_doc.html
+      section: Flow Construction / TCP flag count
+      finding: Aggregate TCP flag counters update for the first packet only; directional PSH/URG counters
+        also fail to increment correctly. The documentation states that its findings apply to original CICIDS2017
+        CSVs.
+    row_corruption: Not individually established; single-packet flows or flows with no later occurrences
+      may have numerically correct values.
+  - id: R17
+    name: URG Flag Count
+    columns:
+    - URG Flag Count
+    phase2_category: A_bug
+    scope: Original CICIDS2017 CSV representation, including Friday DDoS; row-level errors not identified.
+    validation_required: PCAP re-extraction with corrected counters to establish erroneous rows. Feature
+      removal tests dependence, not repair.
+    evidence_level: direct_extraction_error
+    target: feature
+    mechanism: Only the first packet updates the aggregate flag counter; later flagged packets are omitted.
+      A binary first-packet indicator is not a per-flow flag count.
+    sources:
+    - ref: engelen_extended
+      url: https://intrusion-detection.distrinet-research.be/WTMC2021/extended_doc.html
+      section: Flow Construction / TCP flag count
+      finding: Aggregate TCP flag counters update for the first packet only; directional PSH/URG counters
+        also fail to increment correctly. The documentation states that its findings apply to original CICIDS2017
+        CSVs.
+    row_corruption: Not individually established; single-packet flows or flows with no later occurrences
+      may have numerically correct values.
+  - id: R18
+    name: CWE Flag Count
+    columns:
+    - CWE Flag Count
+    phase2_category: A_bug
+    scope: Original CICIDS2017 CSV representation, including Friday DDoS; row-level errors not identified.
+    validation_required: PCAP re-extraction with corrected counters to establish erroneous rows. Feature
+      removal tests dependence, not repair.
+    evidence_level: direct_extraction_error
+    target: feature
+    mechanism: Only the first packet updates the aggregate flag counter; later flagged packets are omitted.
+      A binary first-packet indicator is not a per-flow flag count.
+    sources:
+    - ref: engelen_extended
+      url: https://intrusion-detection.distrinet-research.be/WTMC2021/extended_doc.html
+      section: Flow Construction / TCP flag count
+      finding: Aggregate TCP flag counters update for the first packet only; directional PSH/URG counters
+        also fail to increment correctly. The documentation states that its findings apply to original CICIDS2017
+        CSVs.
+    row_corruption: Not individually established; single-packet flows or flows with no later occurrences
+      may have numerically correct values.
+    schema_note: CWE is the literal original CSV spelling of the aggregate CWR-related field; documentation
+      names the flag-count family, not each field spelling. No new CWR column is invented.
+  - id: R19
+    name: ECE Flag Count
+    columns:
+    - ECE Flag Count
+    phase2_category: A_bug
+    scope: Original CICIDS2017 CSV representation, including Friday DDoS; row-level errors not identified.
+    validation_required: PCAP re-extraction with corrected counters to establish erroneous rows. Feature
+      removal tests dependence, not repair.
+    evidence_level: direct_extraction_error
+    target: feature
+    mechanism: Only the first packet updates the aggregate flag counter; later flagged packets are omitted.
+      A binary first-packet indicator is not a per-flow flag count.
+    sources:
+    - ref: engelen_extended
+      url: https://intrusion-detection.distrinet-research.be/WTMC2021/extended_doc.html
+      section: Flow Construction / TCP flag count
+      finding: Aggregate TCP flag counters update for the first packet only; directional PSH/URG counters
+        also fail to increment correctly. The documentation states that its findings apply to original CICIDS2017
+        CSVs.
+    row_corruption: Not individually established; single-packet flows or flows with no later occurrences
+      may have numerically correct values.
+  - id: R20
+    name: Fwd PSH Flags
+    columns:
+    - Fwd PSH Flags
+    phase2_category: A_bug
+    scope: Original CICIDS2017 CSV representation, including Friday DDoS; row-level errors not identified.
+    validation_required: PCAP re-extraction with corrected counters to establish erroneous rows. Feature
+      removal tests dependence, not repair.
+    evidence_level: direct_extraction_error
+    target: feature
+    mechanism: Directional PSH/URG flag counters are not correctly incremented; the source does not specify
+      the exact per-direction code path or patch date.
+    sources:
+    - ref: engelen_extended
+      url: https://intrusion-detection.distrinet-research.be/WTMC2021/extended_doc.html
+      section: Flow Construction / TCP flag count
+      finding: Aggregate TCP flag counters update for the first packet only; directional PSH/URG counters
+        also fail to increment correctly. The documentation states that its findings apply to original CICIDS2017
+        CSVs.
+    row_corruption: Not individually established; single-packet flows or flows with no later occurrences
+      may have numerically correct values.
+  - id: R21
+    name: Bwd PSH Flags
+    columns:
+    - Bwd PSH Flags
+    phase2_category: A_bug
+    scope: Original CICIDS2017 CSV representation, including Friday DDoS; row-level errors not identified.
+    validation_required: PCAP re-extraction with corrected counters to establish erroneous rows. Feature
+      removal tests dependence, not repair.
+    evidence_level: direct_extraction_error
+    target: feature
+    mechanism: Directional PSH/URG flag counters are not correctly incremented; the source does not specify
+      the exact per-direction code path or patch date.
+    sources:
+    - ref: engelen_extended
+      url: https://intrusion-detection.distrinet-research.be/WTMC2021/extended_doc.html
+      section: Flow Construction / TCP flag count
+      finding: Aggregate TCP flag counters update for the first packet only; directional PSH/URG counters
+        also fail to increment correctly. The documentation states that its findings apply to original CICIDS2017
+        CSVs.
+    row_corruption: Not individually established; single-packet flows or flows with no later occurrences
+      may have numerically correct values.
+  - id: R22
+    name: Fwd URG Flags
+    columns:
+    - Fwd URG Flags
+    phase2_category: A_bug
+    scope: Original CICIDS2017 CSV representation, including Friday DDoS; row-level errors not identified.
+    validation_required: PCAP re-extraction with corrected counters to establish erroneous rows. Feature
+      removal tests dependence, not repair.
+    evidence_level: direct_extraction_error
+    target: feature
+    mechanism: Directional PSH/URG flag counters are not correctly incremented; the source does not specify
+      the exact per-direction code path or patch date.
+    sources:
+    - ref: engelen_extended
+      url: https://intrusion-detection.distrinet-research.be/WTMC2021/extended_doc.html
+      section: Flow Construction / TCP flag count
+      finding: Aggregate TCP flag counters update for the first packet only; directional PSH/URG counters
+        also fail to increment correctly. The documentation states that its findings apply to original CICIDS2017
+        CSVs.
+    row_corruption: Not individually established; single-packet flows or flows with no later occurrences
+      may have numerically correct values.
+  - id: R23
+    name: Bwd URG Flags
+    columns:
+    - Bwd URG Flags
+    phase2_category: A_bug
+    scope: Original CICIDS2017 CSV representation, including Friday DDoS; row-level errors not identified.
+    validation_required: PCAP re-extraction with corrected counters to establish erroneous rows. Feature
+      removal tests dependence, not repair.
+    evidence_level: direct_extraction_error
+    target: feature
+    mechanism: Directional PSH/URG flag counters are not correctly incremented; the source does not specify
+      the exact per-direction code path or patch date.
+    sources:
+    - ref: engelen_extended
+      url: https://intrusion-detection.distrinet-research.be/WTMC2021/extended_doc.html
+      section: Flow Construction / TCP flag count
+      finding: Aggregate TCP flag counters update for the first packet only; directional PSH/URG counters
+        also fail to increment correctly. The documentation states that its findings apply to original CICIDS2017
+        CSVs.
+    row_corruption: Not individually established; single-packet flows or flows with no later occurrences
+      may have numerically correct values.
 
 # Problems with whole flows, labels or the generation process. They have no single column, so they
 # are NOT part of ARR@K; they bound what any feature-level analysis can conclude.

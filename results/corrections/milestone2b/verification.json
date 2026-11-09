@@ -1,0 +1,83 @@
+{
+  "date": "2026-11-09",
+  "pre_correction_commit": "2490821",
+  "targeted": {
+    "command": ".venv/Scripts/python.exe -m pytest tests/test_milestone2b.py -q -p no:cacheprovider",
+    "passed": 8,
+    "failed": 0
+  },
+  "full_suite": {
+    "command": ".venv/Scripts/python.exe -m pytest -q -p no:cacheprovider",
+    "status": "blocked during collection",
+    "errors": [
+      "tests/test_ae_xgb.py: Windows Application Control blocks torch/lib/shm.dll (WinError 4551)",
+      "tests/test_audit.py: Windows Application Control blocks Numba compiled modules (_typeconv/_dispatcher/_devicearray across attempts)"
+    ],
+    "retry_outside_sandbox": "same DLL-policy restrictions; no security-policy changes attempted"
+  },
+  "broad_attempt_outside_sandbox": {
+    "excluded_modules": [
+      "tests/test_audit.py",
+      "tests/test_ae_xgb.py"
+    ],
+    "passed": 96,
+    "failed": 4,
+    "note": "Before the final additional mechanism-retention test; failures were three env tests and one real-data smoke test importing blocked torch."
+  },
+  "final_runnable_subset": {
+    "command": ".venv/Scripts/python.exe -m pytest -q -p no:cacheprovider --ignore=tests/test_audit.py --ignore=tests/test_ae_xgb.py -k \"not test_snapshot_has_provenance_fields and not test_set_seeds_is_reproducible and not test_cli_writes_json and not test_destination_port_removal_overlap_and_common_population\"",
+    "passed": 97,
+    "deselected": 4,
+    "omitted_module_tests": 29,
+    "note": "Exclusions explicitly isolate DLL-blocked tests. This is not a full-suite pass."
+  },
+  "independent_arr": {
+    "command": ".venv/Scripts/python.exe scripts/verify_m2b_arr.py",
+    "arrays": 6,
+    "aggregation_methods": 2,
+    "K": [
+      2,
+      5,
+      10,
+      20
+    ],
+    "tiers": 4,
+    "checked_values": 192,
+    "max_abs_discrepancy": 5.551115123125783e-17
+  },
+  "postprocessing": {
+    "command": ".venv/Scripts/python.exe -m src.audit.correct_arr --verify",
+    "status": "pass",
+    "dimensions_source_rows_finiteness_settings_identity_additivity": "pass"
+  },
+  "integrity": {
+    "protected_files": 96,
+    "sha256_equal": true,
+    "scope": [
+      "baseline run",
+      "Destination Port ablation run",
+      "baseline and ablation summary folders",
+      "comparisons",
+      "all original SHAP outputs including six arrays"
+    ],
+    "manifest": "original_artifact_sha256.json"
+  },
+  "precision_record": {
+    "source": "MILESTONE_2A_REVIEW.zip / review/float32_vs_float64.json",
+    "copy_byte_identical": true,
+    "new_precision_inference_run": false,
+    "limitation": "Existing measured comparison inspected and consistency tested; fresh torch inference unavailable under current DLL policy."
+  },
+  "constraints": {
+    "research_model_retraining": false,
+    "SHAP_recomputed": false,
+    "uploads": false,
+    "paid_compute": false
+  },
+  "files": {
+    "configs/artifact_registry.yaml": "e9befa95467238fc599c30f5410c4c664cf0b3973f4d7d86d4f7c3292338194b",
+    "configs/history/artifact_registry_v1.yaml": "c9c9a68ec110df3054075889299a158e5d8d9eb1242a2ad363dcdd7b0b4c94b1",
+    "docs/evidence/precision_comparison_2a.json": "8e366749d6232bd790ee7e37cb939c42e9b6badd986fe5a84116f2ca42ddc0fa",
+    "results/corrections/milestone2b/corrected_arr_v2.json": "e23a75c52cfed7fe4bb2f9838aff7afa25c2c2c1e5a6ee4930d8fdc0f6a5e07c"
+  }
+}

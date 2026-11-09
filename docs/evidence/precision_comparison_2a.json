@@ -1,0 +1,142 @@
+{
+  "purpose": "Why SHAP evaluates the composite model in float64 (decision log D-019)",
+  "method": "Same saved weights (preprocessor.json, checkpoints/ae_best.pt, xgb_model.json). float32: encoder as trained. float64: deep copy of the encoder cast to double, inputs cast to double, latent cast back to float32 before XGBoost. Both evaluated on the whole test partition in one batch and compared with each other and with the saved run outputs. Batch dependence: each stratified train background row (seed 0) evaluated alone vs inside the full background batch.",
+  "run": "ae_xgb_d008_trackB-seed0-cpu-565a8b9e",
+  "split_fingerprint": "50bd994880abbe151738993e299b90a6e50fb5ffae235a72677bb7813c447f44",
+  "test_rows": 33877,
+  "float32_vs_saved": {
+    "max_abs_prob_diff": 8.631362935496156e-08,
+    "max_abs_latent_diff": 4.76837158203125e-07,
+    "predictions_identical": true
+  },
+  "float64_vs_saved": {
+    "max_abs_prob_diff": 0.0008868888248654283,
+    "max_abs_latent_diff": 1.1920928955078125e-06,
+    "predictions_identical": true
+  },
+  "float64_vs_float32": {
+    "max_abs_margin_diff": 1.5708975791931152,
+    "max_abs_prob_diff": 0.0008868700016758657,
+    "rows_margin_diff_gt_1e-3": 16,
+    "rows": [
+      {
+        "source_row": 72929,
+        "y_true": 1,
+        "margin_float32": 7.217993259429932,
+        "margin_float64": 8.788890838623047
+      },
+      {
+        "source_row": 44465,
+        "y_true": 1,
+        "margin_float32": 6.761155605316162,
+        "margin_float64": 8.218000411987305
+      },
+      {
+        "source_row": 125737,
+        "y_true": 1,
+        "margin_float32": 8.218000411987305,
+        "margin_float64": 6.761155605316162
+      },
+      {
+        "source_row": 71267,
+        "y_true": 1,
+        "margin_float32": 7.594257354736328,
+        "margin_float64": 8.720008850097656
+      },
+      {
+        "source_row": 4944,
+        "y_true": 0,
+        "margin_float32": -8.270292282104492,
+        "margin_float64": -9.006482124328613
+      },
+      {
+        "source_row": 155025,
+        "y_true": 0,
+        "margin_float32": -13.518441200256348,
+        "margin_float64": -13.235922813415527
+      },
+      {
+        "source_row": 86544,
+        "y_true": 0,
+        "margin_float32": -13.518441200256348,
+        "margin_float64": -13.235922813415527
+      },
+      {
+        "source_row": 68937,
+        "y_true": 0,
+        "margin_float32": -13.518441200256348,
+        "margin_float64": -13.235922813415527
+      },
+      {
+        "source_row": 71702,
+        "y_true": 1,
+        "margin_float32": 10.064858436584473,
+        "margin_float64": 9.870000839233398
+      },
+      {
+        "source_row": 130964,
+        "y_true": 1,
+        "margin_float32": 11.067474365234375,
+        "margin_float64": 11.184040069580078
+      },
+      {
+        "source_row": 19013,
+        "y_true": 1,
+        "margin_float32": 12.51427173614502,
+        "margin_float64": 12.596964836120605
+      },
+      {
+        "source_row": 122889,
+        "y_true": 1,
+        "margin_float32": 12.51427173614502,
+        "margin_float64": 12.596964836120605
+      },
+      {
+        "source_row": 110132,
+        "y_true": 1,
+        "margin_float32": 12.605915069580078,
+        "margin_float64": 12.523221969604492
+      },
+      {
+        "source_row": 88348,
+        "y_true": 1,
+        "margin_float32": 9.633914947509766,
+        "margin_float64": 9.707803726196289
+      },
+      {
+        "source_row": 134646,
+        "y_true": 1,
+        "margin_float32": 9.33869743347168,
+        "margin_float64": 9.389745712280273
+      },
+      {
+        "source_row": 167272,
+        "y_true": 1,
+        "margin_float32": 12.719646453857422,
+        "margin_float64": 12.67952823638916
+      }
+    ]
+  },
+  "batch_dependence": {
+    "float32_background50_seed0": {
+      "max_abs_margin_diff": 0.08269309997558594,
+      "rows_differing": 1
+    },
+    "float64_background50_seed0": {
+      "max_abs_margin_diff": 0.0,
+      "rows_differing": 0
+    },
+    "float32_background100_seed0": {
+      "max_abs_margin_diff": 0.0,
+      "rows_differing": 0
+    },
+    "float64_background100_seed0": {
+      "max_abs_margin_diff": 0.0,
+      "rows_differing": 0
+    }
+  },
+  "seconds_whole_test_partition": {
+    "float32": 0.081,
+    "float64": 0.098
+  }
+}

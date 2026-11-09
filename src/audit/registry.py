@@ -14,6 +14,11 @@ TARGETS = ("feature", "flow", "label", "generation_process")
 PAGED_SOURCES = ("engelen2021", "lanvin2023")
 
 
+def mechanisms(entry: dict) -> list[dict]:
+    """Version 1 entries have one mechanism; version 2 may carry several."""
+    return entry.get("mechanisms", [entry])
+
+
 def load_registry(path: Path = REGISTRY_PATH) -> dict:
     with open(path, encoding="utf-8") as f:
         reg = yaml.safe_load(f)
@@ -44,10 +49,33 @@ def validate(reg: dict) -> list[str]:
                 problems.append(f"{eid}: source {src.get('ref')} needs a section and a finding")
             if src.get("ref") in PAGED_SOURCES and not src.get("page"):
                 problems.append(f"{eid}: source {src.get('ref')} needs a page")
-        # A level above "hypothesis" must rest on a paged source, not only on Phase II or our own notes.
+        # Retain the original validation contract for the primary classification.
         if entry.get("evidence_level") != "unverified_hypothesis" and not any(
-                s.get("ref") in PAGED_SOURCES for s in entry.get("sources", [])):
-            problems.append(f"{eid}: {entry.get('evidence_level')} requires a paged source")
+                s.get("ref") in PAGED_SOURCES or (
+                    s.get("ref") == "engelen_extended" and s.get("section") and s.get("url") ==
+                    reg.get("sources", {}).get("engelen_extended", {}).get("url"))
+                for s in entry.get("sources", [])):
+            problems.append(f"{eid}: {entry.get('evidence_level')} requires a paged source or official HTML section")
+        if "mechanisms" in entry and (not entry["mechanisms"] or not any(
+                m.get("evidence_level") == entry.get("evidence_level") for m in entry["mechanisms"])):
+            problems.append(f"{eid}: mechanisms must retain the primary classification")
+        for mechanism in entry.get("mechanisms", []):
+            if mechanism.get("evidence_level") not in LEVELS:
+                problems.append(f"{eid}: mechanism evidence_level invalid")
+            if not mechanism.get("mechanism") or not mechanism.get("sources"):
+                problems.append(f"{eid}: mechanism needs description and sources")
+            for source in mechanism.get("sources", []):
+                ref = source.get("ref")
+                if ref not in reg.get("sources", {}) or not source.get("section") or not source.get("finding"):
+                    problems.append(f"{eid}: mechanism source invalid")
+                if ref in PAGED_SOURCES and not source.get("page"):
+                    problems.append(f"{eid}: mechanism source needs a page")
+            if mechanism.get("evidence_level") != "unverified_hypothesis" and not any(
+                    (s.get("ref") in PAGED_SOURCES and s.get("page")) or
+                    (s.get("ref") == "engelen_extended" and s.get("url") ==
+                     reg.get("sources", {}).get("engelen_extended", {}).get("url") and s.get("section"))
+                    for s in mechanism.get("sources", [])):
+                problems.append(f"{eid}: mechanism requires published evidence")
     columns = [c for e in reg.get("features", []) for c in e.get("columns", [])]
     if len(columns) != len(set(columns)):
         problems.append("a column is mapped by more than one feature entry")
@@ -65,8 +93,9 @@ def column_entries(reg: dict) -> dict[str, dict]:
 def feature_sets(reg: dict, model_columns: list[str]) -> dict:
     """Registered columns per evidence tier, restricted to the model's columns.
 
-    Tiers: 'direct' (direct_extraction_error), 'shortcut' (shortcut_indicator) and 'all'
-    (every registered feature, including unverified hypotheses). Registered columns absent
+    Tiers: 'direct' (direct_extraction_error), 'shortcut' (shortcut_indicator),
+    'hypothesis' (hypothesis-only) and 'all' (union). Direct and shortcut may overlap.
+    Registered columns absent
     from the model are listed under 'missing' rather than silently dropped.
     """
     present = set(model_columns)
@@ -75,9 +104,13 @@ def feature_sets(reg: dict, model_columns: list[str]) -> dict:
     missing = []
     for col, entry in column_entries(reg).items():
         if col in present:
-            tiers[key[entry["evidence_level"]]].add(col)
+            levels = {m["evidence_level"] for m in mechanisms(entry)}
+            for level in levels:
+                tiers[key[level]].add(col)
         else:
             missing.append(col)
+    # Hypothesis-only excludes columns with a supported mechanism; supported tiers may overlap.
+    tiers["hypothesis"] -= tiers["direct"] | tiers["shortcut"]
     tiers["all"] = tiers["direct"] | tiers["shortcut"] | tiers["hypothesis"]
     tiers["missing"] = sorted(missing)
     return tiers

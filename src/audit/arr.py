@@ -9,6 +9,30 @@ from __future__ import annotations
 
 import math
 
+import numpy as np
+
+
+def importance_from_arrays(values, columns, merges=None, aggregation="sum_abs") -> dict[str, float]:
+    """Aggregate existing SHAP arrays, with explicit duplicate handling.
+
+    sum_abs = sum individual mean absolute contributions (historical convention).
+    signed = mean absolute row-wise signed sum (net contribution of the group).
+    Neither constitutes joint-mask/group Shapley values.
+    """
+    values = np.asarray(values, dtype=np.float64)
+    if values.ndim != 2 or values.shape[1] != len(columns) or not len(values):
+        raise ValueError("SHAP shape must be nonempty rows x columns")
+    if len(set(columns)) != len(columns) or not np.isfinite(values).all():
+        raise ValueError("columns must be unique and SHAP values finite")
+    if aggregation not in ("sum_abs", "signed"):
+        raise ValueError("unknown aggregation")
+    merges = merges or {}
+    groups = {}
+    for i, col in enumerate(columns):
+        groups.setdefault(merges.get(col, col), []).append(i)
+    return {name: float(np.abs(values[:, inds]).mean(axis=0).sum()) if aggregation == "sum_abs"
+            else float(np.abs(values[:, inds].sum(axis=1)).mean()) for name, inds in groups.items()}
+
 
 def merge_columns(importance: dict[str, float], merges: dict[str, str]) -> dict[str, float]:
     """Sum the importance of columns that are copies of another (e.g. 'Fwd Header Length.1')."""

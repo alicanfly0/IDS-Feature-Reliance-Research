@@ -16,7 +16,8 @@ from src.data import ddos
 from src.experiments import ae_xgb
 from test_ae_xgb import _flows, _tiny_cfg
 
-REG = load_registry()
+# These tests preserve the Milestone 2A evidence snapshot; v2 is tested in test_milestone2b.py.
+REG = load_registry(ROOT / "configs/history/artifact_registry_v1.yaml")
 BASELINE = ROOT / "results" / "baselines" / "ae_xgb_d008_trackB-seed0-cpu-565a8b9e"
 PRE = json.loads((BASELINE / "preprocessor.json").read_text(encoding="utf-8"))
 D008_COLUMNS = PRE["numeric_cols"] + PRE["dropped_constant_on_train"]

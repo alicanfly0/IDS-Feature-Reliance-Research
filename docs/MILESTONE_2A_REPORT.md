@@ -1,5 +1,7 @@
 # Milestone 2A — Artifact registry, original-feature SHAP and ARR@K (pilot)
 
+> **Historical registry-v1 report.** Milestone 2B supersedes its evidence classifications, ARR@K interpretation and proposed confirmatory use of test-selected features. See [MILESTONE_2B_CORRECTIONS.md](MILESTONE_2B_CORRECTIONS.md). Original pilot outputs remain unchanged. D-015 upload authorization was granted after this historical report.
+
 Date: 2026-11-08. Model explained: `ae_xgb_d008_trackB-seed0-cpu-565a8b9e` (CICIDS2017 Friday DDoS, D-008, track-B split, commit 6fed9b0). Nothing was retrained. Method decisions: decision log D-002, D-012, D-019.
 
 ## 1. What was built

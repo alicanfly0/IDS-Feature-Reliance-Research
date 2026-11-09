@@ -648,3 +648,52 @@ Large artifacts (checkpoints, latent codes, models, full predictions) stay in Gi
 - **No causal conclusion** is drawn beyond "removing this one feature did not measurably change performance on these rows, for one seed".
 
 **Not started (each needs approval):** additional seeds; a time- or session-grouped split; registry-based removal of feature groups; evaluation on the Engelen-corrected data; SHAP.
+
+
+## Milestone 2B amendments — 2026-11-09 (authorized correction scope)
+
+### D-012: registry v2, documented flag-count defects
+
+Official Engelen WTMC2021 extended documentation, Flow Construction / TCP flag count:
+https://intrusion-detection.distrinet-research.be/WTMC2021/extended_doc.html
+HTML sections replace page requirements only for this official web evidence. Source record:
+`docs/evidence/engelen_extended_2026-11-09.md`. Registry v1 remains in
+`configs/history/artifact_registry_v1.yaml`; original pilot outputs are preserved.
+
+Aggregate flag counters FIN/SYN/RST/PSH/ACK/URG/CWE/ECE and directional Fwd/Bwd PSH/URG fields
+are now mapped to documented extraction defects. The aggregate mechanism updates on the first
+packet only. The directional defects are separately documented. CWE is the original CSV spelling
+mapped by family membership, rather than explicitly listed on the page. SYN retains its appendix
+shortcut evidence as a second mechanism. Direct/shortcut tiers can overlap; union membership is a
+set and hypothesis-only excludes supported features. No claim that all rows are erroneous follows.
+PCAP reconstruction and row-level corruption remain unverified. Existing Lanvin evidence remains.
+
+From six unchanged arrays, direct-error ARR@20 is 21.297–22.198%, union 34.672–36.809%, under
+the historical duplicate aggregation. Detailed K=2,5,10,20 tables for all four tiers and both
+aggregation methods: `results/corrections/milestone2b/corrected_arr_v2.json`. Previous zero direct-error
+ARR and 13–15% union reflect the incomplete v1 registry and are historical. No causal claim follows.
+
+### D-019: numerical evaluation and duplicate attribution qualifications
+
+Float64 encoder evaluation is a numerically different function from the original float32 model.
+The archived precision record (`docs/evidence/precision_comparison_2a.json`) gives max margin difference
+1.570897579, despite identical test classes, and max probability discrepancy 0.0008868888 versus saved
+predictions. Double inference was batch-invariant in the tested comparisons only; no universal
+proof or attribution-equivalence bound exists. No float32 SHAP sweep was run.
+
+Historical sum of individual mean absolute SHAP importances is retained as the primary ARR convention
+for continuity; signed row-wise summation before mean absolute value is a reported sensitivity.
+The latter lowers duplicate-header importance and changes one lower rank, but all requested Top-K
+lists and ARR values are identical in the six saved variants. Neither repairs independent masking
+of correlated or duplicate features nor computes joint-mask group Shapley values.
+
+### D-018 / D-007: future evaluation boundary
+
+The pilot used test-set SHAP. Selecting top features from it and testing ablation on those same rows
+would be exploratory. Literature-defined groups and controls should be preregistered, with independent
+uninspected session/capture evaluation; attribution selection must be confined to development data.
+The historical test set remains inspected even if feature selection is later rerun on validation.
+Use the D-018 evaluation-twin exclusions and a declared common population, with prospective validation
+population alignment. McNemar p=0.625 is not equivalence. No new ablation is approved or started here.
+Original open dataset, statistics and generalization decisions stay open. See the correction report
+for the recommended next protocol-design milestone and the current DLL-policy test blocker.

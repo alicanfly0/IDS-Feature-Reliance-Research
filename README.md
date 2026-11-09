@@ -18,7 +18,7 @@ The planned baselines are:
 | MES-DNN | Wardana et al. 2026 |
 | SHAP-selected DCNN + self-attention | Fang et al. 2026 |
 
-**Status: Milestone 2A complete** (artifact registry, original-feature SHAP pilot, ARR@K).
+**Status: Milestone 2B scientific corrections implemented.** Corrected registry and saved-array ARR@K: [docs/MILESTONE_2B_CORRECTIONS.md](docs/MILESTONE_2B_CORRECTIONS.md). See its verification record for the current Windows test-environment blocker.
 
 | Run (one model seed, laptop CPU) | Summary | Details |
 |---|---|---|

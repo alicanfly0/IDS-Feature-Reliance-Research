@@ -18,7 +18,7 @@ The planned baselines are:
 | MES-DNN | Wardana et al. 2026 |
 | SHAP-selected DCNN + self-attention | Fang et al. 2026 |
 
-**Status: Milestone 2B scientific corrections implemented.** Corrected registry and saved-array ARR@K: [docs/MILESTONE_2B_CORRECTIONS.md](docs/MILESTONE_2B_CORRECTIONS.md). See its verification record for the current Windows test-environment blocker.
+**Status: Milestone 3A experiment protocol proposed (not approved, nothing run).** See [docs/MILESTONE_3A_EXPERIMENT_PROTOCOL.md](docs/MILESTONE_3A_EXPERIMENT_PROTOCOL.md); its frozen ablation groups are in `configs/protocol/ablation_groups_3a.yaml`. Corrected registry and saved-array ARR@K: [docs/MILESTONE_2B_CORRECTIONS.md](docs/MILESTONE_2B_CORRECTIONS.md). Test environment: SHAP's Numba modules are blocked by Windows Smart App Control on the development laptop, so `tests/test_audit.py` (16 tests) runs only on Colab; see `results/corrections/milestone2b/verification_2b1.json`.
 
 | Run (one model seed, laptop CPU) | Summary | Details |
 |---|---|---|

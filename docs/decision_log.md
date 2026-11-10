@@ -37,6 +37,13 @@ Status values: OPEN · APPROVED (team decision) · PARTIALLY APPROVED · DEFERRE
 | D-017 | AE-XGBoost adaptations vs the paper | DOCUMENTED (Milestone 1A) |
 | D-018 | Destination Port ablation: comparison design | APPROVED and EXECUTED (seed 0, CPU); no measurable effect |
 | D-019 | Original-feature SHAP method and ARR@K settings | DECIDED (Milestone 2A); pilot run |
+| D-020 | 3A matched controls and smallest effect size of interest | PROPOSED (Milestone 3A) |
+| D-021 | AE epoch cap for 3A ablations | PROPOSED (Milestone 3A) |
+| D-022 | Second model family on the CICIDS2017 scope | PROPOSED (Milestone 3A) |
+| D-023 | Independent evaluation populations and Drive scope | PROPOSED (Milestone 3A) |
+
+Milestone 3A recommendations for the OPEN entries D-004, D-005, D-006, D-007, D-009, D-010 and
+D-012 are at the end of this log. Their status is unchanged until the team approves.
 
 ---
 
@@ -390,7 +397,7 @@ All three are Git-ignored. **No dataset, checkpoint or private file is uploaded 
 
 **Note.** The folder's path is under `OneDrive\Desktop`. Whether OneDrive syncs it depends on the user's OneDrive settings, which are outside this repository.
 
-**Amendments:** none in effect.
+**Amendments:** Amendment 1 (below) is in effect since 2026-11-08.
 
 ### D-015 Amendment 1 — AUTHORIZED (2026-11-08, by the user: "for all of the heavy lifting i will need colab")
 
@@ -410,7 +417,7 @@ Originally proposed for the first AE-XGBoost baseline; the following is transfer
 - No other dataset, no GeneratedLabelledFlows/PCAPs, and no personal files are transferred.
 - Nothing is shared or re-hosted. CIC's terms ask for citation and do not permit re-hosting, so the folder must stay private.
 
-**To authorize:** change this heading to "AUTHORIZED", add the date and who authorized it, and commit. Then set `D015_AMENDMENT_1_RECORDED = True` in the notebook.
+**Recorded as authorized** in commit `fbd10cd`. In the notebook, set `D015_AMENDMENT_1_RECORDED = True` before a Colab run.
 
 ## D-016 Compute architecture: local CPU development + Google Colab GPU — DECIDED (2026-11-08, team requirement)
 
@@ -697,3 +704,94 @@ Use the D-018 evaluation-twin exclusions and a declared common population, with 
 population alignment. McNemar p=0.625 is not equivalence. No new ablation is approved or started here.
 Original open dataset, statistics and generalization decisions stay open. See the correction report
 for the recommended next protocol-design milestone and the current DLL-policy test blocker.
+
+
+## Milestone 3A — protocol proposals (2026-11-10, NOT approved)
+
+Full protocol: `docs/MILESTONE_3A_EXPERIMENT_PROTOCOL.md`. Frozen groups and controls:
+`configs/protocol/ablation_groups_3a.yaml` (train partition only; reproducible with
+`.\run.cmd scripts/freeze_ablation_groups_3a.py --check`). Nothing here has been run.
+
+**Measured design facts (read-only, no model):**
+
+- **Proxy twins on train** (exact equality or |r| ≥ 0.999), so groups and controls are closed
+  under them:
+  - `Total Fwd Packets` = `Subflow Fwd Packets`;
+  - `SYN Flag Count` = `Fwd PSH Flags`;
+  - `RST Flag Count` = `ECE Flag Count`;
+  - `Bwd Packet Length Mean` ≈ `Avg Bwd Segment Size`;
+  - and six more pairs (listed in the protocol).
+- **Family-common populations:** across 38 pre-registered views, validation 33,134 / test 33,038
+  (700 / 839 rows excluded, all BENIGN).
+- **Timestamps:** the TrafficLabelling Friday DDoS file matches MachineLearningCVE row by row
+  (79/79 columns identical). Timestamps are minute resolution.
+- **No host-grouped split:** the attack is a single host pair, so only time blocks are possible.
+
+### Recommendations for OPEN entries (status unchanged)
+
+- **D-004:** WTMC2021 only.
+- **D-005:**
+  - a hand-checked 77-column map (`Fwd Header Length.1` fed from `Fwd Header Length`);
+  - DDoS → 1, BENIGN → 0, other labels excluded;
+  - restriction to the original DDoS file's time window.
+  - Measured: Engelen's Friday file has 95,123 DDoS and no DDoS-Attempted.
+- **D-006:** no cross-schema evaluation for AE-XGBoost; Wednesday DoS only as an optional
+  same-schema extension.
+- **D-007:** adopt protocol §6:
+  - model seeds 0–4;
+  - hierarchical paired bootstrap over seeds and test content groups (B = 2,000);
+  - control-adjusted effects;
+  - Holm across a 10-test primary family;
+  - track A optional.
+- **D-009:** official partition with track-B twin exclusion; inspect the author repository first.
+- **D-010:** reduced scope; decide which extra NetFlow networks (if any) before Stage 4.
+- **D-012:**
+  - confirm the v2 levels and the A/B/C/D group mapping;
+  - group A's inclusion was triggered by test-set SHAP ranks, so its in-domain result is
+    exploratory and confirmatory claims rest on untouched populations.
+
+### D-020 Matched controls and SESOI — PROPOSED
+
+- **Random controls (primary):** five per group, frozen. Whole proxy clusters from the
+  46-input non-registered pool; exact column-count match.
+- **Difficulty-matched control (sensitivity):** one per group, matched by train-only univariate
+  separability. Group A's controls are unavoidably more separable than A (0.090 vs 0.051).
+- **SESOI:** |ΔMCC| = 0.001 (in-domain) and |ΔFPR| = 0.001 (Monday benign).
+- **Readings:**
+
+  | Reading | Condition |
+  |---|---|
+  | Dependence | Holm p < 0.05 and the 95% interval beyond +SESOI |
+  | No practically relevant difference | 90% interval within ±SESOI |
+  | Inconclusive | otherwise |
+
+### D-021 AE epoch cap — PROPOSED
+
+- Keep `max_epochs` 100 and patience 10 (the paper's range) for every 3A fit, and record cap hits.
+- Any configuration whose fits hit the cap is rerun at 200 as a sensitivity (≤ 25 fits).
+- Motivation: the D-018 ablated AE stopped at the cap (best epoch 98).
+
+### D-022 Second model family on the CICIDS2017 scope — PROPOSED
+
+- **Problem:** neither Fang's UNSW-NB15 nor Wardana's NetFlow-v2 data carries our CICIDS2017
+  artifact evidence, and no UNSW or NetFlow artifact is established in our literature.
+- **Proposal:**
+  1. a faithful Fang reproduction (D-009); plus
+  2. a clearly labelled adaptation of the DCNN + self-attention architecture to the D-008 scope,
+     using the same groups, controls and populations as the AE-XGBoost family.
+- **MES-DNN** contributes a duplicate-leakage and cross-network audit, not a CICIDS2017 artifact
+  test.
+
+### D-023 Independent evaluation populations and Drive scope — PROPOSED
+
+| Population | Role |
+|---|---|
+| Monday BENIGN (529,918 rows, never scored) | Confirmatory false-positive population |
+| Tuesday–Thursday BENIGN | Sealed reserve, scored once at the end |
+| Wednesday DoS | Optional cross-attack test |
+
+All three come from `MachineLearningCSV.zip`, already covered by D-015 Amendment 1.
+
+The temporal split needs `GeneratedLabelledFlows.zip` timestamps, which Amendment 1 does not
+cover. It is built locally, and only the index-only split record (no feature values) is placed
+on Drive. That needs approval as a narrow extension of Amendment 1.

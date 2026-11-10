@@ -109,3 +109,31 @@ No Colab upload or security-policy change is authorized by this verification tas
 The new postprocessing path requires neither of those libraries and is verified end to end here.
 
 Implementation, evidence, tests and versioned numerical records: commit `037cb61`. The following documentation commit marks the original 2A interpretation historical and records the revised protocol boundaries.
+
+## Milestone 2B.1 addendum — verification hardening (2026-11-10)
+
+**Issue.** `correct_arr --verify` and the 2B reproduction test compared saved floats by exact JSON
+equality, so numerically identical results could fail across NumPy builds (observed differences
+~5.55e-17).
+
+**Correction.** `compare_results` in `src/audit/correct_arr.py` compares floats with
+`|a - e| <= 1e-12 + 1e-10·|e|` and keeps everything discrete exact: feature names, memberships,
+rankings, K values, variant identifiers, sizes, booleans and SHA-256 digests. NaN matches only NaN,
+infinities must be identical. The tolerance is justified in the code: summation-order error is
+bounded by ~4.4e-14 relative, and the smallest reported ARR digit is 1e-5. SHA-256 integrity of
+the 96 protected artifacts is unchanged and still strict. Seven regression tests cover legitimate
+noise, wrong values (1e-6, 1e-9, −2e-8), discrete tampering, non-finite values and the CLI.
+No result file was regenerated.
+
+**Tests (this machine, 2026-11-10).**
+
+| Run | Passed | Failed | Skipped | Not collected (environment-blocked) |
+|---|---|---|---|---|
+| Full suite | — | — | — | collection interrupted by `tests/test_audit.py` |
+| Suite without `tests/test_audit.py` | 121 | 0 | 0 | 16 (all of `tests/test_audit.py`) |
+
+PyTorch now loads (the torch tests excluded in 2B pass), but Smart App Control still blocks two
+compiled Numba modules, which `shap` imports at load time. **This is not a full-suite pass**; the 16
+audit tests have not run anywhere since 2B. Classification, evidence and recovery steps:
+`results/corrections/milestone2b/verification_2b1.json`. The recommended recovery is running the
+full suite on Colab Free under the existing authorization. Security settings were not changed.

@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 
 import numpy as np
@@ -21,6 +22,58 @@ OUTPUT = ROOT / "results/corrections/milestone2b"
 MERGES = {"Fwd Header Length.1": "Fwd Header Length"}
 TIERS = ("direct", "shortcut", "hypothesis", "all")
 KS = (2, 5, 10, 20)
+
+# Floating-point tolerance for reproducing saved results (Milestone 2B.1).
+# Importances are means over 200 rows of float32-stored SHAP values evaluated in float64; ARR
+# values are ratios of sums of <= 20 such importances. Different NumPy builds may use different
+# summation orders (pairwise/SIMD), whose error is bounded by roughly n * eps relative
+# (200 * 2.2e-16 ~ 4.4e-14). RTOL = 1e-10 leaves a >1000x margin over that bound while staying
+# five orders of magnitude below the smallest reported ARR digit (0.001 % = 1e-5). ATOL = 1e-12
+# covers quantities that are legitimately ~0 (additivity errors, zero tiers). Observed
+# cross-environment differences were ~5.55e-17.
+RTOL = 1e-10
+ATOL = 1e-12
+
+
+def compare_results(expected, actual, path="$", rtol=RTOL, atol=ATOL):
+    """Return a list of differences; empty means the results reproduce.
+
+    Floats: |a - e| <= atol + rtol * |e|; NaN matches only NaN; +/-inf only identical infinity.
+    Everything discrete (strings, ints, bools, None, dict keys, list lengths and order, which
+    covers feature names, memberships, rankings, K values, variant ids and SHA-256 digests) must
+    be exactly equal.
+    """
+    problems = []
+    if isinstance(expected, bool) or isinstance(actual, bool):
+        if type(expected) is not type(actual) or expected != actual:
+            problems.append(f"{path}: {expected!r} != {actual!r}")
+    elif isinstance(expected, float) or isinstance(actual, float):
+        if not all(isinstance(x, (int, float)) for x in (expected, actual)):
+            problems.append(f"{path}: type {type(expected).__name__} != {type(actual).__name__}")
+        else:
+            e, a = float(expected), float(actual)
+            if math.isnan(e) or math.isnan(a):
+                if not (math.isnan(e) and math.isnan(a)):
+                    problems.append(f"{path}: {e!r} != {a!r} (NaN mismatch)")
+            elif math.isinf(e) or math.isinf(a):
+                if e != a:
+                    problems.append(f"{path}: {e!r} != {a!r} (non-finite mismatch)")
+            elif abs(a - e) > atol + rtol * abs(e):
+                problems.append(f"{path}: {e!r} != {a!r} (|diff| {abs(a - e):.3g})")
+    elif isinstance(expected, dict) and isinstance(actual, dict):
+        if set(expected) != set(actual):
+            problems.append(f"{path}: keys differ {sorted(set(expected) ^ set(actual))}")
+        for key in sorted(set(expected) & set(actual)):
+            problems += compare_results(expected[key], actual[key], f"{path}.{key}", rtol, atol)
+    elif isinstance(expected, list) and isinstance(actual, list):
+        if len(expected) != len(actual):
+            problems.append(f"{path}: length {len(expected)} != {len(actual)}")
+        else:
+            for i, (e, a) in enumerate(zip(expected, actual)):
+                problems += compare_results(e, a, f"{path}[{i}]", rtol, atol)
+    elif type(expected) is not type(actual) or expected != actual:
+        problems.append(f"{path}: {expected!r} != {actual!r}")
+    return problems
 
 
 def digest(path):
@@ -132,8 +185,10 @@ def main(argv=None):
     target = OUTPUT / "corrected_arr_v2.json"
     serial = json.dumps(result, indent=2, allow_nan=False) + "\n"
     if args.verify:
-        if json.loads(target.read_text()) != json.loads(serial):
-            raise ValueError("corrected results do not reproduce")
+        problems = compare_results(json.loads(target.read_text()), json.loads(serial))
+        if problems:
+            raise ValueError(f"corrected results do not reproduce ({len(problems)} differences): "
+                             + "; ".join(problems[:10]))
     else:
         with target.open("x", encoding="utf-8") as stream:
             stream.write(serial)

@@ -83,3 +83,40 @@ def test_inputs_and_split_are_the_baseline_ones():
     for v in g["groups"].values():
         assert set(v["columns"]) <= inputs
     assert set(g["control_pool"]["columns"]) <= inputs
+
+
+R1 = ROOT / "configs/protocol/ablation_groups_3a_r1.yaml"
+POP = ROOT / "results/protocol/milestone3a"
+
+
+def test_r1_revision_only_extends_random_draws():
+    """Review resolution: r1 keeps r0 groups, clusters, matched controls and draws 0-4 unchanged."""
+    r0, r1 = _frozen(), yaml.safe_load(R1.read_text(encoding="utf-8"))
+    assert r1["groups"] == r0["groups"] and r1["proxy_clusters_multi"] == r0["proxy_clusters_multi"]
+    assert r1["control_pool"] == r0["control_pool"] and r1["separability_train"] == r0["separability_train"]
+    pool, clusters = set(r1["control_pool"]["columns"]), r1["proxy_clusters_multi"]
+    for name in PRIMARY:
+        a, b = r0["controls"][name], r1["controls"][name]
+        assert b["random"][:5] == a["random"] and b["difficulty_matched"] == a["difficulty_matched"]
+        assert len(b["random"]) == 10 and len({tuple(r) for r in b["random"]}) == 10
+        for ctl in b["random"]:
+            assert len(ctl) == r1["groups"][name]["size"] and set(ctl) <= pool
+            assert _closure(ctl, clusters) == set(ctl)
+
+
+def test_population_records_model_visible_equals_raw():
+    """Twin exclusions on float32 model-visible inputs equal the raw-view exclusions in every view."""
+    for tag, views in (("r0", 38), ("r1", 63)):
+        path = POP / f"eval_population_3a_{tag}.json"
+        if not path.exists():
+            continue
+        rec = json.loads(path.read_text())
+        assert rec["n_views"] == views and rec["split_fingerprint"].startswith("50bd994880abbe15")
+        assert all(v["extra_val"] == 0 and v["extra_test"] == 0 for v in rec["views"].values())
+        raw, mod = rec["family_common_raw_views"], rec["family_common_model_visible"]
+        for k in ("val_excluded", "test_excluded", "val_kept", "test_kept"):
+            assert raw[k] == mod[k]
+        assert len(mod["test_excluded_source_rows"]) == mod["test_excluded"]
+        assert mod["val_excluded_ddos"] == mod["test_excluded_ddos"] == 0
+    r0 = json.loads((POP / "eval_population_3a_r0.json").read_text())["family_common_model_visible"]
+    assert (r0["val_kept"], r0["test_kept"], r0["val_excluded"], r0["test_excluded"]) == (33134, 33038, 700, 839)

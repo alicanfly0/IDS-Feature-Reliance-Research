@@ -795,3 +795,40 @@ All three come from `MachineLearningCSV.zip`, already covered by D-015 Amendment
 The temporal split needs `GeneratedLabelledFlows.zip` timestamps, which Amendment 1 does not
 cover. It is built locally, and only the index-only split record (no feature values) is placed
 on Drive. That needs approval as a narrow extension of Amendment 1.
+
+
+## Milestone 3A review resolution — 2026-11-10 (CONDITIONAL PASS; proposals, NOT approved)
+
+Response document: `docs/MILESTONE_3A_REVIEW_RESOLUTION.md`. r0 (`ablation_groups_3a.yaml`)
+is kept unchanged as the original proposal.
+
+**Leakage on model-visible inputs (measured).** For all 38 r0 views, twin exclusions on the
+runner's float32 model inputs equal those on raw views. The family-common population stays
+33,134 validation / 33,038 test (700 / 839 excluded, all BENIGN). Records:
+`results/protocol/milestone3a/eval_population_3a_r0.json` and `_r1.json`.
+
+Float32 does merge values within 16 columns. No pre-registered view gains a twin from it, and
+any new view must be re-checked.
+
+**D-020 revision r1 (PROPOSED).** The changes:
+
+1. **Design D:** 10 random draws (`ablation_groups_3a_r1.yaml`; draws 0–4 identical to r0, draws
+   5–9 from the same seed rule), with draw *j* ↔ model seed *j*, and seeds 0–9 for every
+   configuration. 110 mandatory fits.
+2. **Why:** with five paired seeds, an exact sign-flip test cannot reach two-sided p < 0.0625.
+3. **Primary in-domain endpoint:** error rate instead of MCC; log loss as sensitivity.
+4. **Decision rules:** two-sided; Holm on exact sign-flip p-values; Bonferroni-consistent 99.5%
+   intervals; TOST at α = 0.005 for practical equivalence.
+5. **SESOI:** 0.001 error rate and 0.001 FPR.
+6. **Group A:** its separability imbalance is disclosed, a null result for A is defined as
+   inconclusive, and a descriptive separability-regression sensitivity is added.
+
+**D-007 (recommendation updated, still OPEN).**
+
+- Seed/draw inference: 10 paired units (exact sign-flip, t with df = 9).
+- Row sampling: paired content-group bootstrap, with a minute-block sensitivity.
+- Monday: Clopper–Pearson per model and a time/host block bootstrap for differences.
+- All intervals are conditional on the CICIDS2017 testbed.
+
+**D-004/D-005.** R4a is restated as the priority confirmatory test. The resolution document §5
+lists the six items these decisions must settle.

@@ -20,12 +20,13 @@ import yaml
 from sklearn.metrics import roc_auc_score
 
 root = Path(__file__).resolve().parents[1]
-FROZEN = root / "configs/protocol/ablation_groups_3a.yaml"
+R1 = "--r1" in sys.argv[1:]
+FROZEN = root / ("configs/protocol/ablation_groups_3a_r1.yaml" if R1 else "configs/protocol/ablation_groups_3a.yaml")
 sys.path.insert(0, str(root))
 from src.data import ddos  # noqa: E402
 
 PROXY_R = 0.999
-N_RANDOM = 5
+N_RANDOM = 10 if R1 else 5
 csv, _ = ddos.verified_csv(root)
 prep = ddos.prepare(ddos.load(csv), {"BENIGN": 0, "DDoS": 1})
 pre = json.loads((root / "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e/preprocessor.json").read_text())
@@ -122,7 +123,9 @@ def matched_control(group):
 
 primary = ["A_flag_defects", "B_appendix_closed", "C_duplication", "D_metadata_hypothesis", "U_documented_union"]
 out = {
-    "protocol": "Milestone 3A pre-registered ablation groups (frozen before any 3A training)",
+    "protocol": ("Milestone 3A revision r1 (PROPOSED): 10 random draws per group, same seed rule; "
+                 "supersedes nothing until approved" if R1 else
+                 "Milestone 3A pre-registered ablation groups (frozen before any 3A training)"),
     "generated_from": {"split_fingerprint": prep.split.fingerprint() if callable(getattr(prep.split, "fingerprint", None)) else None,
                        "partition": "train only", "n_train_rows": int(len(tr)), "inputs": len(inputs),
                        "registry_version": reg.get("registry_version"),

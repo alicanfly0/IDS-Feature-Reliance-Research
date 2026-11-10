@@ -1,6 +1,13 @@
 # Milestone 3A — Pre-registered experiment protocol
 
 **Status: PROPOSED, awaiting team approval. Nothing in this document has been run.**
+
+> **Review update (2026-11-10):** the independent review issued a CONDITIONAL PASS. Proposed
+> corrections (10 draws × seeds 0–9, error-rate endpoint, revised decision rules, model-visible
+> leakage verification) are in [MILESTONE_3A_REVIEW_RESOLUTION.md](MILESTONE_3A_REVIEW_RESOLUTION.md).
+> This document is kept as the original r0 proposal; where they differ, the resolution document
+> states the proposed r1 position.
+
 Date: 2026-11-10. Base commit: `fe7263e` (Milestone 2B.1). Frozen groups:
 `configs/protocol/ablation_groups_3a.yaml`, generated from the training partition only by
 `scripts/freeze_ablation_groups_3a.py` (`--check` reproduces it from the data).

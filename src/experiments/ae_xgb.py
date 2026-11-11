@@ -167,6 +167,8 @@ def run(cfg: dict, device: str, storage: Path, allow_code_change: bool = False, 
     run_dir.mkdir(parents=True, exist_ok=True)
     log = Logger(run_dir / "log.txt")
     snap = env.snapshot(seed=model_seed, dataset_id=cfg["experiment"]["dataset"])
+    snap["available_device"] = snap["device"]
+    snap["device"] = device   # the device this run TRAINS on (not merely the best one available)
     identity = {"run_id": run_id, "config_hash": chash, "device": device, "git_commit": snap["git"]["commit"],
                 "dataset_sha256": snap["dataset"]["sha256"],
                 # Milestone 3B-1: training-relevant environment (Python minor, platform, device, GPU, CUDA,

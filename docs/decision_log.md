@@ -883,3 +883,23 @@ releases:
     checks only.
 - **Drive:** training R4a-ii on Colab would need a new D-015 amendment for `dataset.zip`, or local
   runs.
+
+
+## Milestone 3B-0.1 execution safety — 2026-11-11 (clarifications; nothing approved)
+
+Report: `docs/MILESTONE_3B01_EXECUTION_SAFETY.md`.
+
+- **D-005 item 2:** the +5:00 clock alignment is an **empirical estimate** from the DDoS onset and
+  end. It is not independently established as a time-zone correction.
+- **D-005, measured list:** of the 4 subflow features, only `Subflow Fwd Packets` has label-free
+  evidence. The other three rest on label-separated distribution comparisons and are
+  **suspected** definition changes, not proven redefinitions.
+- **D-024:** R4a-ii remains **PROPOSED**. Separate original and corrected experiments reduce
+  within-dataset inconsistency but do **not** by themselves isolate extractor-defect causality
+  (segmentation, label windows, populations and definitions all differ).
+- **D-023 (Monday):** Monday scoring, once approved, must use the runner-identical float32
+  inference path verified against saved predictions
+  (`results/protocol/milestone3b/inference_consistency_v1.json`), with fail-closed provenance
+  checks.
+- **`--confirm-approved`** is an operator confirmation only. It is not checked against this log
+  and is not proof that any decision is approved.

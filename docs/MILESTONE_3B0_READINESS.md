@@ -126,10 +126,10 @@ No model was loaded.
 | Item | Finding |
 |---|---|
 | Column coverage | All 78 original inputs map to Engelen columns (21 renames; `Destination Port` ← `Dst Port`; `Fwd Header Length.1` ← `Fwd Header Length`, its documented duplicate; `CWE Flag Count` ← `CWR Flag Count`, name only, and constant on train so not a model input) |
-| Clock | Engelen timestamps run **exactly +5:00** relative to the original. The DDoS onset (15:56 vs 20:56) and end (16:16 vs 21:16) agree, and after alignment the per-minute DDoS counts span the same 21 minutes. The cause is undocumented; a UTC−3 vs UTC+2 time-zone difference fits but is a hypothesis |
+| Clock | Engelen timestamps run **exactly +5:00** relative to the original. The DDoS onset (15:56 vs 20:56) and end (16:16 vs 21:16) agree, and after alignment the per-minute DDoS counts span the same 21 minutes. The offset is **empirically estimated** from the attack's first and last minute, not independently established as a time-zone correction. A UTC−3 vs UTC+2 difference fits but is only a hypothesis |
 | Candidate population | Inside the aligned original window (15:30–17:03): **95,123 DDoS + 51,520 BENIGN**. Outside it, PortScan and Bot are out of scope. No "DDoS - Attempted" class exists. D-011 removes 3 rows. 0 rows duplicate an original training vector in the 6 views checked (full + 5 groups); the union over all 63 views must be recomputed before scoring |
 | Label windows | Engelen's documentation gives its tuned DDoS label window as 03:40–04:30 PM (local, by their table). In the data, DDoS flows occur only in 15:56–16:16 after alignment |
-| **Definition and encoding changes** (documented or label-free evidence) | **≥ 16 of the 68 model inputs:** (1) 8 flag fields of group A, counted per packet instead of first packet only (documented); (2) 4 subflow features: for `Subflow Fwd Packets`, the label-free relation `Subflow Fwd Packets` = `Total Fwd Packets` holds in 100% of original rows vs 0% in Engelen, where the value is 0 in 99.4% (undocumented); the other three subflow features show the same collapse (DDoS median 0 or far below the original) in the descriptive comparison; (3) 2 init-window fields: "not observed" coded −1 in the original (14.6% / 39.1%) vs 0 in Engelen, never −1 (encoding change); (4) `min_seg_size_forward`: value set changes (20/32/40/28 → 8/20/40/24); (5) Down/Up Ratio (fix logged on the landing page, 24/11/2021) |
+| **Definition and encoding changes** (documented or label-free evidence) | **≥ 16 of the 68 model inputs:** (1) 8 flag fields of group A, counted per packet instead of first packet only (documented); (2) 4 subflow features: for `Subflow Fwd Packets`, the label-free relation `Subflow Fwd Packets` = `Total Fwd Packets` holds in 100% of original rows vs 0% in Engelen, where the value is 0 in 99.4% (undocumented); the other three subflow features show the same collapse (DDoS median 0 or far below the original) in the label-separated descriptive comparison only, so they are **suspected** definition changes, not proven semantic redefinitions; (3) 2 init-window fields: "not observed" coded −1 in the original (14.6% / 39.1%) vs 0 in Engelen, never −1 (encoding change); (4) `min_seg_size_forward`: value set changes (20/32/40/28 → 8/20/40/24); (5) Down/Up Ratio (fix logged on the landing page, 24/11/2021) |
 | Distribution shift (descriptive) | For DDoS, 24 inputs have KS ≥ 0.5 between original and corrected flows, many at 1.0 (flags, subflow, forward lengths); for BENIGN, 7. `Destination Port` = 80 for 99.998% of original and 100% of corrected DDoS flows |
 
 ### Conclusion: R4a is executable, but its original design cannot answer the question alone
@@ -154,8 +154,12 @@ improves transfer" may reflect definition changes rather than artifacts.
   - **The question it answers:** does near-perfect detection, and group dependence, persist once
     extraction is corrected?
   - **The key contrast:** a group's effect in the original data vs in the corrected data (a
-    difference of effects), which removes most of the definition confound because each side
-    uses its own consistent definitions.
+    difference of effects). Each side uses its own internally consistent definitions, which
+    reduces the within-dataset inconsistency.
+  - **What it cannot show (clarified in 3B-0.1):** by itself it does **not** isolate
+    extractor-defect causality. The two datasets also differ in flow segmentation, label
+    windows, populations and feature definitions, so a difference of effects is compatible with
+    several explanations. **R4a-ii remains PROPOSED, not approved.**
 - **R4a-i (secondary, descriptive):** original models scored on corrected data. It is reported
   as "robustness to an extractor change" with the definition-change list, never as artifact
   reliance.

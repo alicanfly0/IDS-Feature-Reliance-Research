@@ -78,7 +78,10 @@ def prepare_data(cfg: dict, storage: Path, log, root: Path = ROOT, loader=None):
     """Verified data -> D-011 rules -> track-B split. The split is saved once per dataset+policy
     and every later run must reproduce it exactly (same evaluation population)."""
     d, s = cfg["data"], cfg["experiment"]["split"]
-    if loader is None:
+    if loader is None and cfg["experiment"]["dataset"] == "cicids2017_engelen_wtmc2021":
+        from src.data import engelen                     # R4a-ii (D-024): corrected Friday window
+        df, provenance = engelen.load(root)
+    elif loader is None:
         csv, provenance = ddos.verified_csv(root)
         df = ddos.load(csv)
     else:

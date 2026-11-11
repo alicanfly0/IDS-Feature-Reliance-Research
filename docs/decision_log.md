@@ -944,3 +944,34 @@ one environment; identical rows), the user replied "yes" to the request to appro
   controls).
 - **Fixed:** the same code commit `659c35d` and the frozen Colab environment v1.
 - **Not covered:** sensitivity runs, R4a and the other baselines remain unapproved.
+
+
+## Final research decisions — 2026-11-11 (user, explicit)
+
+- **D-004 APPROVED:** Engelen WTMC2021 is the corrected dataset; CNS2022 is not used in the
+  primary experiment.
+- **D-005 APPROVED WITH SAFEGUARDS:**
+  - column map v1;
+  - DDoS → 1, BENIGN → 0, other labels excluded;
+  - the aligned original recording window. The +5:00 offset is an empirically supported
+    assumption, not a confirmed time-zone correction; validate the window before training.
+  - Proxy closure, train-only preprocessing and duplicate exclusions are recomputed **on the
+    corrected data**, with one common evaluation population verified over all actual
+    model-visible R4a views. The original 63-view record is not reused.
+- **D-024 APPROVED:** the 70-fit R4a-ii primary design: full model, groups A, B and U at seeds 0–9,
+  plus 10 random controls each. R4a-i is a descriptive check only. Class-conditional metrics are
+  reported, and the cross-dataset comparison is observational. Group C is not authorized unless a
+  requirement is explained first.
+- **D-009 APPROVED:** Fang DCNN + self-attention on the UNSW-NB15 official partitions, with
+  22-feature selection fitted on train only. 5 seeds, each scored on the official and the
+  duplicate-filtered test populations. Inspect the paper and repository first, and document every
+  adaptation.
+- **D-010 APPROVED:** a two-network MES-DNN *adaptation* (NF-UNSW-NB15-v2 plus a fixed, documented
+  NF-ToN-IoT-v2 subsample). Base training, meta training and final testing are strictly
+  separated. Random vs duplicate-aware evaluation. No claim of faithful five-network
+  reproduction or of unseen-network generalization.
+- **Data permissions (D-015 Amendment 2):**
+  - download NF-ToN-IoT-v2 from its verified official source;
+  - upload the Engelen WTMC2021 `dataset.zip` to the private Drive folder for Colab Free.
+  - Neither dataset may be made public or shared; no paid compute.
+- **Phase IV:** 14 mandatory sections, in the assignment's order.

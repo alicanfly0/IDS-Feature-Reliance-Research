@@ -168,13 +168,19 @@ def run(cfg: dict, device: str, storage: Path, allow_code_change: bool = False, 
     log = Logger(run_dir / "log.txt")
     snap = env.snapshot(seed=model_seed, dataset_id=cfg["experiment"]["dataset"])
     identity = {"run_id": run_id, "config_hash": chash, "device": device, "git_commit": snap["git"]["commit"],
-                "dataset_sha256": snap["dataset"]["sha256"]}
+                "dataset_sha256": snap["dataset"]["sha256"],
+                # Milestone 3B-1: training-relevant environment (Python minor, platform, device, GPU, CUDA,
+                # numpy/pandas/scipy/scikit-learn/torch/xgboost). A run is never resumed in another one.
+                "environment_fingerprint": env.fingerprint(snap), "environment": env.result_relevant(snap)}
     id_file = run_dir / "identity.json"
     if id_file.is_file():
         old = _read_json(id_file)
         for key in ("config_hash", "device", "dataset_sha256"):
             if old[key] != identity[key]:
                 raise RuntimeError(f"cannot resume {run_id}: {key} changed")
+        if "environment_fingerprint" in old and old["environment_fingerprint"] != identity["environment_fingerprint"]:
+            raise RuntimeError(f"cannot resume {run_id}: training-relevant environment changed "
+                               f"{old.get('environment')} -> {identity['environment']}")
         if old["git_commit"] != identity["git_commit"] and not allow_code_change:
             raise RuntimeError(f"cannot resume {run_id}: code commit changed {old['git_commit']} -> "
                                f"{identity['git_commit']} (pass --allow-code-change to accept and record it)")

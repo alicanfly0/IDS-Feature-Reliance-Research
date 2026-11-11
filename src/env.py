@@ -25,7 +25,13 @@ import numpy as np
 
 from src.data.manifest import ROOT, load_manifest
 
-PACKAGES = ("numpy", "pandas", "scikit-learn", "PyYAML", "pytest", "torch", "xgboost", "lightgbm", "shap")
+PACKAGES = ("numpy", "pandas", "scipy", "scikit-learn", "PyYAML", "pytest", "torch", "xgboost", "lightgbm",
+            "shap", "numba", "llvmlite", "matplotlib")
+
+# Fields that can change a TRAINED MODEL or its predictions (Milestone 3B-1). Two runs are comparable only
+# if these are identical. SHAP/numba/llvmlite/matplotlib matter only for explanation stages; pytest,
+# PyYAML, lightgbm (unused by AE-XGBoost), timestamps, RAM, CPU model and driver build are metadata.
+RESULT_RELEVANT_PACKAGES = ("numpy", "pandas", "scipy", "scikit-learn", "torch", "xgboost")
 
 
 def _torch():
@@ -114,6 +120,10 @@ def _gpu() -> dict:
     if torch is not None:
         info["torch_cuda_available"] = torch.cuda.is_available()
         info["torch_cuda_version"] = torch.version.cuda
+        try:
+            info["cudnn_version"] = torch.backends.cudnn.version() if torch.cuda.is_available() else None
+        except Exception:  # noqa: BLE001 - optional fact
+            info["cudnn_version"] = None
         for i in range(torch.cuda.device_count()):
             props = torch.cuda.get_device_properties(i)
             info["devices"].append({"name": props.name, "memory_bytes": props.total_memory})
@@ -184,6 +194,28 @@ def snapshot(seed: int | None = None, dataset_id: str | None = None) -> dict:
         "seed": seed,
         "dataset": {"id": dataset_id, "sha256": dataset_hashes(dataset_id)} if dataset_id else None,
     }
+
+
+def result_relevant(snap: dict) -> dict:
+    """The part of a snapshot that can change trained models or predictions (see RESULT_RELEVANT_PACKAGES)."""
+    gpu = snap.get("gpu") or {}
+    pkgs = snap.get("packages") or {}
+    python = snap.get("python") or ""
+    return {
+        "python": ".".join(python.split(".")[:2]),
+        "platform": "colab" if snap.get("in_colab") else "local",
+        "device": snap.get("device"),
+        "gpu_names": sorted(d.get("name") for d in gpu.get("devices") or []) if snap.get("device") == "cuda" else [],
+        "torch_cuda_version": gpu.get("torch_cuda_version") if snap.get("device") == "cuda" else None,
+        "cudnn_version": gpu.get("cudnn_version") if snap.get("device") == "cuda" else None,
+        "packages": {k: pkgs.get(k) for k in RESULT_RELEVANT_PACKAGES},
+    }
+
+
+def fingerprint(snap: dict) -> str:
+    """SHA-256 of `result_relevant(snap)`; equal fingerprints = same training-relevant environment."""
+    import hashlib
+    return hashlib.sha256(json.dumps(result_relevant(snap), sort_keys=True).encode()).hexdigest()
 
 
 def main(argv: list[str] | None = None) -> int:

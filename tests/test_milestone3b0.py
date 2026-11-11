@@ -139,10 +139,23 @@ def test_run_requires_recorded_approval(capsys):
 
 # ------------------------------------------------------------------ aggregation
 
+def _write_provenance(d, device=None):
+    """Identity + environment records with consistent provenance (3B-1), from this machine's snapshot."""
+    from src import env
+    snap = env.snapshot()
+    snap["dataset"] = {"id": "cicids2017_original", "sha256": {"MachineLearningCSV.zip": "c3f2"}}
+    ident = {"run_id": d.name, "config_hash": "x", "device": device or snap["device"], "git_commit": snap["git"]["commit"],
+             "dataset_sha256": snap["dataset"]["sha256"], "environment_fingerprint": env.fingerprint(snap),
+             "environment": env.result_relevant(snap)}
+    (d / "identity.json").write_text(json.dumps(ident))
+    (d / "environment-20261111T000000.json").write_text(json.dumps(snap))
+
+
 def _fake_run(storage, entry, rows, y, prob):
     d = storage / "runs" / f"{entry['experiment_name']}-seed{entry['model_seed']}-cpu-deadbeef"
     d.mkdir(parents=True)
     (d / "DONE").write_text("{}")
+    _write_provenance(d)
     pred = pd.DataFrame({"source_row": rows, "y_true": y, "prob_ddos": prob, "y_pred": (prob >= 0.5).astype(int)})
     with gzip.open(d / "predictions_test.csv.gz", "wt") as f:
         pred.to_csv(f, index=False)
@@ -231,8 +244,9 @@ def _fake_matrix_run(tmp_path, entry):
     cfg = ae_xgb.load_experiment(ROOT / entry["config"])
     d = tmp_path / "runs" / f"{entry['experiment_name']}-seed{entry['model_seed']}-cpu-{ae_xgb.config_hash(cfg)[:8]}"
     (d / "checkpoints").mkdir(parents=True)
-    for a in ("DONE", "identity.json", "checkpoints/ae_best.pt", "xgb_model.json"):
+    for a in ("DONE", "checkpoints/ae_best.pt", "xgb_model.json"):
         (d / a).write_text("{}")
+    _write_provenance(d)
     (d / "effective_config.json").write_text(json.dumps(cfg, default=str))
     matrix = mx.load_matrix()
     pop = json.loads((ROOT / matrix["population_file"]).read_text())
@@ -300,3 +314,25 @@ def test_runner_equivalent_inference_reproduces_saved_predictions():
     assert sens["threshold_crossings"] == 0 and sens["max_abs_margin_diff"] < 1e-4
     rec = json.loads((ROOT / "results/protocol/milestone3b/inference_consistency_v1.json").read_text())
     assert rec["results"][0]["bitwise_equal_prob_vs_saved"] and all(r["threshold_crossings_vs_saved"] == 0 for r in rec["results"])
+
+
+def test_aggregate_refuses_mixed_environments_before_any_metric(tmp_path):
+    """3B-1: aggregation stops on an environment mismatch before computing comparisons."""
+    rows, y = np.array([3, 7, 9, 12]), np.array([0, 1, 1, 0])
+    full = {"id": "r1_full_s0", "kind": "full", "experiment_name": "ae3b_r1_full", "model_seed": 0}
+    grp = {"id": "r1_A_s0", "kind": "group", "experiment_name": "ae3b_r1_A", "model_seed": 0}
+    matrix = {"n_entries": 2, "entries": [full, grp]}
+    pop = {"family_common_model_visible": {"test_kept_source_rows_sha256": rows_sha256(rows)}}
+    _fake_run(tmp_path, full, rows, y, np.array([0.1, 0.9, 0.8, 0.2]))
+    _fake_run(tmp_path, grp, rows, y, np.array([0.6, 0.9, 0.3, 0.2]))
+    assert agg.aggregate(tmp_path, matrix, pop, check_config=False)["environment"]["n_runs"] == 2
+    d = next((tmp_path / "runs").glob("ae3b_r1_A-*"))
+    snap = json.loads(next(d.glob("environment-*.json")).read_text())
+    snap["packages"]["torch"] = "0.0.1"
+    from src import env
+    ident = json.loads((d / "identity.json").read_text())
+    ident.update(environment_fingerprint=env.fingerprint(snap), environment=env.result_relevant(snap))
+    (d / "identity.json").write_text(json.dumps(ident))
+    next(d.glob("environment-*.json")).write_text(json.dumps(snap))
+    with pytest.raises(RuntimeError, match="incompatible runs"):
+        agg.aggregate(tmp_path, matrix, pop, check_config=False)

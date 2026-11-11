@@ -56,7 +56,78 @@ def _test_predictions(run_dir: Path) -> pd.DataFrame:
         return pd.read_csv(f)
 
 
-def aggregate(storage: Path, matrix: dict, population: dict, root: Path = ROOT, check_config: bool = True) -> dict:
+METADATA_FIELDS = ("utc_time", "os", "cpu", "cpu_count", "ram_bytes", "machine")
+
+
+def environment_record(run_dir: Path) -> dict:
+    """Training-relevant provenance of one run, verified against its own records (fails closed)."""
+    from src import env
+    run_dir = Path(run_dir)
+    ident_path = run_dir / "identity.json"
+    envs = sorted(run_dir.glob("environment-*.json"))
+    if not ident_path.is_file() or not envs:
+        raise RuntimeError(f"{run_dir.name}: missing identity or environment records")
+    ident = json.loads(ident_path.read_text(encoding="utf-8"))
+    for key in ("environment_fingerprint", "environment", "git_commit", "dataset_sha256", "device"):
+        if key not in ident:
+            raise RuntimeError(f"{run_dir.name}: identity lacks '{key}' (missing provenance)")
+    if ident["environment_fingerprint"] != _fp(ident["environment"]):
+        raise RuntimeError(f"{run_dir.name}: identity environment does not match its fingerprint (tampered)")
+    if ident.get("resumed_from_commit") not in (None, ident["git_commit"]):
+        raise RuntimeError(f"{run_dir.name}: resumed under a different code commit")
+    meta = {}
+    for f in envs:
+        snap = json.loads(f.read_text(encoding="utf-8"))
+        if env.fingerprint(snap) != ident["environment_fingerprint"]:
+            raise RuntimeError(f"{run_dir.name}: {f.name} differs from the run's training environment "
+                               f"({env.result_relevant(snap)} vs {ident['environment']})")
+        if (snap.get("git") or {}).get("commit") != ident["git_commit"]:
+            raise RuntimeError(f"{run_dir.name}: {f.name} commit differs from identity")
+        if (snap.get("dataset") or {}).get("sha256") != ident["dataset_sha256"]:
+            raise RuntimeError(f"{run_dir.name}: {f.name} dataset hashes differ from identity")
+        meta[f.name] = {k: snap.get(k) for k in METADATA_FIELDS}
+        meta[f.name]["nvidia_smi"] = (snap.get("gpu") or {}).get("nvidia_smi")
+    if ident["environment"]["device"] != ident["device"]:
+        raise RuntimeError(f"{run_dir.name}: trained on {ident['device']} but the environment reports "
+                           f"{ident['environment']['device']}")
+    return {"fingerprint": ident["environment_fingerprint"], "environment": ident["environment"],
+            "git_commit": ident["git_commit"], "dataset_sha256": ident["dataset_sha256"],
+            "device": ident["device"], "metadata": meta}
+
+
+def _fp(relevant: dict) -> str:
+    import hashlib
+    return hashlib.sha256(json.dumps(relevant, sort_keys=True).encode()).hexdigest()
+
+
+def check_compatible(records: dict[str, dict]) -> dict:
+    """All runs must share one training environment, code commit, dataset and device."""
+    if not records:
+        return {"n_runs": 0}
+    problems = []
+    for key in ("fingerprint", "git_commit", "dataset_sha256", "device"):
+        groups: dict[str, list[str]] = {}
+        for rid, r in sorted(records.items()):
+            groups.setdefault(json.dumps(r[key], sort_keys=True), []).append(rid)
+        if len(groups) <= 1:
+            continue
+        if key == "fingerprint":                     # show the differing environments, not just hashes
+            shown = [f"{records[ids[0]]['environment']} ({len(ids)} runs, e.g. {ids[0]})" for ids in groups.values()]
+            problems.append("training environment differs: " + " vs ".join(shown))
+        else:
+            problems.append(f"{key} differs: " + " vs ".join(f"{v} ({len(ids)} runs)" for v, ids in groups.items()))
+    if problems:
+        raise RuntimeError("incompatible runs, refusing to compare: " + " | ".join(problems))
+    first = next(iter(sorted(records.items())))[1]
+    drivers = sorted({json.dumps(m.get("nvidia_smi")) for r in records.values() for m in r["metadata"].values()})
+    return {"n_runs": len(records), "environment": first["environment"], "fingerprint": first["fingerprint"],
+            "git_commit": first["git_commit"], "device": first["device"],
+            "metadata_variation": {"nvidia_smi_values": [json.loads(d) for d in drivers],
+                                   "note": "metadata (timestamps, RAM, CPU, driver build) is reported, not required to match"}}
+
+
+def aggregate(storage: Path, matrix: dict, population: dict, root: Path = ROOT, check_config: bool = True,
+              check_environment: bool = True) -> dict:
     pop = population["family_common_model_visible"]
     runs, reference = {}, None
     for e in matrix["entries"]:
@@ -72,9 +143,12 @@ def aggregate(storage: Path, matrix: dict, population: dict, root: Path = ROOT, 
                 raise RuntimeError(f"{e['id']}: test rows are not the family-common population")
         elif not pred[["source_row", "y_true"]].equals(reference):
             raise RuntimeError(f"{e['id']}: test rows or labels differ from the other runs")
-        runs[e["id"]] = {"entry": e, "run": run_dir.name, "pred": pred}
+        runs[e["id"]] = {"entry": e, "run": run_dir.name, "pred": pred, "dir": run_dir}
+    # Milestone 3B-1: refuse to compare runs from different training environments, BEFORE any metric.
+    environment = (check_compatible({rid: environment_record(r["dir"]) for rid, r in runs.items()})
+                   if check_environment else {"checked": False})
     out = {"population_test_sha256": pop["test_kept_source_rows_sha256"], "n_completed": len(runs),
-           "n_matrix": matrix["n_entries"], "runs": {}, "paired_vs_full": {}}
+           "n_matrix": matrix["n_entries"], "environment": environment, "runs": {}, "paired_vs_full": {}}
     for rid in sorted(runs):
         r = runs[rid]
         out["runs"][rid] = {"run": r["run"], **endpoint_metrics(r["pred"]["y_true"], r["pred"]["prob_ddos"])}

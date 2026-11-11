@@ -136,6 +136,8 @@ def check_run(run_dir: Path, entry: dict, matrix: dict, root: Path = ROOT) -> di
     if missing:
         raise RuntimeError(f"{run_dir.name}: missing saved artifacts {missing}")
     _check_config(run_dir, entry, root)                                     # config hash = committed entry
+    from src.evaluation.aggregate_3b import environment_record
+    environment_record(run_dir)                                             # 3B-1: environment provenance intact
     record = json.loads((run_dir / "run_record.json").read_text(encoding="utf-8"))
     if record.get("split_fingerprint") != matrix["split_fingerprint"]:
         raise RuntimeError(f"{run_dir.name}: trained on a different split")

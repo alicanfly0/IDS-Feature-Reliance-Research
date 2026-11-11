@@ -74,3 +74,42 @@ def apply_population(prep, record: dict, view_cols: list[str]):
               "own_view_twins": {"val": own["val_excluded"], "test": own["test_excluded"]},
               "test_kept_source_rows_sha256": pop["test_kept_source_rows_sha256"]}
     return reduced, report
+
+
+def verify(root: Path | None = None) -> dict:
+    """Recompute the pinned split and the r1 family-common population from the data (no model)."""
+    from src.config import ROOT, load_config
+    from src.data import ddos
+    from src.experiments.matrix_3b import BASE_CONFIG, POPULATION_FILE
+    root = Path(root) if root is not None else ROOT
+    cfg = load_config(root / BASE_CONFIG)
+    csv, provenance = ddos.verified_csv(root)
+    prep = ddos.prepare(ddos.load(csv), cfg["data"]["label_map"], tuple(cfg["experiment"]["split"]["fractions"]),
+                        cfg["experiment"]["split"]["seed"], tuple(cfg["data"]["nonnegative_cols"]))
+    expected = cfg["experiment"]["split"]["expected_fingerprint"]
+    record_path = root / POPULATION_FILE
+    record = load_population(record_path, lf_sha256(record_path))
+    split, rep = apply_population(prep, record, prep.feature_cols)          # full view; refuses on any mismatch
+    rows = prep.frame.index.to_numpy()
+    out = {"split_fingerprint": prep.split.fingerprint(), "expected_split_fingerprint": expected,
+           "split_matches": prep.split.fingerprint() == expected, "population_record": POPULATION_FILE,
+           "population_record_sha256_lf": lf_sha256(record_path), **rep,
+           "val_kept_matches": rows_sha256(rows[split.val]) == record["family_common_model_visible"]["val_kept_source_rows_sha256"],
+           "test_kept_matches": rows_sha256(rows[split.test]) == record["family_common_model_visible"]["test_kept_source_rows_sha256"],
+           "data_provenance": provenance}
+    if not (out["split_matches"] and out["val_kept_matches"] and out["test_kept_matches"]):
+        raise RuntimeError(f"split or population does not reproduce: {out}")
+    return out
+
+
+if __name__ == "__main__":
+    import argparse
+    p = argparse.ArgumentParser(description="Verify the pinned split and the family-common population (no model).")
+    p.add_argument("command", choices=("verify",))
+    p.add_argument("--json", type=Path)
+    a = p.parse_args()
+    result = verify()
+    if a.json:
+        a.json.parent.mkdir(parents=True, exist_ok=True)
+        a.json.write_text(json.dumps(result, indent=1) + "\n", encoding="utf-8")
+    print(f"split {result['split_fingerprint'][:16]} OK; family-common val {result['val_kept']} / test {result['test_kept']} OK")

@@ -96,7 +96,7 @@ if USE_GITHUB:
     os.chdir(CODE_DIR)
     print(subprocess.run(["git", "log", "-1", "--oneline"], capture_output=True, text=True).stdout)
 """),
-    md("## 3. Dependencies and tests on this runtime\nUses Colab's preinstalled stack; installs only what is missing. Tests must pass before anything else (real-data tests skip until the data is present)."),
+    md("## 3. Environment, dependencies and tests on this runtime\nInstalls only what is missing, then checks the runtime against the frozen spec `configs/environments/colab_env_v1.yaml` (Milestone 3B-1). Python, the torch/CUDA stack and the GPU model cannot be changed by pip: a mismatch stops the notebook. If only pip packages differ, the exact versions are pinned and you must **restart the runtime (Runtime → Restart session) and run all again**. Tests must pass before anything else (real-data tests skip until the data is present)."),
     code("""
 import importlib.metadata, importlib.util, subprocess, sys
 # Decide what to install WITHOUT importing anything (an import would fail if a package is missing).
@@ -107,12 +107,18 @@ if "xgboost>=2.0" not in missing and int(importlib.metadata.version("xgboost").s
     missing.append("xgboost>=2.0")   # device="cuda" API needs XGBoost 2+
 if missing:
     subprocess.run([sys.executable, "-m", "pip", "install", "-q", *missing], check=True)
-import xgboost   # only after installation
+os.makedirs(f"{STORAGE}/preflight", exist_ok=True)
+check = subprocess.run([sys.executable, "-m", "src.colab_env", "install", "--json", f"{STORAGE}/preflight/env_check.json"])
+if check.returncode == 4:
+    raise RuntimeError("Pinned package versions were installed. Runtime -> Restart session, then Run all again.")
+if check.returncode != 0:
+    raise RuntimeError("This runtime is INCOMPATIBLE with the frozen environment spec (see preflight/env_check.json). "
+                     "Do not run experiments here.")
+import xgboost   # only after installation and the environment check
 print("xgboost", xgboost.__version__, "| CUDA build:", xgboost.build_info().get("USE_CUDA"))
 import numba, shap
-print("numba", numba.__version__, "| shap", shap.__version__, "(Colab versions; the laptop pins shap 0.49.1)")
-!mkdir -p "{STORAGE}/preflight"
-!python -m pytest -q -rs 2>&1 | tee "{STORAGE}/preflight/pytest_before_data.txt"
+print("numba", numba.__version__, "| shap", shap.__version__)
+!python -m pytest -q -ra 2>&1 | tee "{STORAGE}/preflight/pytest_before_data.txt"
 !python -m src.env --dataset cicids2017_original --json "{STORAGE}/preflight/environment.json"
 """),
     md("## 4. Data: copy ONE archive and verify it\nOnly `MachineLearningCSV.zip` (235,102,953 bytes) is needed. Verified against the manifest's SHA-256 and CIC's MD5 before use; the runner then extracts only the Friday DDoS file and checks its CRC."),
@@ -120,7 +126,8 @@ print("numba", numba.__version__, "| shap", shap.__version__, "(Colab versions; 
 !mkdir -p data/raw/cicids2017_original
 !cp "{ARCHIVE}" data/raw/cicids2017_original/
 !python -m src.data.acquire verify cicids2017_original --file MachineLearningCSV.zip 2>&1 | tee "{STORAGE}/preflight/dataset_verify.txt"
-!python -m pytest -q -rs 2>&1 | tee "{STORAGE}/preflight/pytest_with_data.txt"
+!python -m src.experiments.population verify --json "{STORAGE}/preflight/split_population.json"
+!python -m pytest -q -ra 2>&1 | tee "{STORAGE}/preflight/pytest_with_data.txt"
 """),
     md("## 5. GPU timing benchmark (about a minute): DISABLED by default\nBounded computational work: it trains **temporary** model components (60 autoencoder batches and 50 XGBoost rounds on the real training partition) only to measure speed, then discards them. It saves no model and evaluates nothing, and it is not an experiment run. Because it trains temporary components, it needs its own explicit authorization. It records timing (`cnet-runs/benchmarks/`) and peak memory (`cnet-runs/preflight/benchmark_resources.json`)."),
     code("""
@@ -168,7 +175,7 @@ else:
 """),
     md("## 8. Milestone 3B (protocol r1)\nThe dry run shows the 110-fit matrix, batch status and estimates and trains nothing. Training ONE batch is disabled by default: it needs the approvals (D-007, D-012, D-020 r1, D-021, D-023) recorded in the decision log, the batch number, and the confirmation phrase. `--confirm-approved` is only the operator's confirmation; it is not proof that the approvals exist."),
     code("""
-!python -m src.experiments.matrix_3b plan --storage "{STORAGE}"
+!python -m src.experiments.matrix_3b plan --storage "{STORAGE}" 2>&1 | tee "{STORAGE}/preflight/dry_run.txt"
 AUTHORIZE_3B_BATCH = ""                 # type exactly: I confirm this training batch is approved
 BATCH = None                            # e.g. 0, after approval only
 if AUTHORIZE_3B_BATCH == "I confirm this training batch is approved" and isinstance(BATCH, int):
@@ -176,6 +183,15 @@ if AUTHORIZE_3B_BATCH == "I confirm this training batch is approved" and isinsta
                     "--device", "cuda", "--confirm-approved"], check=True)
 else:
     print("Training disabled: no batch was trained in this cell.")
+"""),
+    md("## 9. Preflight manifest\nWrites `cnet-runs/preflight/MANIFEST.json`: the commit, the time and the SHA-256 of every preflight file produced by **this** session. Download the whole `preflight` folder for review."),
+    code("""
+import hashlib, json, glob, datetime
+files = sorted(f for f in glob.glob(f"{STORAGE}/preflight/*") if not f.endswith("MANIFEST.json"))
+manifest = {"commit": EXPECTED_COMMIT, "utc_time": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+            "files": {os.path.basename(f): hashlib.sha256(open(f, "rb").read()).hexdigest() for f in files}}
+json.dump(manifest, open(f"{STORAGE}/preflight/MANIFEST.json", "w"), indent=1)
+print(json.dumps(manifest, indent=1))
 """),
 ]
 

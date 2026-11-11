@@ -258,3 +258,28 @@ On this machine it prints Python 3.11.9, `Windows-10-10.0.26200-SP0` (build 2620
 ## First Colab session checklist
 
 Superseded by **First real run — exact steps** at the top of this document.
+
+---
+
+## Session steps from Milestone 3B-1 (verification and preflight)
+
+1. **Build the bundle.** On the laptop, build the bundle for the approved commit H:
+   `git archive --format=zip -o cnet_code_<H[:12]>.zip H`. Upload it to `MyDrive/cnet-data/`
+   (the dataset zip is already there from session 1).
+2. **Open the notebook** `notebooks/colab_runner.ipynb` in Colab and select the **T4 GPU** runtime.
+   The frozen spec requires a Tesla T4.
+3. **Fill in cell 1:** `D015_AMENDMENT_1_RECORDED = True` and `EXPECTED_COMMIT = "H"`. Leave every
+   `AUTHORIZE_...` phrase empty. Then **Runtime → Run all**, and allow Drive access.
+4. **Section 3** checks the runtime against `configs/environments/colab_env_v1.yaml`:
+   - if it reports **pinned packages installed**, do *Runtime → Restart session* and *Run all* again;
+   - if it reports **incompatible** (Python, torch/CUDA, GPU model), stop: no experiments may run in
+     that runtime. A new spec version needs a decision.
+5. **Records.** The session writes these to `MyDrive/cnet-runs/preflight/`:
+   `env_check.json`, `environment.json`, `pytest_before_data.txt`, `dataset_verify.txt`,
+   `split_population.json`, `pytest_with_data.txt`, `dry_run.txt`, and `MANIFEST.json` (SHA-256 of
+   each). It also writes `benchmark_resources.json`, but only if the benchmark phrase was typed.
+6. **Download** the `preflight` folder and give it to Claude for review. Never substitute locally
+   regenerated output for Colab output.
+
+Runs trained in different environments cannot be compared: the runner refuses to resume a run in a
+changed environment, and aggregation refuses mixed environments before computing any metric.

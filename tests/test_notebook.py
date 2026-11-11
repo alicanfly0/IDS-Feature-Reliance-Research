@@ -108,6 +108,14 @@ def test_benchmark_is_described_as_bounded_training_guarded_and_dry_run_stays_ac
 
 def test_preflight_records_are_saved_after_drive_is_mounted():
     assert ALL.index("drive.mount") < ALL.index('{STORAGE}/preflight')
-    for name in ("pytest_before_data.txt", "environment.json", "dataset_verify.txt", "pytest_with_data.txt",
-                 "benchmark_resources.json"):
-        assert f"preflight/{name}" in ALL
+    for name in ("env_check.json", "pytest_before_data.txt", "environment.json", "dataset_verify.txt",
+                 "split_population.json", "pytest_with_data.txt", "dry_run.txt", "benchmark_resources.json", "MANIFEST.json"):
+        assert f"preflight/{name}" in ALL, name
+
+
+def test_environment_is_checked_against_the_spec_before_tests_and_stops_clearly():
+    env_check = ALL.index('"src.colab_env", "install"')
+    assert env_check < ALL.index("import xgboost") < ALL.index("pytest -q -ra")
+    assert "returncode == 4" in ALL and "Restart session" in ALL
+    assert ALL.count("raise RuntimeError(") >= 2 and "SystemExit" not in ALL     # a real error halts "Run all"
+    assert "pip install" not in ALL.split('"src.colab_env", "install"')[1].split("import xgboost")[0]

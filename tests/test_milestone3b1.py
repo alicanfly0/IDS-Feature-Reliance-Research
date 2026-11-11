@@ -196,3 +196,13 @@ def test_runner_refuses_to_resume_in_a_different_environment(tmp_path, monkeypat
         **real(*a, **k)["packages"], "xgboost": "0.0.0"}})
     with pytest.raises(RuntimeError, match="training-relevant environment changed"):
         ae_xgb.run(cfg, "cpu", tmp_path, loader=_loader)
+
+
+@pytest.mark.skipif(not (ROOT / "data/raw/cicids2017_original/MachineLearningCSV.zip").is_file(),
+                    reason="CICIDS2017 archive not available")
+def test_split_and_population_verify_reproduces_records():
+    from src.experiments.population import verify
+    out = verify()
+    assert out["split_matches"] and out["val_kept_matches"] and out["test_kept_matches"]
+    assert (out["val_kept"], out["test_kept"]) == (33134, 33038)
+    assert "path" not in json.dumps(out["data_provenance"]).lower()             # names only, no local paths

@@ -1,0 +1,13 @@
+....................................s............s...................... [ 40%]
+...........s..s......ss.................s............................... [ 80%]
+............s......................                                      [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_audit.py:218: local baseline run not present
+SKIPPED [1] tests/test_d018_records.py:52: local run folders not present
+SKIPPED [1] tests/test_milestone2b.py:43: requires Git history; not available in a git-archive bundle
+SKIPPED [1] tests/test_milestone2b.py:81: six local arrays unavailable
+SKIPPED [1] tests/test_milestone2b.py:157: six local arrays unavailable
+SKIPPED [1] tests/test_milestone2b.py:173: local original runs unavailable
+SKIPPED [1] tests/test_milestone3b0.py:302: baseline run or data unavailable
+SKIPPED [1] tests/test_real_data_smoke.py:41: unsw_nb15 files not downloaded
+171 passed, 8 skipped in 50.29s

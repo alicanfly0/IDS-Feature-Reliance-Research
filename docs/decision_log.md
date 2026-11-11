@@ -934,3 +934,13 @@ for the batch 0 review.
 - Upper bound per fit 3.7 min.
 
 **Not approved:** D-004, D-005, D-024 (R4a) and any Engelen upload.
+
+### Batches 1–10 approved — 2026-11-11 (user)
+
+After the batch 0 review (`results/colab results/batch0/SUMMARY.md`: 10 seeds; mean 5.8 errors;
+one environment; identical rows), the user replied "yes" to the request to approve batches 1–10.
+
+- **Scope:** the remaining 100 mandatory design-D fits (groups A, B, C, D, U and their random
+  controls).
+- **Fixed:** the same code commit `659c35d` and the frozen Colab environment v1.
+- **Not covered:** sensitivity runs, R4a and the other baselines remain unapproved.

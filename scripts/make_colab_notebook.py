@@ -25,8 +25,10 @@ Plan and rationale: `docs/COLAB_EXECUTION_PLAN.md`.
 **Authorization boundary (D-015):** no data may reach Google until **D-015 Amendment 1** is recorded in
 `docs/decision_log.md`. Step 1 refuses to continue before you set the switch.
 
-Run the cells top to bottom. After a disconnect, run them again: the experiment resumes from its last
-checkpoint, and a finished run is never recomputed or overwritten.
+Running the cells top to bottom performs **verification, a bounded timing benchmark and a dry run only**.
+It never trains a full model: every training action (sections 6 and 8) is disabled by default and runs
+only after you type the exact confirmation phrase into that cell. After a disconnect, an authorized run
+resumes from its last checkpoint; a finished run is never recomputed or overwritten.
 """),
     md("## 0. Runtime\nRuntime → Change runtime type → **T4 GPU** (or any GPU). Free tier may not assign one."),
     code("""
@@ -118,32 +120,46 @@ print("numba", numba.__version__, "| shap", shap.__version__, "(Colab versions; 
 !python -m src.data.acquire verify cicids2017_original --file MachineLearningCSV.zip
 !python -m pytest -q tests/test_real_data_smoke.py -k friday
 """),
-    md("## 5. GPU timing benchmark (about a minute)\nMeasures AE batches and XGBoost rounds on the real training partition and projects the full run. No training."),
+    md("## 5. GPU timing benchmark (about a minute)\nBounded computational work: it trains **temporary** model components (60 autoencoder batches and 50 XGBoost rounds on the real training partition) only to measure speed, then discards them. It saves no model and evaluates nothing, and it is not an experiment run."),
     code("""
 !python -m src.experiments.ae_xgb --config configs/experiments/ae_xgb_d008_trackB.yaml --device cuda --storage "{STORAGE}" --benchmark
 """),
-    md("## 6. The run (one model seed, leakage-resistant track)\n`--device cuda` stops immediately if no GPU is attached instead of silently running on CPU. Re-run this cell after a disconnect to resume."),
+    md("## 6. Legacy single-baseline run: DISABLED by default\nTrains one full model. Leave the phrase empty unless this exact run has been approved. `--device cuda` stops immediately if no GPU is attached. After a disconnect, re-running an authorized cell resumes it."),
     code("""
-!python -m src.experiments.ae_xgb --config configs/experiments/ae_xgb_d008_trackB.yaml --device cuda --storage "{STORAGE}"
+AUTHORIZE_LEGACY_BASELINE_RUN = ""      # type exactly: I confirm this training run is approved
+if AUTHORIZE_LEGACY_BASELINE_RUN == "I confirm this training run is approved":
+    subprocess.run([sys.executable, "-m", "src.experiments.ae_xgb", "--config", "configs/experiments/ae_xgb_d008_trackB.yaml",
+                    "--device", "cuda", "--storage", STORAGE], check=True)
+else:
+    print("Training disabled: no model was trained in this cell.")
 """),
     md("## 7. Results\nOur measured results (not author-reported). Bring the run folder back to the laptop for review: download `cnet-runs/runs/<run_id>/` into `results/runs/`."),
     code("""
 import glob, json
-run_dir = sorted(glob.glob(f"{STORAGE}/runs/ae_xgb_d008_trackB-seed0-cuda-*"))[-1]
-print(run_dir)
-metrics = json.load(open(f"{run_dir}/metrics.json"))
-for part in ("val", "test"):
-    m = metrics[part]
-    print(part, {k: round(m[k], 6) for k in ("accuracy", "precision", "recall", "f1", "macro_f1", "auroc", "mcc")},
-          m["confusion_matrix"], m["class_counts"])
-record = json.load(open(f"{run_dir}/run_record.json"))
-print(json.dumps({k: record[k] for k in ("input_dim", "autoencoder", "augmentation", "xgboost", "timings")}, indent=1))
+done = sorted(d for d in glob.glob(f"{STORAGE}/runs/ae_xgb_d008_trackB-seed0-cuda-*") if os.path.isfile(f"{d}/DONE"))
+if not done:
+    print("No completed legacy run (expected unless section 6 was authorized).")
+else:
+    run_dir = done[-1]
+    print(run_dir)
+    metrics = json.load(open(f"{run_dir}/metrics.json"))
+    for part in ("val", "test"):
+        m = metrics[part]
+        print(part, {k: round(m[k], 6) for k in ("accuracy", "precision", "recall", "f1", "macro_f1", "auroc", "mcc")},
+              m["confusion_matrix"], m["class_counts"])
+    record = json.load(open(f"{run_dir}/run_record.json"))
+    print(json.dumps({k: record[k] for k in ("input_dim", "autoencoder", "augmentation", "xgboost", "timings")}, indent=1))
 """),
-    md("## 8. Milestone 3B (protocol r1): dry run only\nShows the 110-fit matrix, batch status and estimates; trains nothing. Training a batch needs the recorded approvals (D-007, D-012, D-020 r1, D-021, D-023) and is started explicitly with `run --batch K --confirm-approved`; every run resumes from its checkpoints after a disconnect and never overwrites a finished run."),
+    md("## 8. Milestone 3B (protocol r1)\nThe dry run shows the 110-fit matrix, batch status and estimates and trains nothing. Training ONE batch is disabled by default: it needs the approvals (D-007, D-012, D-020 r1, D-021, D-023) recorded in the decision log, the batch number, and the confirmation phrase. `--confirm-approved` is only the operator's confirmation; it is not proof that the approvals exist."),
     code("""
 !python -m src.experiments.matrix_3b plan --storage "{STORAGE}"
-# After approval only, one batch at a time:
-# !python -m src.experiments.matrix_3b run --batch 0 --storage "{STORAGE}" --device cuda --confirm-approved
+AUTHORIZE_3B_BATCH = ""                 # type exactly: I confirm this training batch is approved
+BATCH = None                            # e.g. 0, after approval only
+if AUTHORIZE_3B_BATCH == "I confirm this training batch is approved" and isinstance(BATCH, int):
+    subprocess.run([sys.executable, "-m", "src.experiments.matrix_3b", "run", "--batch", str(BATCH), "--storage", STORAGE,
+                    "--device", "cuda", "--confirm-approved"], check=True)
+else:
+    print("Training disabled: no batch was trained in this cell.")
 """),
 ]
 

@@ -1,6 +1,6 @@
 """Deterministic aggregation of completed Milestone 3B runs on the family-common test rows.
 
-    python -m src.evaluation.aggregate_3b --storage DIR [--out results/milestone3b/aggregate.json]
+    python -m src.evaluation.aggregate_3b --storage DIR [--design r4a] [--out results/milestone3b/aggregate.json]
 
 Refuses to aggregate if any completed run was trained from a config other than its committed
 matrix entry, or if the runs' test rows differ in any way (order, set, labels).
@@ -154,7 +154,8 @@ def aggregate(storage: Path, matrix: dict, population: dict, root: Path = ROOT, 
         out["runs"][rid] = {"run": r["run"], **endpoint_metrics(r["pred"]["y_true"], r["pred"]["prob_ddos"])}
     for rid in sorted(runs):
         e = runs[rid]["entry"]
-        full_id = f"r1_full_s{e['model_seed']}"
+        full_id = next((i for i, r in runs.items() if r["entry"]["kind"] == "full"
+                        and r["entry"]["model_seed"] == e["model_seed"]), None)
         if e["kind"] == "full" or full_id not in runs:
             continue
         a, f = runs[rid]["pred"], runs[full_id]["pred"]
@@ -172,8 +173,9 @@ def main(argv=None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--storage", type=Path, required=True)
     p.add_argument("--out", type=Path)
+    p.add_argument("--design", default="r1", help="matrix design: r1 (main) or r4a (R4a-ii)")
     a = p.parse_args(argv)
-    matrix = load_matrix()
+    matrix = load_matrix(design=a.design)
     population = json.loads((ROOT / matrix["population_file"]).read_text(encoding="utf-8"))
     result = aggregate(a.storage, matrix, population)
     text = json.dumps(result, indent=1, sort_keys=True)

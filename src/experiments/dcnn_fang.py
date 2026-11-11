@@ -204,7 +204,20 @@ def train_seed(seed: int, X: np.ndarray, y: np.ndarray, device: str = "cpu", hp:
     from src.models.dcnn import DCNNSA
 
     set_seeds(seed)
+    was_deterministic = torch.are_deterministic_algorithms_enabled()
     torch.use_deterministic_algorithms(True)
+    try:
+        return _train(seed, X, y, device, hp, log)
+    finally:
+        torch.use_deterministic_algorithms(was_deterministic)   # never leak global state (Colab tests)
+
+
+def _train(seed, X, y, device, hp, log):
+    import torch
+    from sklearn.model_selection import train_test_split
+    from sklearn.utils.class_weight import compute_class_weight
+
+    from src.models.dcnn import DCNNSA
     idx = np.arange(len(y))
     fit, val = train_test_split(idx, test_size=hp["val_fraction"], stratify=y, random_state=seed)
     cw = compute_class_weight("balanced", classes=np.array([0, 1]), y=y[fit])

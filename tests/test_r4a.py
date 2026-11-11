@@ -95,3 +95,20 @@ def test_group_module_reproduces_frozen_r1_on_original_data():
     r1 = yaml.safe_load((ROOT / mx.GROUPS_FILE).read_text(encoding="utf-8"))
     assert out["proxy_clusters_multi"] == r1["proxy_clusters_multi"]
     assert all(out["controls"][g]["random"] == r1["controls"][g]["random"] for g in out["controls"])
+
+
+ENGELEN = ROOT / "data/raw/cicids2017_engelen_wtmc2021/dataset.zip"
+
+
+@pytest.mark.skipif(not ENGELEN.is_file(), reason="Engelen dataset not available")
+def test_r4a_i_uses_the_recorded_r4a_test_rows():
+    from src.evaluation.score_r4a_i import r4a_test_rows
+    frame, y = r4a_test_rows()
+    assert len(y) == 22049 and int(y.sum()) == 14168 and "Destination Port" in frame.columns
+
+
+def test_aggregate_pairs_each_run_with_its_own_designs_full_model():
+    from src.evaluation import aggregate_3b
+    src = (ROOT / "src/evaluation/aggregate_3b.py").read_text(encoding="utf-8")
+    assert 'f"r1_full_s' not in src and "--design" in src
+    assert callable(aggregate_3b.aggregate)

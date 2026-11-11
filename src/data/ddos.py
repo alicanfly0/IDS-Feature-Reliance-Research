@@ -53,18 +53,19 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def verified_csv(root: Path = ROOT, archive_entry: dict | None = None) -> tuple[Path, dict]:
-    """Verify the archive (size, sha256, publisher MD5), extract only the DDoS member if needed,
-    and check the CSV against the archive's CRC. Returns (csv path, provenance)."""
+def verified_csv(root: Path = ROOT, archive_entry: dict | None = None, member: str = MEMBER) -> tuple[Path, dict]:
+    """Verify the archive (size, sha256, publisher MD5), extract only the requested member (default:
+    the D-008 Friday DDoS file) if needed, and check the CSV against the archive's CRC.
+    Returns (csv path, provenance)."""
     entry = archive_entry or {f["name"]: f for f in load_manifest()["datasets"][DATASET_ID]["files"]}[ARCHIVE]
     local_dir = root / load_manifest()["datasets"][DATASET_ID]["local_dir"]
     archive = local_dir / ARCHIVE
     problems = check_file(archive, entry)
     if problems:
         raise RuntimeError(f"{archive} failed verification: {problems}")
-    csv = local_dir / "extracted" / MEMBER
+    csv = local_dir / "extracted" / member
     with zipfile.ZipFile(archive) as zf:
-        info = zf.getinfo(MEMBER)
+        info = zf.getinfo(member)
         if not csv.is_file():
             csv.parent.mkdir(parents=True, exist_ok=True)
             tmp = csv.with_name(csv.name + ".part")
@@ -73,7 +74,7 @@ def verified_csv(root: Path = ROOT, archive_entry: dict | None = None) -> tuple[
             tmp.replace(csv)
     if _crc32(csv) != info.CRC:
         raise RuntimeError(f"{csv} does not match its archive member (CRC mismatch); delete it and re-run")
-    return csv, {"archive": ARCHIVE, "archive_sha256": entry["sha256"], "member": MEMBER,
+    return csv, {"archive": ARCHIVE, "archive_sha256": entry["sha256"], "member": member,
                  "member_crc32": f"{info.CRC:08x}", "csv_sha256": _sha256(csv)}
 
 

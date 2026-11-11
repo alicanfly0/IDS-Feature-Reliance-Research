@@ -76,7 +76,9 @@ The randomness of the control draw therefore belongs in the estimand.
 unmeasured.
 
 **Why D.** Ten exchangeable paired units, each with an independent draw and seed, make the
-sign-flip test exact. The smallest p is 2/1024 ≈ 0.002, below the strictest Holm/Bonferroni
+sign-flip test possible. Its exactness holds only under the assumptions stated in
+`docs/MILESTONE_3B0_READINESS.md` §1, and ties at zero reduce the attainable p. The smallest
+p is 2/1024 ≈ 0.002, below the strictest Holm/Bonferroni
 threshold of 0.05/10 = 0.005. A t-interval has df = 9.
 
 D only *extends* the frozen design. Draws 0–4 and seeds 0–4 are r0's; draws 5–9 come from the
@@ -162,8 +164,10 @@ exists.
 
 **Implications:**
 
-- **If A's removal costs more than its controls,** the claim is strengthened: A is less
-  separable feature by feature yet matters more.
+- **The imbalance is a matching limitation in both directions** (corrected in Milestone 3B-0,
+  `docs/MILESTONE_3B0_READINESS.md` §1). Univariate separability is only a proxy, so a larger
+  effect for A than for its controls is **not** automatically stronger evidence. It is reported
+  with the same caveat as any other result.
 - **If A's effect does not exceed its controls,** that is **inconclusive about A**, not evidence
   that A is harmless.
 - Univariate separability also understates multivariate use: flag counts were the top SHAP

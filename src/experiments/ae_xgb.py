@@ -30,6 +30,7 @@ from src.config import ROOT, check_no_leaky_outputs, load_config, make_preproces
 from src.data import ddos
 from src.data.split import Split, content_groups, exclude_eval_twins, load_split, partition_overlap, save_split
 from src.evaluation.metrics import binary_metrics
+from src.experiments.population import apply_population, load_population
 from src.models import augment as aug
 from src.models import autoencoder as ae
 from src.models import xgb as xgbm
@@ -99,6 +100,17 @@ def prepare_data(cfg: dict, storage: Path, log, root: Path = ROOT, loader=None):
     if expected and loader is None and prep.split.fingerprint() != expected:
         raise RuntimeError(f"split fingerprint {prep.split.fingerprint()} != expected {expected}")
     prep.report["split_fingerprint"] = prep.split.fingerprint()
+    population = cfg["run"].get("eval_population")
+    if population and cfg["run"].get("exclude_eval_twins"):
+        raise ValueError("use either run.eval_population (family-common) or run.exclude_eval_twins, not both")
+    if population:
+        # Milestone 3B: identical validation/test rows for every model, from a validated record.
+        drop = cfg["experiment"].get("extra_drop_cols", [])
+        view = [c for c in prep.feature_cols if c not in drop]
+        record = load_population(root / population["record"], population["sha256"])
+        prep.split, prep.report["family_common_population"] = apply_population(prep, record, view)
+        log(f"family-common population: val {prep.report['family_common_population']['val_kept']}, "
+            f"test {prep.report['family_common_population']['test_kept']}")
     if cfg["run"].get("exclude_eval_twins"):
         # Feature-removal runs: same split and training rows, but validation/test rows whose
         # vector duplicates an earlier partition IN THIS MODEL'S INPUT VIEW are not evaluated.

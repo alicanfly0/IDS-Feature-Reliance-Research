@@ -97,7 +97,8 @@ if USE_GITHUB:
     code("""
 import importlib.metadata, importlib.util, subprocess, sys
 # Decide what to install WITHOUT importing anything (an import would fail if a package is missing).
-need = {"xgboost": "xgboost>=2.0", "pytest": "pytest", "yaml": "PyYAML", "sklearn": "scikit-learn", "pandas": "pandas"}
+need = {"xgboost": "xgboost>=2.0", "pytest": "pytest", "yaml": "PyYAML", "sklearn": "scikit-learn", "pandas": "pandas",
+        "numba": "numba", "shap": "shap"}   # shap imports numba; tests/test_audit.py needs both (blocked on the laptop)
 missing = [pkg for mod, pkg in need.items() if importlib.util.find_spec(mod) is None]
 if "xgboost>=2.0" not in missing and int(importlib.metadata.version("xgboost").split(".")[0]) < 2:
     missing.append("xgboost>=2.0")   # device="cuda" API needs XGBoost 2+
@@ -105,6 +106,8 @@ if missing:
     subprocess.run([sys.executable, "-m", "pip", "install", "-q", *missing], check=True)
 import xgboost   # only after installation
 print("xgboost", xgboost.__version__, "| CUDA build:", xgboost.build_info().get("USE_CUDA"))
+import numba, shap
+print("numba", numba.__version__, "| shap", shap.__version__, "(Colab versions; the laptop pins shap 0.49.1)")
 !python -m pytest -q -rs
 !python -m src.env --dataset cicids2017_original
 """),
@@ -135,6 +138,12 @@ for part in ("val", "test"):
           m["confusion_matrix"], m["class_counts"])
 record = json.load(open(f"{run_dir}/run_record.json"))
 print(json.dumps({k: record[k] for k in ("input_dim", "autoencoder", "augmentation", "xgboost", "timings")}, indent=1))
+"""),
+    md("## 8. Milestone 3B (protocol r1): dry run only\nShows the 110-fit matrix, batch status and estimates; trains nothing. Training a batch needs the recorded approvals (D-007, D-012, D-020 r1, D-021, D-023) and is started explicitly with `run --batch K --confirm-approved`; every run resumes from its checkpoints after a disconnect and never overwrites a finished run."),
+    code("""
+!python -m src.experiments.matrix_3b plan --storage "{STORAGE}"
+# After approval only, one batch at a time:
+# !python -m src.experiments.matrix_3b run --batch 0 --storage "{STORAGE}" --device cuda --confirm-approved
 """),
 ]
 

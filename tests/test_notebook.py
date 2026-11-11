@@ -55,7 +55,8 @@ def test_no_token_in_persisted_urls():
 # Milestone 3B-0.1: top-to-bottom execution must never train a full model.
 TRAINING = re.compile(r"src\.experiments\.ae_xgb|matrix_3b\W+run|matrix_3b\", \"run\"")
 PHRASES = {"AUTHORIZE_LEGACY_BASELINE_RUN": "I confirm this training run is approved",
-           "AUTHORIZE_3B_BATCH": "I confirm this training batch is approved"}
+           "AUTHORIZE_3B_BATCH": "I confirm this training batch is approved",
+           "AUTHORIZE_BENCHMARK": "I confirm the bounded benchmark is authorized"}   # benchmark trains temporary components
 
 
 def _training_lines():
@@ -65,7 +66,7 @@ def _training_lines():
         lines = src.splitlines()
         for j, line in enumerate(lines):
             code = line.split("#", 1)[0] if not line.lstrip().startswith("!") else line
-            if not TRAINING.search(code) or "--benchmark" in code:
+            if not TRAINING.search(code):
                 continue
             guard = next((g for g in reversed(lines[:j]) if g.lstrip().startswith("if ")), "")
             guarded = any(f'{flag} == "{phrase}"' in guard for flag, phrase in PHRASES.items())
@@ -96,8 +97,17 @@ def test_guard_detects_an_active_training_line():
         CODE = saved
 
 
-def test_benchmark_is_described_as_bounded_training_and_dry_run_stays_active():
+def test_benchmark_is_described_as_bounded_training_guarded_and_dry_run_stays_active():
     md_text = "".join("".join(c["source"]) for c in NB["cells"] if c["cell_type"] == "markdown")
     assert "trains **temporary** model components" in md_text and "No training." not in md_text
     assert any(l.strip().startswith("!python -m src.experiments.matrix_3b plan") for l in ALL.splitlines())
-    assert any(l.strip().startswith("!python -m src.experiments.ae_xgb") and "--benchmark" in l for l in ALL.splitlines())
+    bench = [f for f in _training_lines() if "--benchmark" in CODE[f[0]]]
+    assert bench and all(g for *_, g in bench)                     # benchmark only behind its own phrase
+    assert not any(l.strip().startswith("!") and "--benchmark" in l for l in ALL.splitlines())
+
+
+def test_preflight_records_are_saved_after_drive_is_mounted():
+    assert ALL.index("drive.mount") < ALL.index('{STORAGE}/preflight')
+    for name in ("pytest_before_data.txt", "environment.json", "dataset_verify.txt", "pytest_with_data.txt",
+                 "benchmark_resources.json"):
+        assert f"preflight/{name}" in ALL

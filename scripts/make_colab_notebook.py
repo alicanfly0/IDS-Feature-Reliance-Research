@@ -26,8 +26,9 @@ Plan and rationale: `docs/COLAB_EXECUTION_PLAN.md`.
 `docs/decision_log.md`. Step 1 refuses to continue before you set the switch.
 
 Running the cells top to bottom performs **verification, a bounded timing benchmark and a dry run only**.
-It never trains a full model: every training action (sections 6 and 8) is disabled by default and runs
-only after you type the exact confirmation phrase into that cell. After a disconnect, an authorized run
+It never trains a full model: every action that trains anything (the bounded benchmark in section 5 and
+the runs in sections 6 and 8) is disabled by default and runs only after you type the exact confirmation
+phrase into that cell. Preflight records (environment, tests, benchmark) are saved to `cnet-runs/preflight/`. After a disconnect, an authorized run
 resumes from its last checkpoint; a finished run is never recomputed or overwritten.
 """),
     md("## 0. Runtime\nRuntime → Change runtime type → **T4 GPU** (or any GPU). Free tier may not assign one."),
@@ -110,19 +111,34 @@ import xgboost   # only after installation
 print("xgboost", xgboost.__version__, "| CUDA build:", xgboost.build_info().get("USE_CUDA"))
 import numba, shap
 print("numba", numba.__version__, "| shap", shap.__version__, "(Colab versions; the laptop pins shap 0.49.1)")
-!python -m pytest -q -rs
-!python -m src.env --dataset cicids2017_original
+!mkdir -p "{STORAGE}/preflight"
+!python -m pytest -q -rs 2>&1 | tee "{STORAGE}/preflight/pytest_before_data.txt"
+!python -m src.env --dataset cicids2017_original --json "{STORAGE}/preflight/environment.json"
 """),
     md("## 4. Data: copy ONE archive and verify it\nOnly `MachineLearningCSV.zip` (235,102,953 bytes) is needed. Verified against the manifest's SHA-256 and CIC's MD5 before use; the runner then extracts only the Friday DDoS file and checks its CRC."),
     code("""
 !mkdir -p data/raw/cicids2017_original
 !cp "{ARCHIVE}" data/raw/cicids2017_original/
-!python -m src.data.acquire verify cicids2017_original --file MachineLearningCSV.zip
-!python -m pytest -q tests/test_real_data_smoke.py -k friday
+!python -m src.data.acquire verify cicids2017_original --file MachineLearningCSV.zip 2>&1 | tee "{STORAGE}/preflight/dataset_verify.txt"
+!python -m pytest -q -rs 2>&1 | tee "{STORAGE}/preflight/pytest_with_data.txt"
 """),
-    md("## 5. GPU timing benchmark (about a minute)\nBounded computational work: it trains **temporary** model components (60 autoencoder batches and 50 XGBoost rounds on the real training partition) only to measure speed, then discards them. It saves no model and evaluates nothing, and it is not an experiment run."),
+    md("## 5. GPU timing benchmark (about a minute): DISABLED by default\nBounded computational work: it trains **temporary** model components (60 autoencoder batches and 50 XGBoost rounds on the real training partition) only to measure speed, then discards them. It saves no model and evaluates nothing, and it is not an experiment run. Because it trains temporary components, it needs its own explicit authorization. It records timing (`cnet-runs/benchmarks/`) and peak memory (`cnet-runs/preflight/benchmark_resources.json`)."),
     code("""
-!python -m src.experiments.ae_xgb --config configs/experiments/ae_xgb_d008_trackB.yaml --device cuda --storage "{STORAGE}" --benchmark
+AUTHORIZE_BENCHMARK = ""                # type exactly: I confirm the bounded benchmark is authorized
+if AUTHORIZE_BENCHMARK == "I confirm the bounded benchmark is authorized":
+    import json, resource, time
+    t0 = time.time()
+    subprocess.run([sys.executable, "-m", "src.experiments.ae_xgb", "--config", "configs/experiments/ae_xgb_d008_trackB.yaml",
+                    "--device", "cuda", "--storage", STORAGE, "--benchmark"], check=True)
+    gpu = subprocess.run(["nvidia-smi", "--query-gpu=name,memory.total,memory.used", "--format=csv,noheader"],
+                         capture_output=True, text=True).stdout.strip()
+    res = {"wall_s": round(time.time() - t0, 1),
+           "peak_rss_mb_children": round(resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss / 1024, 1),
+           "gpu_after": gpu}
+    json.dump(res, open(f"{STORAGE}/preflight/benchmark_resources.json", "w"), indent=1)
+    print(res)
+else:
+    print("Benchmark disabled: nothing was trained in this cell.")
 """),
     md("## 6. Legacy single-baseline run: DISABLED by default\nTrains one full model. Leave the phrase empty unless this exact run has been approved. `--device cuda` stops immediately if no GPU is attached. After a disconnect, re-running an authorized cell resumes it."),
     code("""

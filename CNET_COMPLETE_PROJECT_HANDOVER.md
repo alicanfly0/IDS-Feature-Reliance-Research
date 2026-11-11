@@ -44,7 +44,7 @@
 
 You are taking over a research codebase that is **already far along**. Do not rebuild anything. Work in this order:
 
-1. **Open the project root** (Windows): `C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation`. All commands below run from there.
+1. **Open the project root** (Windows): `<project root>`. All commands below run from there.
 2. **Read this file first**, completely. It replaces the previous conversation, which you cannot see.
 3. **Read** `README.md` and `docs/decision_log.md` (the decision log is the authority for every research decision).
 4. **Read the latest reports:** `docs/MILESTONE_2A_REPORT.md`, `docs/DIAGNOSTIC_D008_SHORTCUTS.md`, `docs/MILESTONE_1A_HANDOVER.md`, `docs/COLAB_EXECUTION_PLAN.md`.
@@ -280,7 +280,7 @@ Wardana 39 inputs not 43; Fang's TreeSHAP is on LightGBM; AE-XGB raw-name SHAP n
 
 | Item | Value |
 |---|---|
-| Project root | `C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation` (under OneDrive\Desktop; OneDrive sync depends on user settings) |
+| Project root | `<project root>` (under OneDrive\Desktop; OneDrive sync depends on user settings) |
 | OS / hardware | Windows 11 Pro; Dell Latitude 7430, Intel i7-1265U, 16 GB RAM, Intel Iris Xe; **no CUDA** |
 | Python | CPython 3.11.9 (python.org per-user install); **venv at `.venv/`** in the project (Git-ignored) |
 | Running | `.\run.cmd -m <module>` uses `.venv\Scripts\python.exe` without activation (PowerShell or cmd) |
@@ -870,7 +870,7 @@ Start §8.4 step 1: ask the user for the Milestone 2A review document and get pe
 ```
 You are taking over the CNET Phase III/IV research project from a previous Claude Code account.
 The repository is at:
-C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation
+<project root>
 
 Read CNET_COMPLETE_PROJECT_HANDOVER.md in the project root first, completely, and follow its
 "START HERE" section. Continue from the existing repository; do NOT rebuild the project, do NOT

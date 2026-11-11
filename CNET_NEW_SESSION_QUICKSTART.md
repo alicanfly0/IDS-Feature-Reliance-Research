@@ -14,7 +14,7 @@ Full context: `CNET_COMPLETE_PROJECT_HANDOVER.md` (read it first). This page is 
 
 | What | Path |
 |---|---|
-| Project root | `C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation` |
+| Project root | `<project root>` |
 | Decisions | `docs/decision_log.md` (D-001 … D-019) |
 | Latest report | `docs/MILESTONE_2A_REPORT.md` |
 | Registry | `configs/artifact_registry.yaml`, `src/audit/registry.py` |
@@ -60,7 +60,7 @@ Re-running completed experiment configs is safe: they print "already complete" o
 ```
 You are taking over the CNET Phase III/IV research project from a previous Claude Code account.
 The repository is at:
-C:\Users\aliwa\OneDrive\Desktop\FAST NUCES\semester 7\CNET\cnet project implementation
+<project root>
 
 Read CNET_COMPLETE_PROJECT_HANDOVER.md in the project root first, completely, and follow its
 "START HERE" section. Continue from the existing repository; do NOT rebuild the project, do NOT

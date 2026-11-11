@@ -832,3 +832,54 @@ any new view must be re-checked.
 
 **D-004/D-005.** R4a is restated as the priority confirmatory test. The resolution document §5
 lists the six items these decisions must settle.
+
+
+## Milestone 3B-0 readiness — 2026-11-11 (proposals, NOT approved)
+
+Readiness report: `docs/MILESTONE_3B0_READINESS.md`. Protocol r1 is the *working* design for
+infrastructure only; D-020 r1 remains PROPOSED.
+
+**D-007 / D-020 clarification (PROPOSED).**
+
+- **Orientation:** Δ = metric(ablated) − metric(full) for lower-is-better endpoints;
+  d = Δ_group − Δ_control. Positive values mean the group's removal hurt more.
+- **Sign-flip exactness:** holds under the sharp exchangeability null only; otherwise it is
+  approximate, with a t-interval as sensitivity and disagreement read as inconclusive.
+- **Ties:** endpoints with ≤ 8 non-zero contrasts are "not testable at the family α by design".
+- **Group A:** the matching imbalance is a limitation in both directions.
+
+**D-004 (recommendation unchanged):** WTMC2021 only.
+
+**D-005 (recommendation updated after the read-only R4a audit):**
+
+1. column map `configs/protocol/r4a_column_map_v1.yaml` (all 78 inputs covered);
+2. a clock alignment of exactly +5:00 (Engelen minus original), estimated from the DDoS onset and
+   end, which agree;
+3. DDoS → 1, BENIGN → 0, other labels out of scope;
+4. the original file's recording window after alignment (95,123 DDoS + 51,520 BENIGN);
+5. twin exclusion against all 63 model-visible r1 views before any scoring.
+
+Measured: **at least 16 of the 68 model inputs change definition or encoding** between the two
+releases:
+
+- the 8 group-A flag fields (documented);
+- 4 subflow features;
+- 2 init-window fields (−1 → 0 sentinel);
+- `min_seg_size_forward`;
+- Down/Up Ratio (fix logged on the landing page).
+
+### D-024 R4a design — PROPOSED (new)
+
+- **Problem:** scoring original-trained models on corrected data (R4a-i) confounds corrected flow
+  construction with re-defined features and re-tuned labels, and it contaminates group-vs-control
+  contrasts.
+- **Proposal:**
+  - **R4a-ii (primary):** the same pre-registered protocol rebuilt within the corrected Friday data
+    (track-B split, groups mapped by name, proxy closure recomputed on the corrected training
+    partition, design D). The key estimand is the difference between a group's effect in the
+    original and in the corrected data.
+  - **R4a-i (secondary):** reported only as robustness to an extractor change.
+  - **R4a-i′ (optional):** a definition-stable input view chosen from documentation and label-free
+    checks only.
+- **Drive:** training R4a-ii on Colab would need a new D-015 amendment for `dataset.zip`, or local
+  runs.

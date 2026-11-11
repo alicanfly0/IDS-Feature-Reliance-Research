@@ -1,0 +1,27 @@
+{
+  "dataset": "nf_ton_iot_v2",
+  "source_rows": 16940496,
+  "csv_sha1_verified": "c0e014512c9a825146c52982d3cf12d3fce1ccc9",
+  "csv_bytes": 2676491000,
+  "subsample_size": 2390275,
+  "rng": "numpy default_rng(42).choice(replace=False)",
+  "size_rule": "equal to the NF-UNSW-NB15-v2 total (N1)",
+  "selected_rows_sha256": "f3c8e75abe81a518e7117e2e1138bb61ce2f51cfcd7af74c3fd36ae46b068a72",
+  "label_counts": {
+    "0": 860986,
+    "1": 1529289
+  },
+  "attack_counts": {
+    "Benign": 860986,
+    "scanning": 533766,
+    "xss": 346502,
+    "ddos": 286664,
+    "password": 162490,
+    "dos": 99739,
+    "injection": 96218,
+    "backdoor": 2383,
+    "mitm": 1056,
+    "ransomware": 471
+  },
+  "cache_frame_sha256": "a6b309772e10756631df96e3c299b1038edfb5dd7467befafaa700ce6cd5fafc"
+}

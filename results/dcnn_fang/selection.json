@@ -1,0 +1,1098 @@
+{
+  "protocol": "D-009 Fang DCNN+SA adaptation",
+  "dataset": "unsw_nb15",
+  "files_sha256": {
+    "UNSW_NB15_training-set.csv": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "UNSW_NB15_testing-set.csv": "734fe6642edf758f7c94d7d9149426b49d202fe8e7bf0bef47392489c3c0a559"
+  },
+  "rows": {
+    "train": 68264,
+    "test": 41089,
+    "train_dos": 12264,
+    "test_dos": 4089
+  },
+  "positive_class": "DoS",
+  "preprocessor": {
+    "numeric": [
+      "dur",
+      "spkts",
+      "dpkts",
+      "sbytes",
+      "dbytes",
+      "rate",
+      "sttl",
+      "dttl",
+      "sload",
+      "dload",
+      "sloss",
+      "dloss",
+      "sinpkt",
+      "dinpkt",
+      "sjit",
+      "djit",
+      "swin",
+      "stcpb",
+      "dtcpb",
+      "dwin",
+      "tcprtt",
+      "synack",
+      "ackdat",
+      "smean",
+      "dmean",
+      "trans_depth",
+      "response_body_len",
+      "ct_srv_src",
+      "ct_state_ttl",
+      "ct_dst_ltm",
+      "ct_src_dport_ltm",
+      "ct_dst_sport_ltm",
+      "ct_dst_src_ltm",
+      "is_ftp_login",
+      "ct_ftp_cmd",
+      "ct_flw_http_mthd",
+      "ct_src_ltm",
+      "ct_srv_dst",
+      "is_sm_ips_ports"
+    ],
+    "categorical": [
+      "proto",
+      "service",
+      "state"
+    ],
+    "categories": {
+      "proto": [
+        "3pc",
+        "a/n",
+        "aes-sp3-d",
+        "any",
+        "argus",
+        "aris",
+        "arp",
+        "ax.25",
+        "bbn-rcc",
+        "bna",
+        "br-sat-mon",
+        "cbt",
+        "cftp",
+        "chaos",
+        "compaq-peer",
+        "cphb",
+        "cpnx",
+        "crtp",
+        "crudp",
+        "dcn",
+        "ddp",
+        "ddx",
+        "dgp",
+        "egp",
+        "eigrp",
+        "emcon",
+        "encap",
+        "etherip",
+        "fc",
+        "fire",
+        "ggp",
+        "gmtp",
+        "gre",
+        "hmp",
+        "i-nlsp",
+        "iatp",
+        "ib",
+        "icmp",
+        "idpr",
+        "idpr-cmtp",
+        "idrp",
+        "ifmp",
+        "igmp",
+        "igp",
+        "il",
+        "ip",
+        "ipcomp",
+        "ipcv",
+        "ipip",
+        "iplt",
+        "ipnip",
+        "ippc",
+        "ipv6",
+        "ipv6-frag",
+        "ipv6-no",
+        "ipv6-opts",
+        "ipv6-route",
+        "ipx-n-ip",
+        "irtp",
+        "isis",
+        "iso-ip",
+        "iso-tp4",
+        "kryptolan",
+        "l2tp",
+        "larp",
+        "leaf-1",
+        "leaf-2",
+        "merit-inp",
+        "mfe-nsp",
+        "mhrp",
+        "micp",
+        "mobile",
+        "mtp",
+        "mux",
+        "narp",
+        "netblt",
+        "nsfnet-igp",
+        "nvp",
+        "ospf",
+        "pgm",
+        "pim",
+        "pipe",
+        "pnni",
+        "pri-enc",
+        "prm",
+        "ptp",
+        "pup",
+        "pvp",
+        "qnx",
+        "rdp",
+        "rsvp",
+        "rtp",
+        "rvd",
+        "sat-expak",
+        "sat-mon",
+        "sccopmce",
+        "scps",
+        "sctp",
+        "sdrp",
+        "secure-vmtp",
+        "sep",
+        "skip",
+        "sm",
+        "smp",
+        "snp",
+        "sprite-rpc",
+        "sps",
+        "srp",
+        "st2",
+        "stp",
+        "sun-nd",
+        "swipe",
+        "tcf",
+        "tcp",
+        "tlsp",
+        "tp++",
+        "trunk-1",
+        "trunk-2",
+        "ttp",
+        "udp",
+        "unas",
+        "uti",
+        "vines",
+        "visa",
+        "vmtp",
+        "vrrp",
+        "wb-expak",
+        "wb-mon",
+        "wsn",
+        "xnet",
+        "xns-idp",
+        "xtp",
+        "zero"
+      ],
+      "service": [
+        "-",
+        "dhcp",
+        "dns",
+        "ftp",
+        "ftp-data",
+        "http",
+        "irc",
+        "pop3",
+        "radius",
+        "smtp",
+        "snmp",
+        "ssh",
+        "ssl"
+      ],
+      "state": [
+        "CON",
+        "ECO",
+        "FIN",
+        "INT",
+        "PAR",
+        "REQ",
+        "RST",
+        "URN",
+        "no"
+      ]
+    },
+    "n_transformed": 194
+  },
+  "train_matrix_sha256": "0a097adec0a6fde0ae454d453adf4af3e28b1d56cc8b42ab2dd6794246225bbc",
+  "k": 22,
+  "selected": [
+    "sttl",
+    "ct_state_ttl",
+    "sbytes",
+    "swin",
+    "proto_udp",
+    "smean",
+    "sload",
+    "ct_dst_src_ltm",
+    "proto_unas",
+    "ct_srv_dst",
+    "ct_srv_src",
+    "dload",
+    "ct_dst_sport_ltm",
+    "dttl",
+    "dbytes",
+    "sloss",
+    "rate",
+    "ct_src_dport_ltm",
+    "sinpkt",
+    "proto_tcp",
+    "dmean",
+    "dloss"
+  ],
+  "selected_index": [
+    6,
+    28,
+    3,
+    16,
+    158,
+    23,
+    8,
+    32,
+    159,
+    37,
+    27,
+    9,
+    31,
+    7,
+    4,
+    10,
+    5,
+    30,
+    12,
+    152,
+    24,
+    11
+  ],
+  "rule95_count": 30,
+  "cumulative_share_at_k": 0.9053087571718794,
+  "ranking": [
+    {
+      "feature": "sttl",
+      "mean_abs_shap": 4.030873444139081
+    },
+    {
+      "feature": "ct_state_ttl",
+      "mean_abs_shap": 0.7186974367073291
+    },
+    {
+      "feature": "sbytes",
+      "mean_abs_shap": 0.6150635913714767
+    },
+    {
+      "feature": "swin",
+      "mean_abs_shap": 0.4158413608466764
+    },
+    {
+      "feature": "proto_udp",
+      "mean_abs_shap": 0.347339570758327
+    },
+    {
+      "feature": "smean",
+      "mean_abs_shap": 0.32493594796485326
+    },
+    {
+      "feature": "sload",
+      "mean_abs_shap": 0.29926243651712103
+    },
+    {
+      "feature": "ct_dst_src_ltm",
+      "mean_abs_shap": 0.28811339521373036
+    },
+    {
+      "feature": "proto_unas",
+      "mean_abs_shap": 0.27604911346790006
+    },
+    {
+      "feature": "ct_srv_dst",
+      "mean_abs_shap": 0.27501034659224843
+    },
+    {
+      "feature": "ct_srv_src",
+      "mean_abs_shap": 0.25379474776141453
+    },
+    {
+      "feature": "dload",
+      "mean_abs_shap": 0.2154193649713094
+    },
+    {
+      "feature": "ct_dst_sport_ltm",
+      "mean_abs_shap": 0.20485057168418536
+    },
+    {
+      "feature": "dttl",
+      "mean_abs_shap": 0.14281089621843204
+    },
+    {
+      "feature": "dbytes",
+      "mean_abs_shap": 0.13421648719478743
+    },
+    {
+      "feature": "sloss",
+      "mean_abs_shap": 0.12599562818477705
+    },
+    {
+      "feature": "rate",
+      "mean_abs_shap": 0.11881992012212114
+    },
+    {
+      "feature": "ct_src_dport_ltm",
+      "mean_abs_shap": 0.11236923577719124
+    },
+    {
+      "feature": "sinpkt",
+      "mean_abs_shap": 0.10293632496152721
+    },
+    {
+      "feature": "proto_tcp",
+      "mean_abs_shap": 0.0927238630541361
+    },
+    {
+      "feature": "dmean",
+      "mean_abs_shap": 0.07624956424285408
+    },
+    {
+      "feature": "dloss",
+      "mean_abs_shap": 0.07053907689472233
+    },
+    {
+      "feature": "djit",
+      "mean_abs_shap": 0.07012424387654125
+    },
+    {
+      "feature": "ct_dst_ltm",
+      "mean_abs_shap": 0.06174288240465911
+    },
+    {
+      "feature": "state_CON",
+      "mean_abs_shap": 0.06033965963696925
+    },
+    {
+      "feature": "synack",
+      "mean_abs_shap": 0.05928911928476958
+    },
+    {
+      "feature": "proto_ospf",
+      "mean_abs_shap": 0.05905969339072793
+    },
+    {
+      "feature": "spkts",
+      "mean_abs_shap": 0.05459815586200522
+    },
+    {
+      "feature": "ct_src_ltm",
+      "mean_abs_shap": 0.05408635993436085
+    },
+    {
+      "feature": "state_INT",
+      "mean_abs_shap": 0.05027542459178962
+    },
+    {
+      "feature": "dur",
+      "mean_abs_shap": 0.04559652059872116
+    },
+    {
+      "feature": "stcpb",
+      "mean_abs_shap": 0.04276288684743895
+    },
+    {
+      "feature": "tcprtt",
+      "mean_abs_shap": 0.04271905792489625
+    },
+    {
+      "feature": "dpkts",
+      "mean_abs_shap": 0.038566381498566456
+    },
+    {
+      "feature": "service_dns",
+      "mean_abs_shap": 0.03242316835458592
+    },
+    {
+      "feature": "proto_sctp",
+      "mean_abs_shap": 0.0323841205056237
+    },
+    {
+      "feature": "dtcpb",
+      "mean_abs_shap": 0.03236725173055426
+    },
+    {
+      "feature": "sjit",
+      "mean_abs_shap": 0.028689258817476027
+    },
+    {
+      "feature": "dinpkt",
+      "mean_abs_shap": 0.027506587980389904
+    },
+    {
+      "feature": "service_-",
+      "mean_abs_shap": 0.027117491207553572
+    },
+    {
+      "feature": "ackdat",
+      "mean_abs_shap": 0.026742406163763135
+    },
+    {
+      "feature": "trans_depth",
+      "mean_abs_shap": 0.02281867786655929
+    },
+    {
+      "feature": "response_body_len",
+      "mean_abs_shap": 0.020527289506054133
+    },
+    {
+      "feature": "service_http",
+      "mean_abs_shap": 0.013074817608026687
+    },
+    {
+      "feature": "is_sm_ips_ports",
+      "mean_abs_shap": 0.011682783743657577
+    },
+    {
+      "feature": "proto_arp",
+      "mean_abs_shap": 0.00984313940286613
+    },
+    {
+      "feature": "service_ftp",
+      "mean_abs_shap": 0.005630386540465819
+    },
+    {
+      "feature": "proto_ipv6",
+      "mean_abs_shap": 0.005445444921912764
+    },
+    {
+      "feature": "ct_flw_http_mthd",
+      "mean_abs_shap": 0.005165423836648083
+    },
+    {
+      "feature": "proto_swipe",
+      "mean_abs_shap": 0.004047340907576637
+    },
+    {
+      "feature": "proto_sun-nd",
+      "mean_abs_shap": 0.003920432002748994
+    },
+    {
+      "feature": "service_smtp",
+      "mean_abs_shap": 0.003819366372037599
+    },
+    {
+      "feature": "proto_mobile",
+      "mean_abs_shap": 0.003753341159599526
+    },
+    {
+      "feature": "is_ftp_login",
+      "mean_abs_shap": 0.002534965093044024
+    },
+    {
+      "feature": "state_FIN",
+      "mean_abs_shap": 0.0017825664280616891
+    },
+    {
+      "feature": "service_dhcp",
+      "mean_abs_shap": 0.0016971344779197043
+    },
+    {
+      "feature": "proto_sep",
+      "mean_abs_shap": 0.001678716723964339
+    },
+    {
+      "feature": "proto_rvd",
+      "mean_abs_shap": 0.0007229579272527526
+    },
+    {
+      "feature": "state_RST",
+      "mean_abs_shap": 0.0006834119907000297
+    },
+    {
+      "feature": "proto_ip",
+      "mean_abs_shap": 0.0005375531407353886
+    },
+    {
+      "feature": "ct_ftp_cmd",
+      "mean_abs_shap": 0.0003825952631550289
+    },
+    {
+      "feature": "proto_gre",
+      "mean_abs_shap": 0.00026075855694886267
+    },
+    {
+      "feature": "proto_mux",
+      "mean_abs_shap": 0.00017864070547480974
+    },
+    {
+      "feature": "proto_pim",
+      "mean_abs_shap": 8.423726034053103e-05
+    },
+    {
+      "feature": "dwin",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_3pc",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_a/n",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_aes-sp3-d",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_any",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_argus",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_aris",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ax.25",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_bbn-rcc",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_bna",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_br-sat-mon",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_cbt",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_cftp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_chaos",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_compaq-peer",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_cphb",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_cpnx",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_crtp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_crudp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_dcn",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ddp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ddx",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_dgp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_egp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_eigrp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_emcon",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_encap",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_etherip",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_fc",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_fire",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ggp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_gmtp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_hmp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_i-nlsp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_iatp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ib",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_icmp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_idpr",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_idpr-cmtp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_idrp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ifmp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_igmp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_igp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_il",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ipcomp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ipcv",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ipip",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_iplt",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ipnip",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ippc",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ipv6-frag",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ipv6-no",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ipv6-opts",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ipv6-route",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ipx-n-ip",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_irtp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_isis",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_iso-ip",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_iso-tp4",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_kryptolan",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_l2tp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_larp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_leaf-1",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_leaf-2",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_merit-inp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_mfe-nsp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_mhrp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_micp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_mtp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_narp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_netblt",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_nsfnet-igp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_nvp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_pgm",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_pipe",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_pnni",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_pri-enc",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_prm",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ptp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_pup",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_pvp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_qnx",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_rdp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_rsvp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_rtp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_sat-expak",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_sat-mon",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_sccopmce",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_scps",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_sdrp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_secure-vmtp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_skip",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_sm",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_smp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_snp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_sprite-rpc",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_sps",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_srp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_st2",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_stp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_tcf",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_tlsp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_tp++",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_trunk-1",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_trunk-2",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_ttp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_uti",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_vines",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_visa",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_vmtp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_vrrp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_wb-expak",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_wb-mon",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_wsn",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_xnet",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_xns-idp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_xtp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "proto_zero",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "service_ftp-data",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "service_irc",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "service_pop3",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "service_radius",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "service_snmp",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "service_ssh",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "service_ssl",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "state_ECO",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "state_PAR",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "state_REQ",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "state_URN",
+      "mean_abs_shap": 0.0
+    },
+    {
+      "feature": "state_no",
+      "mean_abs_shap": 0.0
+    }
+  ],
+  "lgbm_params": {
+    "n_estimators": 300,
+    "learning_rate": 0.05,
+    "max_depth": -1,
+    "num_leaves": 31,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "objective": "binary",
+    "random_state": 42,
+    "verbose": -1
+  },
+  "test_populations": {
+    "model_visible": {
+      "excluded_rows": 3330,
+      "kept_rows": 37759,
+      "excluded_by_class": {
+        "Normal": 1862,
+        "DoS": 1468
+      },
+      "kept_by_class": {
+        "Normal": 35138,
+        "DoS": 2621
+      },
+      "excluded_with_label_conflict": 3,
+      "kept_mask_sha256": "adac8b3e3597050829fb41a6b6bfa12e45863ca34ca9c6ad677b52a3a16e110f"
+    },
+    "raw_features": {
+      "excluded_rows": 1395,
+      "kept_rows": 39694,
+      "excluded_by_class": {
+        "Normal": 1193,
+        "DoS": 202
+      },
+      "kept_by_class": {
+        "Normal": 35807,
+        "DoS": 3887
+      },
+      "excluded_with_label_conflict": 0,
+      "kept_mask_sha256": "eda134159d1f871621f32e51bc245ecf2ce14776588a479a5ce5a9672ef8f054"
+    }
+  }
+}

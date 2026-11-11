@@ -379,3 +379,54 @@ datasets:
         scenario needs NF-ToN-IoT-v2, NF-BoT-IoT-v2, NF-CSE-CIC-IDS2018-v2 and
         NF-UQ-NIDS-v2 (~150M flows combined), NOT in this manifest (D-010)
       - same-traffic schema comparison against UNSW-NB15 (D-006)
+
+  # ---------------------------------------------------------------------------
+  nf_ton_iot_v2:
+    name: NF-ToN-IoT-v2 (UQ NetFlow v2 feature set)
+    status: verified
+    local_dir: data/raw/nf_ton_iot_v2
+    publisher: University of Queensland (Sarhan, Layeghy, Portmann)
+    official_source:
+      landing_page: https://staff.itee.uq.edu.au/marius/NIDS_datasets/
+      download: https://rdm.uq.edu.au/files/a4ad7080-ef9c-11ed-a964-b70596e96ad5
+      access_notes: >
+        Same RDM mechanism as nf_unsw_nb15_v2 (signed S3 URL for object
+        9bafce9d380588c2_MOHANAD_A4706.zip, Last-Modified 2023-05-15).
+        Downloaded 2026-11-11 under D-015 Amendment 2 (user authorization,
+        D-010 two-network MES-DNN adaptation). Not to be shared or made public.
+    version: v2 (UQ RDM object last modified 2023-05-15)
+    files:
+      - name: NF-ToN-IoT-v2.zip   # local name; server object is 9bafce9d380588c2_MOHANAD_A4706.zip
+        size_bytes: 168120179
+        sha256: 69dd3b8bd59e23f0718dfc69b2757cb6ca08fe2c4c1d4fd126b8bbd204bbbad2
+        download: {method: uq_rdm, uuid: a4ad7080-ef9c-11ed-a964-b70596e96ad5}
+    license: >
+      "Permitted Re-Use with Commercial Use Restriction" (UQ RDM dataset licence),
+      as nf_unsw_nb15_v2.
+    citation: >
+      M. Sarhan, S. Layeghy, M. Portmann, "Towards a Standard Feature Set for
+      Network Intrusion Detection System Datasets", Mobile Networks and
+      Applications, 2022, doi:10.1007/s11036-021-01843-0.
+    records:
+      total: 16940496   # landing page
+      attack: 10841027  # landing page (63.99%)
+      benign: 6099469   # landing page
+      attack_classes: {Backdoor: 16809, DoS: 712609, DDoS: 2026234, Injection: 684465, MITM: 7723, Password: 1153323, Ransomware: 3425, Scanning: 3781419, XSS: 2455020}
+    publisher_checksums: >
+      BagIt bag; manifest-sha1.txt: data/NF-ToN-IoT-v2.csv
+      c0e014512c9a825146c52982d3cf12d3fce1ccc9 (2,676,491,000 bytes, streamed
+      from the zip, never extracted), data/NetFlow_v2_Features.csv
+      6cf84d2d76c29321175d9429996d7cda2f3b15d6 (identical to NF-UNSW-NB15-v2's).
+    feature_schema:
+      count: 43   # same NetFlow_v2_Features.csv as nf_unsw_nb15_v2 (identical SHA-1)
+      inputs_used: same 39 as nf_unsw_nb15_v2.feature_schema.wardana_table2_inputs
+      identifier_fields: [IPV4_SRC_ADDR, L4_SRC_PORT, IPV4_DST_ADDR, L4_DST_PORT]
+      confirmed: true
+    labeling:
+      columns: [Label, Attack]
+      notes: Wardana uses binary normal/anomaly only.
+    split_policy: >
+      fixed uniform subsample of 2,390,275 rows (numpy default_rng(42)), record
+      results/protocol/mesdnn/ton_subsample_v1.json; partitions per src/experiments/mes_dnn.py
+    intended_experiments:
+      - MES-DNN two-network adaptation (D-010), fixed documented subsample

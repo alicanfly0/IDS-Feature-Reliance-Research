@@ -4,6 +4,7 @@ from src.data.manifest import load_manifest, local_status, sha256_file, validate
 
 EXPECTED_DATASETS = {
     "cicids2017_original", "cicids2017_engelen_wtmc2021", "unsw_nb15", "nf_unsw_nb15_v2",
+    "nf_ton_iot_v2",   # D-015 Amendment 2 (D-010 two-network MES-DNN)
 }
 MIRROR_HOSTS = ("kaggle.com", "huggingface.co", "github.com/datasets")
 
@@ -12,7 +13,7 @@ def test_manifest_is_well_formed():
     assert validate_manifest(load_manifest()) == []
 
 
-def test_manifest_covers_the_four_planned_datasets():
+def test_manifest_covers_the_planned_datasets():
     assert set(load_manifest()["datasets"]) == EXPECTED_DATASETS
 
 

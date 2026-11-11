@@ -133,6 +133,19 @@ def _git() -> dict:
     return {"commit": bundled, "dirty": False if bundled else None, "source": "bundle" if bundled else None}
 
 
+def git_history_available(root: Path | str | None = None) -> bool:
+    """True only in a real Git checkout (a `git archive` bundle has no history to query)."""
+    root = Path(root) if root is not None else Path(__file__).resolve().parents[1]
+    if not (root / ".git").exists():
+        return False
+    try:
+        r = subprocess.run(["git", "-C", str(root), "rev-parse", "--is-inside-work-tree"],
+                           capture_output=True, text=True, timeout=20)
+    except (OSError, subprocess.SubprocessError):
+        return False
+    return r.returncode == 0 and r.stdout.strip() == "true"
+
+
 def in_colab() -> bool:
     if "COLAB_RELEASE_TAG" in os.environ or "google.colab" in sys.modules:
         return True

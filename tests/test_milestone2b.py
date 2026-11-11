@@ -9,6 +9,7 @@ from src.audit.arr import importance_from_arrays
 from src.audit.correct_arr import ATOL, OUTPUT, PILOT, calculate, compare_results, protected_integrity
 from src.audit.registry import feature_sets, load_registry, validate
 from src.config import ROOT
+from src.env import git_history_available
 
 
 def test_v2_flag_family_and_multiple_mechanisms():
@@ -26,13 +27,29 @@ def test_v2_flag_family_and_multiple_mechanisms():
     assert syn["evidence_level"] == "shortcut_indicator" and len(syn["mechanisms"]) == 2
 
 
+# LF-normalised SHA-256 of `git show 2490821:configs/artifact_registry.yaml` (registry v1 at the
+# handover commit), recorded in Milestone 3B-1 from the full Git checkout so the archived copy can be
+# verified even from a `git archive` bundle, which has no history.
+REGISTRY_V1_SHA256_LF = "c9c9a68ec110df3054075889299a158e5d8d9eb1242a2ad363dcdd7b0b4c94b1"
+
+
+def test_original_registry_matches_recorded_v1_hash():
+    """Archive-safe: runs everywhere, including Colab bundles without .git."""
+    import hashlib
+    local = (ROOT / "configs/history/artifact_registry_v1.yaml").read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(local).hexdigest() == REGISTRY_V1_SHA256_LF
+
+
+@pytest.mark.skipif(not git_history_available(), reason="requires Git history; not available in a git-archive bundle")
 def test_original_registry_is_exact_git_snapshot():
+    import hashlib
     import subprocess
     original = subprocess.run(["git", "show", "2490821:configs/artifact_registry.yaml"],
                               cwd=ROOT, check=True, capture_output=True).stdout
     # Git stores LF; Windows working-tree snapshots may contain CRLF.
     local = (ROOT / "configs/history/artifact_registry_v1.yaml").read_bytes()
     assert original.replace(b"\r\n", b"\n") == local.replace(b"\r\n", b"\n")
+    assert hashlib.sha256(original.replace(b"\r\n", b"\n")).hexdigest() == REGISTRY_V1_SHA256_LF   # recorded hash is right
 
 
 def test_web_evidence_requires_section_url_and_published_support():

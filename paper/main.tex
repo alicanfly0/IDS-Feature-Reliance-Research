@@ -386,8 +386,14 @@ what the task requires: the remaining features carry almost the same information
 
 \textbf{DCNN and MES-DNN.} No artifact registry exists for UNSW-NB15 or NetFlow-v2, so we report
 no ARR for these models, only the stability of their own GradientExplainer rankings (500
-background rows, 1,000 class-balanced explained rows per model). \pending{DCNN: Spearman across
-seeds and agreement with the LightGBM selector ranking, from results/attribution\_pilot/dcnn.json.}
+background rows, 1,000 class-balanced explained rows per model). The DCNN's rankings of its 22
+inputs, explained on the duplicate-filtered test rows, are stable across seeds (mean pairwise
+Spearman 0.91, minimum 0.86; mean top-5 overlap 78\%). They are led by the time-to-live features
+\texttt{sttl}, \texttt{ct\_state\_ttl} and \texttt{dttl} together with \texttt{sloss} and
+\texttt{swin}. They agree only weakly with the LightGBM ranking that selected the features
+(Spearman 0.28--0.48 per seed), which confirms that the selector's SHAP values explain
+LightGBM, not the DCNN.
+% results/attribution_pilot/dcnn.json
 For MES-DNN, the mean pairwise Spearman correlation of the ensemble's 39-feature rankings across
 five seeds is 0.73 (NF-UNSW-NB15-v2) and 0.87 (NF-ToN-IoT-v2) under the random split and 0.69 and
 0.86 under the duplicate-aware split, but the top-5 sets overlap by only 44--50\% between seeds.

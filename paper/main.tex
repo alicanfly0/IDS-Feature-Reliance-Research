@@ -272,15 +272,71 @@ so both class-conditional views are reported).
 \subsection{AE-XGBoost: full model}
 Ten full-model seeds (0--9) made 8, 6, 6, 6, 7, 3, 4, 5, 8 and 5 errors on the 33,038-row
 family-common test (mean 5.8; MCC $\approx$ 0.99964). % results/milestone3b/stats_r1.json = batch0/SUMMARY.md
+On the 494,940 untouched Monday benign flows the same ten models produced 334--966 false
+positives (FPR 0.068\%--0.195\%, mean 0.108\%). All 110 fits ran on one code commit and one
+fingerprinted environment. % results/milestone3b/stats_r1.json
+
 \subsection{AE-XGBoost: group ablations (H1) and Monday FPR (H2)}
-\pending{Table of $\bar d$, interval, Holm-adjusted p and TOST verdict for groups A--U from
-results of batches 1--10 (aggregate\_3b, stats\_3b).}
+\begin{table*}[t]
+\centering
+\caption{Pre-registered primary family (10 tests). $\bar\Delta_G$, $\bar\Delta_R$: mean removal effect of the group and of its size-matched random control (ablated minus full); $\bar d$: mean paired contrast; all $\times10^{-3}$ (SESOI $=1$). Interval: 99\% t-interval (Bonferroni-consistent). $p_{\mathrm{Holm}}$: exact sign-flip p, Holm-adjusted over the family.}
+\label{tab:main}
+\input{tables/main_r1.tex}
+\end{table*}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/contrasts_r1.pdf}
+\caption{Paired contrasts $d_s$ (dots, ten seeds), their mean (diamond) and 99\% interval (bar).
+Grey band: $\pm$SESOI.}
+\label{fig:contrasts}
+\end{figure}
+Table~\ref{tab:main} and Fig.~\ref{fig:contrasts} give the primary family. Removing group A
+(TCP flag-count defects, 8 inputs), D (metadata hypotheses, 2 inputs) or the union U (20
+inputs) increased the in-domain error rate more than removing equally many random features
+(Holm-adjusted $p$ = 0.020, 0.047 and 0.020). The effects are tiny: $\bar d$ = 0.097, 0.148 and
+0.182 $\times10^{-3}$, i.e.\ about 3, 5 and 6 additional errors on 33,038 test rows. Every 99\%
+interval lies inside the SESOI ($\pm1\times10^{-3}$), so these differences are statistically
+detectable but practically negligible. For groups B (TCP appendix) and C (duplicated packets)
+the error-rate contrasts are practically equivalent to zero. On Monday benign traffic (H2) no
+contrast was significant after Holm correction; C is practically equivalent, and A, B, D and
+U are inconclusive because their intervals exceed the SESOI, reflecting seed-to-seed variation
+of the full model's FPR (0.068\%--0.195\%). % results/milestone3b/stats_r1.json, tables_r1.md
 \subsection{Transfer to the corrected capture (R4a)}
 \pending{R4a-i descriptive scores and R4a-ii 70-fit results; observational, not causal.}
 \subsection{DCNN + self-attention on UNSW-NB15}
 \pending{Five-seed mean and range on official vs duplicate-filtered test, from results/dcnn\_fang/summary.json.}
 \subsection{MES-DNN on NetFlow-v2}
-\pending{Random vs duplicate-aware ensemble metrics per network, from results/mes\_dnn/summary.json.}
+\begin{table}[t]
+\centering
+\caption{MES-DNN adaptation, MCC on each network's test partition (mean [min, max] over five
+seeds). ``Unseen'': random-split test rows whose input vector occurs in no other partition.}
+\label{tab:mes}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Model / population & NF-UNSW-NB15-v2 & NF-ToN-IoT-v2 \\
+\midrule
+Own base, random, all & 0.939 [0.922, 0.951] & 0.906 [0.778, 0.945] \\
+Own base, random, unseen & 0.841 [0.800, 0.872] & 0.865 [0.859, 0.871] \\
+Own base, duplicate-aware & 0.940 [0.928, 0.948] & 0.150 [0.136, 0.176] \\
+Ensemble, random, all & 0.658 [0.166, 0.938] & 0.625 [0.412, 0.884] \\
+Ensemble, duplicate-aware & 0.001 [$-$0.101, 0.134] & 0.242 [0.061, 0.890] \\
+\bottomrule
+\end{tabular}
+\end{table}
+% results/mes_dnn/summary.json, networks.json
+The two networks are heavily duplicated on the 39 inputs: NF-UNSW-NB15-v2 has 236,999 distinct
+vectors in 2,390,275 flows, and the NF-ToN-IoT-v2 subsample has 505,611, with one benign vector
+repeated 422,766 times (17.7\%) and one attack vector 249,048 times. Under the random split,
+81\% of NF-ToN-IoT-v2 test rows and 94\% of NF-UNSW-NB15-v2 test rows have an identical vector
+in another partition. Each network's own base model is accurate on its random
+test partition. When no vector may cross partitions, the NF-UNSW-NB15-v2 base model is unchanged
+(MCC 0.940), but the NF-ToN-IoT-v2 base model collapses to MCC 0.150: it flags 88.8\% of benign
+flows and its AUC falls from 0.979 to 0.711. Its training benign class is dominated by the single
+422,766-row vector, and the test partition now consists of whole duplicate groups never seen in
+training, so errors arrive in large correlated blocks. Base models do not transfer across
+networks, and the two-network meta-model is unstable across seeds (random-split MCC 0.17--0.94
+on NF-UNSW-NB15-v2): it sees only the two base scores and cannot tell which network a flow came
+from. A five-network evaluation was outside our scope.
 \subsection{Attribution}
 \pending{ARR@K for AE-XGBoost (registry v2); DCNN and MES-DNN attribution pilots without ARR
 classification (no registry exists for those datasets).}

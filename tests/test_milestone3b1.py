@@ -169,7 +169,7 @@ def test_mixed_devices_missing_and_tampered_provenance_are_rejected(tmp_path):
 
 
 def test_historical_laptop_runs_are_not_comparable_with_colab_runs(tmp_path):
-    from tests.test_milestone3b1 import _run_dir as mk
+    mk = _run_dir
     laptop = env.snapshot()                                     # this machine (laptop or CI), not Colab
     laptop.update(git=_session1_snapshot()["git"], dataset=_session1_snapshot()["dataset"])
     a = mk(tmp_path, "colab")
@@ -184,7 +184,7 @@ def test_historical_laptop_runs_are_not_comparable_with_colab_runs(tmp_path):
 
 def test_runner_refuses_to_resume_in_a_different_environment(tmp_path, monkeypatch):
     from src.experiments import ae_xgb
-    from tests.test_ae_xgb import _loader, _tiny_cfg
+    from test_ae_xgb import _loader, _tiny_cfg
     cfg = _tiny_cfg()
     run_dir = ae_xgb.run(cfg, "cpu", tmp_path, loader=_loader)
     ident = json.loads((run_dir / "identity.json").read_text())

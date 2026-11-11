@@ -49,7 +49,7 @@ def test_archive_mode_has_no_git_history_and_skips_only_history_tests(tmp_path):
     (tmp_path / ".git").mkdir()                                     # an empty .git is not a repository
     assert git_history_available(tmp_path) is False
     assert git_history_available(ROOT) == (ROOT / ".git").exists()
-    import tests.test_milestone2b as m
+    import test_milestone2b as m
     marks = {name: [mk.name for mk in getattr(getattr(m, name), "pytestmark", [])]
              for name in ("test_original_registry_is_exact_git_snapshot", "test_original_registry_matches_recorded_v1_hash")}
     assert marks["test_original_registry_is_exact_git_snapshot"] == ["skipif"]

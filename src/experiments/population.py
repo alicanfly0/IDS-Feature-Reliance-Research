@@ -113,3 +113,44 @@ if __name__ == "__main__":
         a.json.parent.mkdir(parents=True, exist_ok=True)
         a.json.write_text(json.dumps(result, indent=1) + "\n", encoding="utf-8")
     print(f"split {result['split_fingerprint'][:16]} OK; family-common val {result['val_kept']} / test {result['test_kept']} OK")
+
+
+def compute_family_common(cfg: dict, prep, views: dict[str, list[str]]) -> dict:
+    """Evaluation-twin exclusions for every view, on raw columns AND on the runner's float32
+    model-visible inputs (train-only preprocessing refit per view); the union defines one common
+    validation/test population. Read-only; no model. Used for R4a-ii (D-005)."""
+    import pandas as pd
+    from src.config import make_preprocessor
+    parts = prep.split.parts()
+    rows = prep.frame.index.to_numpy()
+    per_view, union_v, union_t = {}, set(), set()
+    for name, drop in views.items():
+        raw_view = [c for c in prep.feature_cols if c not in drop]
+        _, raw = exclude_eval_twins(content_groups(prep.frame, raw_view), prep.split)
+        c = json.loads(json.dumps(cfg))
+        c["experiment"]["extra_drop_cols"] = list(drop)
+        pre = make_preprocessor(c)
+        pre.fit(prep.frame.iloc[parts["train"]])
+        visible = pd.DataFrame(pre.transform(prep.frame).to_numpy(dtype=np.float32))
+        _, mod = exclude_eval_twins(content_groups(visible, list(visible.columns)), prep.split)
+        rv, rt = set(raw["val_excluded_positions"]), set(raw["test_excluded_positions"])
+        mv, mt = set(mod["val_excluded_positions"]), set(mod["test_excluded_positions"])
+        if not (rv <= mv and rt <= mt):
+            raise AssertionError(f"{name}: raw exclusions not contained in model-visible ones")
+        per_view[name] = {"dropped": len(drop), "model_inputs": len(pre.output_columns), "raw_val": len(rv),
+                          "raw_test": len(rt), "model_val": len(mv), "model_test": len(mt),
+                          "extra_val": len(mv - rv), "extra_test": len(mt - rt)}
+        union_v |= mv
+        union_t |= mt
+    v = np.array(sorted(union_v), dtype=int)
+    t = np.array(sorted(union_t), dtype=int)
+    keep_v, keep_t = np.setdiff1d(parts["val"], v), np.setdiff1d(parts["test"], t)
+    y = prep.y
+    pop = {"val_excluded": len(v), "test_excluded": len(t), "val_excluded_ddos": int(y[v].sum()) if len(v) else 0,
+           "test_excluded_ddos": int(y[t].sum()) if len(t) else 0, "val_kept": len(keep_v), "test_kept": len(keep_t),
+           "test_kept_ddos": int(y[keep_t].sum()), "test_kept_benign": int(len(keep_t) - y[keep_t].sum()),
+           "val_excluded_source_rows": rows[v].tolist(), "test_excluded_source_rows": rows[t].tolist(),
+           "val_kept_source_rows_sha256": rows_sha256(rows[keep_v]), "test_kept_source_rows_sha256": rows_sha256(rows[keep_t])}
+    return {"n_views": len(views), "views": per_view, "split_fingerprint": prep.split.fingerprint(),
+            "representation": "model-visible: runner TrainOnlyPreprocessor refit on train per view, float32",
+            "positions_are": "source_row = row index in the corrected Friday CSV", "family_common_model_visible": pop}

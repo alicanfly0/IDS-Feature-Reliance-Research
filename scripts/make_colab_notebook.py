@@ -44,7 +44,8 @@ D015_AMENDMENT_1_RECORDED = False      # set True ONLY after the amendment is re
 EXPECTED_COMMIT = ""                   # full 40-character commit hash to run
 DRIVE_ROOT = "/content/drive/MyDrive"
 DATA_DRIVE = f"{DRIVE_ROOT}/cnet-data"  # code bundle here; datasets in one subfolder per manifest id
-ARCHIVE = f"{DATA_DRIVE}/cicids2017_original/MachineLearningCSV.zip"   # the only dataset file needed
+ARCHIVE = f"{DATA_DRIVE}/cicids2017_original/MachineLearningCSV.zip"   # original CICIDS2017 (main experiment)
+ENGELEN = f"{DATA_DRIVE}/cicids2017_engelen_wtmc2021/dataset.zip"     # R4a-ii only (D-015 Amendment 2, approved)
 STORAGE = f"{DRIVE_ROOT}/cnet-runs"     # splits, checkpoints, run records, metrics persist here
 CODE_DIR = "/content/cnet"              # VM-local working copy (fast, wiped between sessions)
 
@@ -126,6 +127,12 @@ print("numba", numba.__version__, "| shap", shap.__version__)
 !mkdir -p data/raw/cicids2017_original
 !cp "{ARCHIVE}" data/raw/cicids2017_original/
 !python -m src.data.acquire verify cicids2017_original --file MachineLearningCSV.zip 2>&1 | tee "{STORAGE}/preflight/dataset_verify.txt"
+if os.path.isfile(ENGELEN):   # R4a-ii: corrected data, verified against the manifest before any use
+    os.makedirs("data/raw/cicids2017_engelen_wtmc2021", exist_ok=True)
+    shutil.copy(ENGELEN, "data/raw/cicids2017_engelen_wtmc2021/dataset.zip")
+    !python -m src.data.acquire verify cicids2017_engelen_wtmc2021 --file dataset.zip 2>&1 | tee -a "{STORAGE}/preflight/dataset_verify.txt"
+else:
+    print("Engelen dataset.zip not on Drive: R4a-ii cannot run in this session (main experiment unaffected).")
 !python -m src.experiments.population verify --json "{STORAGE}/preflight/split_population.json"
 !python -m pytest -q -ra 2>&1 | tee "{STORAGE}/preflight/pytest_with_data.txt"
 """),
@@ -176,11 +183,13 @@ else:
     md("## 8. Milestone 3B (protocol r1)\nThe dry run shows the 110-fit matrix, batch status and estimates and trains nothing. Training ONE batch is disabled by default: it needs the approvals (D-007, D-012, D-020 r1, D-021, D-023) recorded in the decision log, the batch number, and the confirmation phrase. `--confirm-approved` is only the operator's confirmation; it is not proof that the approvals exist."),
     code("""
 !python -m src.experiments.matrix_3b plan --storage "{STORAGE}" 2>&1 | tee "{STORAGE}/preflight/dry_run.txt"
+!python -m src.experiments.matrix_3b plan --design r4a --storage "{STORAGE}" 2>&1 | tee "{STORAGE}/preflight/dry_run_r4a.txt"
+DESIGN = "r1"                           # "r1" = main experiment; "r4a" = R4a-ii (corrected data, D-024)
 AUTHORIZE_3B_BATCH = ""                 # type exactly: I confirm this training batch is approved
 BATCH = None                            # e.g. 0, after approval only
 if AUTHORIZE_3B_BATCH == "I confirm this training batch is approved" and isinstance(BATCH, int):
-    subprocess.run([sys.executable, "-m", "src.experiments.matrix_3b", "run", "--batch", str(BATCH), "--storage", STORAGE,
-                    "--device", "cuda", "--confirm-approved"], check=True)
+    subprocess.run([sys.executable, "-m", "src.experiments.matrix_3b", "run", "--design", DESIGN, "--batch", str(BATCH),
+                    "--storage", STORAGE, "--device", "cuda", "--confirm-approved"], check=True)
 else:
     print("Training disabled: no batch was trained in this cell.")
 """),

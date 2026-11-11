@@ -188,7 +188,9 @@ def test_runner_refuses_to_resume_in_a_different_environment(tmp_path, monkeypat
     cfg = _tiny_cfg()
     run_dir = ae_xgb.run(cfg, "cpu", tmp_path, loader=_loader)
     ident = json.loads((run_dir / "identity.json").read_text())
-    assert ident["environment_fingerprint"] == env.fingerprint(env.snapshot()) and "environment" in ident
+    expected = env.snapshot()
+    expected["device"] = "cpu"                                    # the device the run TRAINED on
+    assert ident["environment_fingerprint"] == env.fingerprint(expected) and ident["environment"]["device"] == "cpu"
     assert agg.environment_record(run_dir)["fingerprint"] == ident["environment_fingerprint"]
     (run_dir / "DONE").unlink()                                                   # simulate an interrupted run
     real = env.snapshot
@@ -206,3 +208,24 @@ def test_split_and_population_verify_reproduces_records():
     assert out["split_matches"] and out["val_kept_matches"] and out["test_kept_matches"]
     assert (out["val_kept"], out["test_kept"]) == (33134, 33038)
     assert "path" not in json.dumps(out["data_provenance"]).lower()             # names only, no local paths
+
+
+def test_cpu_run_on_a_gpu_machine_records_its_training_device(tmp_path, monkeypatch):
+    """Reproduces Colab locally: a GPU is available, the run trains on CPU; provenance must stay consistent."""
+    from src.experiments import ae_xgb
+    from test_ae_xgb import _loader, _tiny_cfg
+    real = env.snapshot
+
+    def gpu_machine(*a, **k):
+        s = real(*a, **k)
+        s["device"] = "cuda"                                      # best AVAILABLE device, as on Colab
+        s["gpu"] = {**(s.get("gpu") or {}), "devices": [{"name": "Tesla T4", "memory_bytes": 1}],
+                    "torch_cuda_version": "13.0", "torch_cuda_available": True}
+        return s
+    monkeypatch.setattr(env, "snapshot", gpu_machine)
+    run_dir = ae_xgb.run(_tiny_cfg(), "cpu", tmp_path, loader=_loader)
+    ident = json.loads((run_dir / "identity.json").read_text())
+    saved = json.loads(next(run_dir.glob("environment-*.json")).read_text())
+    assert saved["device"] == "cpu" and saved["available_device"] == "cuda"
+    assert ident["environment"]["device"] == "cpu" and ident["environment"]["gpu_names"] == []
+    assert agg.environment_record(run_dir)["device"] == "cpu"     # no false device mismatch

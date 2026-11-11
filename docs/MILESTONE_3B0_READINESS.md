@@ -81,6 +81,15 @@ corrected accordingly.
 | Statistics | `src/evaluation/stats_3b.py` | Orientation, exact sign-flip with tie handling and attainable-p reporting, t-intervals, Holm, pre-registered readings, Clopper–Pearson, cluster bootstrap with a distinct-replicate count |
 | Colab notebook | `scripts/make_colab_notebook.py` → `notebooks/colab_runner.ipynb` | Installs numba and shap if missing (needed by `tests/test_audit.py`); new §8 3B dry-run cell; the training line is commented out and needs `--confirm-approved` |
 
+**Monday population record (data-only, no model):** `results/protocol/milestone3b/monday_population_r1.json`.
+
+| Step | Rows |
+|---|---|
+| Monday raw | 529,918 |
+| After D-011 rules | 529,466 |
+| Excluded as duplicates of a Friday training vector in at least one of the 63 model-visible r1 views (largest single view 25,866; full view 9,197) | 34,526 (6.5%) |
+| **Kept for every model** | **494,940** (hash recorded; the scorer refuses any other row set) |
+
 **Original artifacts:** all 96 SHA-256-protected artifacts are unchanged, and `correct_arr --verify`
 passes. The six SHAP arrays and original runs are untouched.
 

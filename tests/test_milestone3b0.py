@@ -205,3 +205,98 @@ def test_population_applies_identically_and_refuses_tampering(tmp_path):
     bad["family_common_model_visible"]["test_excluded_source_rows"] = bad["family_common_model_visible"]["test_excluded_source_rows"][1:]
     with pytest.raises(RuntimeError):
         apply_population(prep, bad, [c for c in prep.feature_cols if c not in groups["groups"]["D_metadata_hypothesis"]["columns"]])
+
+
+# ------------------------------------------------------------------ 3B-0.1: scorer provenance (fail closed)
+
+MONDAY_RECORD = ROOT / "results/protocol/milestone3b/monday_population_r1.json"
+
+
+def test_monday_record_checked_against_committed_matrix():
+    matrix = mx.load_matrix()
+    record = json.loads(MONDAY_RECORD.read_text())
+    sb.check_record(record, matrix)                                         # the committed record passes
+    for key, value in (("groups_sha256_lf", "0" * 64), ("split_fingerprint", "f" * 64), ("n_views", 38),
+                       ("groups_file", "configs/protocol/ablation_groups_3a.yaml"), ("kept", record["kept"] + 1)):
+        bad = dict(record, **{key: value})
+        with pytest.raises(RuntimeError):
+            sb.check_record(bad, matrix)
+    bad = dict(record, per_view_training_twins={k: v for k, v in list(record["per_view_training_twins"].items())[1:]})
+    with pytest.raises(RuntimeError, match="views"):
+        sb.check_record(bad, matrix)
+
+
+def _fake_matrix_run(tmp_path, entry):
+    from src.experiments import ae_xgb
+    cfg = ae_xgb.load_experiment(ROOT / entry["config"])
+    d = tmp_path / "runs" / f"{entry['experiment_name']}-seed{entry['model_seed']}-cpu-{ae_xgb.config_hash(cfg)[:8]}"
+    (d / "checkpoints").mkdir(parents=True)
+    for a in ("DONE", "identity.json", "checkpoints/ae_best.pt", "xgb_model.json"):
+        (d / a).write_text("{}")
+    (d / "effective_config.json").write_text(json.dumps(cfg, default=str))
+    matrix = mx.load_matrix()
+    pop = json.loads((ROOT / matrix["population_file"]).read_text())
+    (d / "run_record.json").write_text(json.dumps({"split_fingerprint": matrix["split_fingerprint"]}))
+    (d / "data_report.json").write_text(json.dumps({"family_common_population": {
+        "test_kept_source_rows_sha256": pop["family_common_model_visible"]["test_kept_source_rows_sha256"]}}))
+    base = json.loads((ROOT / mx.BASELINE_PREPROCESSOR).read_text())
+    cols = [c for c in base["numeric_cols"] if c not in entry["drop"]]
+    (d / "preprocessor.json").write_text(json.dumps({"numeric_cols": cols, "input_dim": len(cols),
+                                                      "dropped_by_name": ["Label", *entry["drop"]],
+                                                      "dropped_constant_on_train": base["dropped_constant_on_train"]}))
+    return d, matrix
+
+
+def test_scorer_refuses_tampered_runs(tmp_path):
+    matrix = mx.load_matrix()
+    entry = next(e for e in matrix["entries"] if e["id"] == "r1_Bctl3_s3")
+    d, matrix = _fake_matrix_run(tmp_path, entry)
+    assert sb.check_run(d, entry, matrix)["input_dim"] == 58                 # untampered synthetic run passes
+    other = next(e for e in matrix["entries"] if e["id"] == "r1_Bctl3_s4" or e["id"] == "r1_B_s3")
+    with pytest.raises(RuntimeError, match="committed config"):
+        sb.check_run(d, other, matrix)                                     # wrong matrix entry
+    tamper = [
+        ("run_record.json", {"split_fingerprint": "0" * 64}, "different split"),
+        ("data_report.json", {"family_common_population": {"test_kept_source_rows_sha256": "0" * 64}}, "family-common"),
+    ]
+    for name, content, msg in tamper:
+        saved = (d / name).read_text()
+        (d / name).write_text(json.dumps(content))
+        with pytest.raises(RuntimeError, match=msg):
+            sb.check_run(d, entry, matrix)
+        (d / name).write_text(saved)
+    pre = json.loads((d / "preprocessor.json").read_text())
+    (d / "preprocessor.json").write_text(json.dumps({**pre, "numeric_cols": pre["numeric_cols"][:-1]}))
+    with pytest.raises(RuntimeError, match="input schema"):
+        sb.check_run(d, entry, matrix)
+    (d / "preprocessor.json").write_text(json.dumps(pre))
+    cfg = json.loads((d / "effective_config.json").read_text())
+    cfg["run"]["model_seed"] = 7
+    (d / "effective_config.json").write_text(json.dumps(cfg))
+    with pytest.raises(RuntimeError, match="committed config"):
+        sb.check_run(d, entry, matrix)
+    (d / "xgb_model.json").unlink()
+    with pytest.raises(RuntimeError, match="missing saved artifacts"):
+        sb.check_run(d, entry, matrix)
+
+
+# ------------------------------------------------------------------ 3B-0.1: inference consistency (bounded)
+
+BASELINE_RUN = ROOT / "results/runs/ae_xgb_d008_trackB-seed0-cpu-565a8b9e"
+
+
+@pytest.mark.skipif(not (DATA and (BASELINE_RUN / "DONE").is_file()), reason="baseline run or data unavailable")
+def test_runner_equivalent_inference_reproduces_saved_predictions():
+    """Already-inspected baseline test rows only: the Monday inference path must equal the saved run."""
+    from src.data import ddos
+    cfg = load_config(ROOT / mx.BASE_CONFIG)
+    prep = ddos.prepare(ddos.load(ddos.verified_csv(ROOT)[0]), cfg["data"]["label_map"])
+    with gzip.open(BASELINE_RUN / "predictions_test.csv.gz", "rt") as f:
+        saved = pd.read_csv(f).iloc[:9000]                                  # spans two 8192-row batches
+    raw = prep.frame.loc[saved["source_row"].to_numpy(), prep.feature_cols].to_numpy(np.float64)
+    prob, sens = sb.runner_equivalent_proba(BASELINE_RUN, prep.feature_cols, raw)
+    assert np.array_equal(prob.astype(np.float32), saved["prob_ddos"].to_numpy(np.float32))
+    assert ((prob >= 0.5).astype(int) == saved["y_pred"].to_numpy()).all()
+    assert sens["threshold_crossings"] == 0 and sens["max_abs_margin_diff"] < 1e-4
+    rec = json.loads((ROOT / "results/protocol/milestone3b/inference_consistency_v1.json").read_text())
+    assert rec["results"][0]["bitwise_equal_prob_vs_saved"] and all(r["threshold_crossings_vs_saved"] == 0 for r in rec["results"])

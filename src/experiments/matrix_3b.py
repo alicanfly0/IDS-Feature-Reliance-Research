@@ -3,7 +3,8 @@
     python -m src.experiments.matrix_3b generate                  # write configs + matrix.json (idempotent)
     python -m src.experiments.matrix_3b plan [--storage DIR]      # dry run: batches, status, estimates
     python -m src.experiments.matrix_3b run --batch K --storage DIR --device cuda --confirm-approved
-                                                                  # trains ONE batch (needs recorded approval)
+                                                                  # trains ONE batch; the flag is an operator
+                                                                  # confirmation only, NOT proof of approval
 
 Mandatory design D (docs/MILESTONE_3A_REVIEW_RESOLUTION.md §3): full model and the five primary
 groups at model seeds 0-9, and random control draw j trained with seed j (j = 0..9): 110 fits.
@@ -177,7 +178,8 @@ def main(argv=None) -> int:
     p.add_argument("--batch", type=int)
     p.add_argument("--device", default="auto", choices=("auto", "cpu", "cuda"))
     p.add_argument("--confirm-approved", action="store_true",
-                   help="required for 'run': confirms D-007/D-012/D-020 r1/D-021/D-023 approval is recorded")
+                   help="required for 'run': the OPERATOR's explicit confirmation that D-007/D-012/D-020 r1/D-021/D-023 "
+                        "approvals are recorded. It is not checked against the decision log and is not proof of approval.")
     a = p.parse_args(argv)
     if a.command == "generate":
         print(f"wrote {generate().relative_to(ROOT)}")

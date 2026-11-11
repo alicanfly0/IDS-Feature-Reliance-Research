@@ -903,3 +903,34 @@ Report: `docs/MILESTONE_3B01_EXECUTION_SAFETY.md`.
   checks.
 - **`--confirm-approved`** is an operator confirmation only. It is not checked against this log
   and is not proof that any decision is approved.
+
+
+## Approvals for Milestone 3B batch 0 — 2026-11-11 (user)
+
+The user approved starting the experiments ("done please start now"), in reply to the request to
+approve the five decisions the independent reviewer recommended. Recorded as **APPROVED
+(2026-11-11)**, with their documented limitations:
+
+- **D-007:** the r1 statistics plan, including the sign-flip assumptions.
+- **D-012:** registry v2 levels and the A/B/C/D group mapping.
+- **D-020 r1:** design D (110 fits, seeds 0–9, 10 control draws), the error-rate endpoint and the
+  decision rules. The SESOI of 0.001 error rate ≈ 33 errors on the 33,038 test rows, versus 5
+  baseline errors, so it is a generous margin. FPR SESOI 0.001.
+- **D-021:** AE cap of 100 epochs, with the cap-200 sensitivity where the cap is hit.
+- **D-023:** Monday as the confirmatory FPR population and a sealed Tuesday–Thursday reserve.
+
+**Scope of this approval:** batch 0 only (the 10 full-model seeds). The remaining 100 fits wait
+for the batch 0 review.
+
+**Code and environment:** all 110 fits must use code commit `659c35d` (bundle
+`cnet_code_659c35d8349e.zip`) and the frozen Colab environment v1.
+
+**Measured on the T4** (`results/colab results/benchmark1/`):
+
+- data preparation 30 s;
+- autoencoder 1.28 s per epoch;
+- XGBoost 0.034 s per round;
+- peak RAM 2.2 GB.
+- Upper bound per fit 3.7 min.
+
+**Not approved:** D-004, D-005, D-024 (R4a) and any Engelen upload.

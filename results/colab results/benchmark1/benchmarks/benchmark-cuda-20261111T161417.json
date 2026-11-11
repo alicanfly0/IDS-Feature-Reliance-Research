@@ -1,0 +1,64 @@
+{
+  "device": "cuda",
+  "snapshot": {
+    "utc_time": "2026-11-11T16:14:17+00:00",
+    "python": "3.13.16",
+    "os": "Linux-6.6.159+-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "cpu": "Intel(R) Xeon(R) CPU @ 2.00GHz",
+    "cpu_count": 2,
+    "ram_bytes": 13605818368,
+    "in_colab": true,
+    "device": "cuda",
+    "gpu": {
+      "torch_cuda_available": true,
+      "devices": [
+        {
+          "name": "Tesla T4",
+          "memory_bytes": 15637086208
+        }
+      ],
+      "torch_cuda_version": "13.0",
+      "cudnn_version": 92800,
+      "nvidia_smi": [
+        "Tesla T4, 15360 MiB, 580.82.07"
+      ]
+    },
+    "packages": {
+      "numpy": "2.4.6",
+      "pandas": "2.2.3",
+      "scipy": "1.16.3",
+      "scikit-learn": "1.6.1",
+      "PyYAML": "6.0.3",
+      "pytest": "8.4.2",
+      "torch": "2.14.1+cu130",
+      "xgboost": "3.4.1",
+      "lightgbm": "4.6.0",
+      "shap": "0.54.1",
+      "numba": "0.64.0",
+      "llvmlite": "0.46.0",
+      "matplotlib": "3.10.0"
+    },
+    "git": {
+      "commit": "659c35d8349e4393e8c43ebda0d1ecd0391a414e",
+      "dirty": false,
+      "source": "bundle"
+    },
+    "seed": null,
+    "dataset": null
+  },
+  "train_rows": 157998,
+  "input_dim": 68,
+  "measured": {
+    "data_and_preprocess_s": 30.09,
+    "ae_seconds_per_batch": 0.001908840366665269,
+    "ae_batches_per_epoch": 618,
+    "ae_seconds_per_epoch": 1.28,
+    "xgb_seconds_per_round": 0.034189692139998444
+  },
+  "projection_upper_bound_minutes": {
+    "autoencoder_max_epochs": 2.1,
+    "xgboost_max_rounds": 1.1
+  },
+  "projection_assumptions": "AE runs all 100 epochs and XGBoost all 2000 rounds (early stopping usually ends both sooner); excludes Drive I/O and session start-up"
+}

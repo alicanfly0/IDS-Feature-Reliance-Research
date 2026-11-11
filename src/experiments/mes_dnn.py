@@ -37,6 +37,7 @@ OUT = ROOT / "results/mes_dnn"
 PARTS = ("base", "meta", "val", "test")
 FRACTIONS = {"base": 0.63, "meta": 0.07, "val": 0.03, "test": 0.27}
 HP = dict(hidden=[9, 7, 5, 3], meta_hidden=10, lr=1e-3, batch_size=1000, epochs=10, threshold=0.5)
+PARTITIONER = {"random": "stratified rows", "dup_aware": "v2 balanced largest-first group assignment"}
 NETWORKS = {"N1_unsw": netflow.load_unsw, "N2_ton": netflow.load_ton}
 
 
@@ -67,11 +68,20 @@ def partition(mode: str, seed: int, y: np.ndarray, gid: np.ndarray) -> np.ndarra
     g = pd.DataFrame({"g": gid, "y": y}).groupby("g")["y"].agg(["size", "mean"])
     g_label = (g["mean"] >= 0.5).astype(int).to_numpy()
     sizes = g["size"].to_numpy()
+    frac = np.array([FRACTIONS[p] for p in PARTS])
     assign = np.empty(len(g), dtype=np.int8)
     for cls in (0, 1):
+        # v2 (balanced): groups in descending size (random order among equal sizes), each to the
+        # partition with the largest remaining row deficit for this class. v1 placed groups by a
+        # random cumulative order, which let giant groups (NF-ToN-IoT-v2: one vector x 422,766
+        # rows) fill a partition with one class; superseded, see results/mes_dnn/superseded/.
         gs = rng.permutation(np.flatnonzero(g_label == cls))
-        mid = (np.cumsum(sizes[gs]) - sizes[gs] / 2) / sizes[gs].sum()
-        assign[gs] = np.searchsorted(edges, mid, side="right").clip(max=3)
+        gs = gs[np.argsort(-sizes[gs], kind="stable")]
+        deficit = frac * sizes[gs].sum()
+        for k in gs:
+            j = int(np.argmax(deficit))
+            assign[k] = j
+            deficit[j] -= sizes[k]
     return assign[gid]
 
 
@@ -297,7 +307,7 @@ def cmd_run(modes: list, seeds: list) -> int:
             rdir.mkdir(parents=True, exist_ok=True)
             torch.save(art["meta"].state_dict(), rdir / "ensemble.pt")
             np.savez_compressed(rdir / "test_proba.npz", **{k.replace("/", "__"): v for k, v in art["proba"].items()})
-            out = {"mode": mode, "seed": seed, "hyperparameters": HP, "fractions": FRACTIONS, **info,
+            out = {"mode": mode, "seed": seed, "partitioner": PARTITIONER[mode], "hyperparameters": HP, "fractions": FRACTIONS, **info,
                    "environment": snap, "environment_fingerprint": fingerprint(snap)}
             (rdir / "metrics.json").write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
             line = " | ".join(f"{k.split('/')[0]} MCC {v['all']['mcc']:.4f} novel {v['novel_vectors']['mcc']:.4f}"

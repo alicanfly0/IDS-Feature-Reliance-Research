@@ -40,6 +40,16 @@ def test_dup_aware_puts_every_vector_in_one_partition():
     assert rnd["test_rows_with_vector_seen_in_base_meta_val"] > 0.9 * rnd["rows"]["test"]
 
 
+def test_dup_aware_keeps_class_mix_with_giant_groups():
+    y = np.r_[np.zeros(4000, int), np.ones(6000, int)]
+    gid = np.r_[np.zeros(1800, int), np.arange(1, 2201), np.full(2500, 2201), np.arange(2202, 5702)]
+    p = M.partition("dup_aware", 0, y, gid)
+    assert pd.Series(p).groupby(gid).nunique().max() == 1
+    for cls in (0, 1):
+        share = np.bincount(p[y == cls], minlength=4) / (y == cls).sum()
+        assert np.allclose(share, [M.FRACTIONS[k] for k in M.PARTS], atol=0.01), share
+
+
 def test_meta_model_freezes_bases_and_stacks_their_outputs():
     Base, Meta = M._models()
     bases = [Base(np.zeros(39), np.ones(39)) for _ in range(2)]

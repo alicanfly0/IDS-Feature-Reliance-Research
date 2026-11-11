@@ -1,0 +1,26 @@
+{
+  "N1_unsw": {
+    "rows": 2390275,
+    "attack": 95053,
+    "unique_vectors": 236999,
+    "duplicate_rows": 2153276,
+    "label_conflict_vectors": 0,
+    "matrix_sha256": "15ba4af9c0d2708718352076ff4f743132f61a8c3efa558eb137a6ec4e2216e7",
+    "input_transform": "log1p",
+    "raw_values_beyond_float32_max": {}
+  },
+  "N2_ton": {
+    "rows": 2390275,
+    "attack": 1529289,
+    "unique_vectors": 505611,
+    "duplicate_rows": 1884664,
+    "label_conflict_vectors": 0,
+    "matrix_sha256": "30379a349dab1d6023835f0571f5b96ffab3dc9d32ce28d5117f271f6bf7da98",
+    "input_transform": "log1p",
+    "raw_values_beyond_float32_max": {
+      "SRC_TO_DST_SECOND_BYTES": 22,
+      "DST_TO_SRC_SECOND_BYTES": 23
+    }
+  },
+  "shared_vectors_between_networks_hash64": 4
+}

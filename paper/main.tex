@@ -167,8 +167,8 @@ where $\mathcal{V}$ is the set of all views (full model, groups and controls).
 
 \subsection{Artifact groups and size-matched controls}
 Groups are defined from the literature before training: A (TCP flag-count defects), B (TCP
-appendix features), C (duplicated-packet timing features), D (metadata hypotheses such as
-destination port) and U (their union). Each group $G$ is closed under the proxy relation measured
+appendix features), C (duplicated-packet timing features), D (metadata hypotheses: destination port
+and backward initial window) and U (the union of the documented groups A, B and C). Each group $G$ is closed under the proxy relation measured
 on training data (exact equality or $|r|\geq 0.999$), so a removed feature cannot be recovered
 through a near-copy. For each $G$ ten random controls $R_{G,1..10}$ of equal size are drawn from
 the non-registered, proxy-closed features.
@@ -192,9 +192,12 @@ Practical equivalence is declared when the TOST interval lies within the smalles
 interest, $\pm0.001$ (about 33 errors on the test population, and 0.1 percentage points of FPR).
 
 \subsection{Attribution: ARR@K}
-For a model's global mean-$|\mathrm{SHAP}|$ ranking, the artifact reliance ratio
-$\mathrm{ARR@}K=|\mathrm{top}_K\cap\mathcal{R}|/K$ is the share of the top-$K$ features in the
-artifact registry $\mathcal{R}$. It is descriptive only.
+With global importances $I_j=\overline{|\mathrm{SHAP}_j|}$, the artifact reliance ratio is the
+share of the top-$K$ attribution mass held by features of the artifact registry $\mathcal{R}$:
+\begin{equation}
+\mathrm{ARR@}K=\frac{\sum_{j\in\mathrm{top}_K\cap\mathcal{R}} I_j}{\sum_{j\in\mathrm{top}_K} I_j}.
+\end{equation}
+It measures where an explanation concentrates, not whether performance depends on those features.
 
 \begin{algorithm}[t]
 \caption{Feature-reliance audit (one group $G$)}
@@ -277,6 +280,7 @@ positives (FPR 0.068\%--0.195\%, mean 0.108\%). All 110 fits ran on one code com
 fingerprinted environment. % results/milestone3b/stats_r1.json
 
 \subsection{AE-XGBoost: group ablations (H1) and Monday FPR (H2)}
+\label{sec:results-main}
 \begin{table*}[t]
 \centering
 \caption{Pre-registered primary family (10 tests). $\bar\Delta_G$, $\bar\Delta_R$: mean removal effect of the group and of its size-matched random control (ablated minus full); $\bar d$: mean paired contrast; all $\times10^{-3}$ (SESOI $=1$). Interval: 99\% t-interval (Bonferroni-consistent). $p_{\mathrm{Holm}}$: exact sign-flip p, Holm-adjusted over the family.}
@@ -304,7 +308,37 @@ of the full model's FPR (0.068\%--0.195\%). % results/milestone3b/stats_r1.json,
 \subsection{Transfer to the corrected capture (R4a)}
 \pending{R4a-i descriptive scores and R4a-ii 70-fit results; observational, not causal.}
 \subsection{DCNN + self-attention on UNSW-NB15}
-\pending{Five-seed mean and range on official vs duplicate-filtered test, from results/dcnn\_fang/summary.json.}
+\begin{table}[t]
+\centering
+\caption{DCNN + self-attention adaptation on UNSW-NB15 (Normal vs DoS, DoS positive), mean
+[min, max] over five seeds. Filtered: test rows whose model-visible input equals a training row
+removed (3,330 rows: 1,862 Normal, 1,468 DoS).}
+\label{tab:dcnn}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Metric & Official (41,089) & Filtered (37,759) \\
+\midrule
+Errors & 2,078 [1,850, 2,354] & 1,990 [1,757, 2,259] \\
+False negatives & 102 [92, 112] & 102 [92, 112] \\
+MCC & 0.784 [0.763, 0.801] & 0.719 [0.696, 0.740] \\
+DoS recall & 0.975 [0.973, 0.978] & 0.961 [0.957, 0.965] \\
+DoS precision & 0.669 [0.639, 0.696] & 0.572 [0.539, 0.604] \\
+Normal-class FPR & 0.053 [0.047, 0.061] & 0.054 [0.047, 0.062] \\
+ROC-AUC & 0.995 [0.994, 0.995] & 0.992 [0.991, 0.993] \\
+\bottomrule
+\end{tabular}
+\end{table}
+% results/dcnn_fang/summary.json, selection.json
+Table~\ref{tab:dcnn} summarises the five seeds. On the official test partition the model detects
+97.5\% of DoS flows but flags 5.3\% of Normal flows, so 95\% of its errors are false positives
+and DoS precision is 0.669 (MCC 0.784). Removing the 3,330 test rows that have a model-visible
+twin in the training partition lowers MCC to 0.719 and DoS precision to 0.572. The false-negative
+count is identical in the two populations for every seed (95, 109, 92, 112, 100): all 1,468
+duplicated DoS test rows were detected by all five models, whereas the Normal-class FPR is
+unchanged. The duplicated rows are therefore easy positives that raise recall, precision and MCC
+without saying anything about generalisation to unseen DoS flows. A looser filter on the raw
+features removes only 1,395 rows and leaves MCC at 0.781, so most of the overlap appears only after
+winsorising, scaling and the 22-feature selection map distinct raw rows onto the same model input.
 \subsection{MES-DNN on NetFlow-v2}
 \begin{table}[t]
 \centering
@@ -338,8 +372,28 @@ networks, and the two-network meta-model is unstable across seeds (random-split 
 on NF-UNSW-NB15-v2): it sees only the two base scores and cannot tell which network a flow came
 from. A five-network evaluation was outside our scope.
 \subsection{Attribution}
-\pending{ARR@K for AE-XGBoost (registry v2); DCNN and MES-DNN attribution pilots without ARR
-classification (no registry exists for those datasets).}
+\textbf{AE-XGBoost.} Permutation SHAP on the log-odds of an earlier single-seed AE-XGBoost model
+(same Friday DDoS task, duplicate-aware split; six explainer settings varying background,
+sample and permutation budget) ranks ACK Flag Count first in every setting. Under registry v2,
+registered features (all evidence tiers) hold 55.0--60.8\% of the top-2 attribution mass and
+34.7--36.8\% of the top-20 mass (ARR@20 of the extraction-defect tier alone: 21.3--22.2\%).
+% results/corrections/milestone2b/corrected_arr_v2.json, docs/MILESTONE_2B_CORRECTIONS.md
+Read naively, the explanation says the model relies on the TCP flag-count defects. The
+interventional result says otherwise: retrained without the eight flag-count features (group A),
+the model makes about three additional errors on 33,038 test rows
+(Section~\ref{sec:results-main}). The explanation describes what one fitted model uses, not
+what the task requires: the remaining features carry almost the same information.
+
+\textbf{DCNN and MES-DNN.} No artifact registry exists for UNSW-NB15 or NetFlow-v2, so we report
+no ARR for these models, only the stability of their own GradientExplainer rankings (500
+background rows, 1,000 class-balanced explained rows per model). \pending{DCNN: Spearman across
+seeds and agreement with the LightGBM selector ranking, from results/attribution\_pilot/dcnn.json.}
+For MES-DNN, the mean pairwise Spearman correlation of the ensemble's 39-feature rankings across
+five seeds is 0.73 (NF-UNSW-NB15-v2) and 0.87 (NF-ToN-IoT-v2) under the random split and 0.69 and
+0.86 under the duplicate-aware split, but the top-5 sets overlap by only 44--50\% between seeds.
+% results/attribution_pilot/mes.json
+Two seeds of the same model typically share only two or three of their five most important
+features, so a single-seed explanation is not a stable description of the model family.
 
 % ===================================================================== 9. Comparison
 \section{Comparison with Base Papers and State-of-the-Art}
@@ -347,18 +401,100 @@ Our numbers are not directly comparable with the source papers: the data scope, 
 populations and polarity differ (Table~\ref{tab:related}). Nezhadsistani et al.\ report F1 0.9993
 on CICIDS2017 under 5-fold CV with joint 5G training; Fang et al.\ use a stratified 70/30 split
 with Normal as the positive class; Wardana et al.\ use five networks and a random split.
-\pending{Side-by-side table: author-reported vs ours, with every protocol difference in a column.}
+\begin{table*}[t]
+\centering
+\caption{Author-reported results vs our adaptations. Values are not directly comparable; the
+protocol columns list every difference that we know of. Ours: mean over seeds.}
+\label{tab:compare}
+\begin{tabular}{@{}lp{3.3cm}p{3.1cm}p{3.7cm}p{4.2cm}@{}}
+\toprule
+Model & Author data and protocol & Author-reported & Our data and protocol & Ours \\
+\midrule
+AE-XGBoost~\cite{nezhadsistani2026} & CICIDS2017 jointly with two 5G datasets; 5-fold CV & F1 0.9993 &
+CICIDS2017 Friday DDoS only; duplicate-aware split; twin-excluded test; 10 seeds &
+F1 0.99985, MCC 0.99964, 5.8 errors / 33,038 \\
+DCNN+SA~\cite{fang2026} & UNSW-NB15 Normal vs DoS; Normal positive; seed 42 & MCC 0.9355, AUROC 0.999 &
+Official partition, DoS positive; $K=22$ fixed; 5 seeds & MCC 0.784 (official), 0.719
+(duplicate-filtered); AUC 0.995 \\
+MES-DNN~\cite{wardana2026} & Five NetFlow-v2 networks; random 70/30 split & Accuracy 96.67\%, F1 95.36\% (scenario 2) &
+Two networks (NF-ToN-IoT-v2 subsampled); random vs duplicate-aware split; 5 seeds &
+Ensemble accuracy 85.5\%, F1 0.715 (random); 61.7\%, F1 0.445 (duplicate-aware) \\
+\bottomrule
+\end{tabular}
+\end{table*}
+% AE: results/milestone3b/aggregate_r1.json (F1 from fp/fn, 19,233 positives); DCNN: results/dcnn_fang/summary.json;
+% MES: results/mes_dnn/summary.json (ensemble, population all, mean over 5 seeds x 2 networks).
+Table~\ref{tab:compare} shows the pattern. On the CICIDS2017 Friday DDoS task our AE-XGBoost
+adaptation reaches a higher F1 than the reported model does on its broader task, even under a
+duplicate-aware split, so this benchmark is close to saturated. Our DCNN adaptation stays well below the reported MCC,
+and the gap widens once training twins are removed from the test set. Our two-network MES-DNN
+ensemble is well below the five-network result and degrades further under the duplicate-aware
+split. Because none of the three is a reproduction, these gaps are not evidence that the
+reported numbers are wrong; they show how strongly the reported figures depend on the split and
+the population.
 
 % ===================================================================== 10. Ablation
 \section{Ablation Study}
-\pending{Feature-group ablations (main), selector size K = 22 vs the 95\% rule (30 features) for
-the DCNN if run, split mode for MES-DNN, and the attention ablation if run.}
+Three ablations were run; each removes one component and holds everything else fixed.
+
+\textbf{Feature groups (AE-XGBoost, 110 fits).} Removing any one documented artifact group, the
+metadata hypotheses or the 20-feature union changes the in-domain error rate by at most
+$0.18\times10^{-3}$ relative to a size-matched random control (Table~\ref{tab:main}). The
+model's near-perfect accuracy is therefore not carried by the documented artifact features; it
+survives their removal almost unchanged.
+
+\textbf{Leakage control in the test population (DCNN).} Removing training twins from the
+UNSW-NB15 test set (Table~\ref{tab:dcnn}) lowers MCC from 0.784 to 0.719 and DoS precision from
+0.669 to 0.572 without changing a single false negative. A raw-feature filter removes fewer rows
+(1,395 vs 3,330) and almost no MCC (0.781), so the leakage check must be made on the model's
+input, not on the raw record.
+
+\textbf{Split mode (MES-DNN).} Replacing the random split by a duplicate-aware one
+(Table~\ref{tab:mes}) leaves the NF-UNSW-NB15-v2 base model unchanged (MCC 0.939 vs 0.940) but
+reduces the NF-ToN-IoT-v2 base model from 0.906 to 0.150, and the two-network ensemble from
+0.658 and 0.625 to 0.001 and 0.242.
+
+\textbf{Not run.} Fang et al.'s 95\% cumulative-SHAP rule selects 30 features on our training
+partition rather than 22 (22 features cover 90.5\% of the mass); we kept $K=22$ and did not
+retrain with 30. We also did not repeat the attention ablation of the source paper. Both are
+listed as future work rather than estimated.
+% results/dcnn_fang/selection.json (rule95 count 30, cumulative share at K = 0.9053)
 
 % ===================================================================== 11. Discussion
 \section{Discussion}
-\pending{Interpretation after results; threats to validity: inspected test set (H1 is a
-pre-registered estimate, not confirmatory), single capture day, +5:00 alignment assumption,
-adaptation differences, sign-flip exactness only under sharp exchangeability, ten seeds.}
+\textbf{Attribution is not reliance.} The AE-XGBoost explanation concentrates on the TCP
+flag-count features, which the forensic literature documents as defective, yet retraining
+without them costs about three errors in 33,038. Both observations are correct; they answer
+different questions. An explanation reports which inputs one fitted model happens to use. When
+many features are redundant, a retrained model uses others and loses almost nothing. Claims that
+a NIDS ``relies on'' a feature should therefore be backed by an intervention, not by a SHAP plot.
+
+\textbf{The Friday DDoS benchmark is saturated, not necessarily valid.} That accuracy survives
+the removal of every documented artifact group shows that the remaining features separate DDoS
+from benign traffic on this capture. It does not show that the separation transfers: all test
+rows come from the same afternoon, the same hosts and the same extractor.
+\pending{R4a: what the corrected-capture results add to this point.}
+
+\textbf{Duplicates inflate reported scores.} In both UNSW-NB15 and the NetFlow-v2 data, a large
+share of test rows repeat a training input exactly. Duplicated rows are easy: in the DCNN audit
+not one of the 1,468 duplicated DoS test rows was missed by any seed. On NF-ToN-IoT-v2 a single
+benign vector makes up 17.7\% of the data; once whole duplicate groups are held out, the base
+model that looked accurate under a random split fails on benign traffic. Reported results on
+these datasets should state how duplicates were handled.
+
+\textbf{Threats to validity.}
+(i) The CICIDS2017 test population was inspected while the protocol was designed, so H1 is a
+pre-registered estimate on a known population, not a confirmatory test on fresh data.
+(ii) The main experiment uses one capture day, one attack family and one model; the effects may
+differ for other attacks.
+(iii) The $+5{:}00$ clock alignment of the Engelen capture is an empirically supported
+assumption, not a confirmed time-zone correction.
+(iv) All three models are adaptations with documented differences from the source papers.
+(v) The sign-flip p-values are exact only under sharp exchangeability of the paired contrasts;
+ten seeds give a smallest attainable two-sided p of $2/1024$.
+(vi) The SESOI of $10^{-3}$ was fixed before training but is a judgement; another value would
+change the practical-relevance and equivalence verdicts, though not the p-values.
+(vii) The MES-DNN audit uses two of five networks and a fixed NF-ToN-IoT-v2 subsample.
 
 % ===================================================================== 12. Conclusion
 \section{Conclusion and Future Work}

@@ -1,0 +1,32 @@
+# Frozen Colab software environment v1 (Milestone 3B-1), taken ONLY from what Colab session 1 recorded:
+#   results/colab results/session1/preflight/environment.json (commit ac0715a, 2026-11-11T15:18:45Z)
+#   plus the numba version printed by the notebook's dependency cell in the same session.
+# Checked and enforced by `python -m src.colab_env check|install` (see docs/COLAB_EXECUTION_PLAN.md).
+version: 1
+source_session: colab_session1
+source_commit: ac0715a73ad9af7e591aac100c116b594dd21158
+
+# Cannot be changed by pip: a mismatch is FATAL (choose another runtime, or create spec v2 by decision).
+python_major_minor: "3.13"            # observed 3.13.16
+platform: colab
+device: cuda
+gpu_name: Tesla T4                    # result-relevant: different GPUs can give different float results
+torch:
+  version: 2.14.1+cu130               # managed by Colab with its CUDA stack; NEVER reinstalled by the checker
+  cuda_runtime: "13.0"                # torch.version.cuda
+
+# pip-pinnable: if Colab's image differs, `install` pins these exact versions, then asks for a runtime restart.
+pinned_packages:
+  numpy: 2.4.6
+  pandas: 2.2.3
+  scikit-learn: 1.6.1
+  xgboost: 3.4.1
+  shap: 0.54.1                        # explanation stages only
+  numba: 0.64.0                       # explanation stages only; observed in the notebook printout, not environment.json
+  lightgbm: 4.6.0                     # not used by AE-XGBoost
+  PyYAML: 6.0.3
+  pytest: 8.4.2
+
+# Not recorded by session 1 (the snapshot did not include them then). They are NOT guessed here:
+# every run now records them, and the aggregator requires them to be identical across runs.
+not_observed_in_session1: [scipy, llvmlite, matplotlib, cudnn_version, nvidia_driver]

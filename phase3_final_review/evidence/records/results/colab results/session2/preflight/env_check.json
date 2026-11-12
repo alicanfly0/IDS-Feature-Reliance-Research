@@ -1,0 +1,26 @@
+{
+ "compatible": true,
+ "fatal": [],
+ "pinnable": {},
+ "spec_version": 1,
+ "result_relevant": {
+  "python": "3.13",
+  "platform": "colab",
+  "device": "cuda",
+  "gpu_names": [
+   "Tesla T4"
+  ],
+  "torch_cuda_version": "13.0",
+  "cudnn_version": 92800,
+  "packages": {
+   "numpy": "2.4.6",
+   "pandas": "2.2.3",
+   "scipy": "1.16.3",
+   "scikit-learn": "1.6.1",
+   "torch": "2.14.1+cu130",
+   "xgboost": "3.4.1"
+  }
+ },
+ "fingerprint": "be81b4d6da06489e4692ce2f0dd5acb6918e422dfc2a2a900cd2ba39fbdb1a8b",
+ "installed": []
+}

@@ -1,0 +1,66 @@
+{
+  "train": {
+    "n": 157998,
+    "class_counts": {
+      "negative_0": 68421,
+      "positive_1": 89577
+    },
+    "threshold": 0.5,
+    "confusion_matrix": {
+      "tn": 68421,
+      "fp": 0,
+      "fn": 3,
+      "tp": 89574
+    },
+    "accuracy": 0.9999810124178787,
+    "precision": 1.0,
+    "recall": 0.9999665092601896,
+    "f1": 0.9999832543496827,
+    "macro_f1": 0.9999806658682536,
+    "auroc": 0.9999999952683559,
+    "mcc": 0.9999613324841098
+  },
+  "val": {
+    "n": 33834,
+    "class_counts": {
+      "negative_0": 14619,
+      "positive_1": 19215
+    },
+    "threshold": 0.5,
+    "confusion_matrix": {
+      "tn": 14615,
+      "fp": 4,
+      "fn": 1,
+      "tp": 19214
+    },
+    "accuracy": 0.9998522196606964,
+    "precision": 0.9997918617962327,
+    "recall": 0.9999479573250065,
+    "f1": 0.9998699034683736,
+    "macro_f1": 0.9998494377954148,
+    "auroc": 0.9999996902857429,
+    "mcc": 0.9996988919099905
+  },
+  "test": {
+    "n": 33877,
+    "class_counts": {
+      "negative_0": 14644,
+      "positive_1": 19233
+    },
+    "threshold": 0.5,
+    "confusion_matrix": {
+      "tn": 14641,
+      "fp": 3,
+      "fn": 2,
+      "tp": 19231
+    },
+    "accuracy": 0.9998524072379491,
+    "precision": 0.9998440262035978,
+    "recall": 0.9998960120626007,
+    "f1": 0.9998700184573791,
+    "macro_f1": 0.9998496471226357,
+    "auroc": 0.9999922633940319,
+    "mcc": 0.9996992960534733
+  },
+  "note": "train metrics are for overfitting diagnosis only; validation selected the model; test was not used for any choice"
+}

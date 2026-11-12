@@ -1,0 +1,77 @@
+{
+  "full_run": "ae_xgb_d008_trackB-seed0-cpu-565a8b9e",
+  "ablated_run": "ae_xgb_d008_trackB_noDstPort-seed0-cpu-3054b399",
+  "split_fingerprint": "50bd994880abbe151738993e299b90a6e50fb5ffae235a72677bb7813c447f44",
+  "input_dim": {
+    "full": 68,
+    "ablated": 67
+  },
+  "excluded_from_ablated_evaluation": {
+    "val_excluded": 357,
+    "test_excluded": 391
+  },
+  "common_test_rows": 33486,
+  "full_test_rows": 33877,
+  "full_on_full_test": {
+    "accuracy": 0.9998524072379491,
+    "precision": 0.9998440262035978,
+    "recall": 0.9998960120626007,
+    "f1": 0.9998700184573791,
+    "macro_f1": 0.9998496471226357,
+    "auroc": 0.9999922633940319,
+    "mcc": 0.9996992960534733,
+    "confusion_matrix": {
+      "tn": 14641,
+      "fp": 3,
+      "fn": 2,
+      "tp": 19231
+    }
+  },
+  "full_on_common": {
+    "accuracy": 0.9998506838678851,
+    "precision": 0.9998440262035978,
+    "recall": 0.9998960120626007,
+    "f1": 0.9998700184573791,
+    "macro_f1": 0.9998473053170951,
+    "auroc": 0.9999923138081772,
+    "mcc": 0.9996946124991521,
+    "confusion_matrix": {
+      "tn": 14250,
+      "fp": 3,
+      "fn": 2,
+      "tp": 19231
+    }
+  },
+  "ablated_on_common": {
+    "accuracy": 0.9997909574150391,
+    "precision": 0.9998440099833611,
+    "recall": 0.9997920241252015,
+    "f1": 0.999818016378526,
+    "macro_f1": 0.9997862313274395,
+    "auroc": 0.999980399663662,
+    "mcc": 0.9995724645196572,
+    "confusion_matrix": {
+      "tn": 14250,
+      "fp": 3,
+      "fn": 4,
+      "tp": 19229
+    }
+  },
+  "delta_ablated_minus_full": {
+    "accuracy": -5.972645284602063e-05,
+    "precision": -1.6220236709330038e-08,
+    "recall": -0.00010398793739918588,
+    "f1": -5.2002078853141676e-05,
+    "macro_f1": -6.107398965560229e-05,
+    "auroc": -1.1914144515179359e-05,
+    "mcc": -0.0001221479794949465
+  },
+  "paired": {
+    "both_correct": 33478,
+    "only_full_correct": 3,
+    "only_ablated_correct": 1,
+    "both_wrong": 4,
+    "mcnemar_exact_p": 0.625
+  },
+  "note": "single model seed; descriptive. Same training rows, labels, split and settings except the removed feature."
+}

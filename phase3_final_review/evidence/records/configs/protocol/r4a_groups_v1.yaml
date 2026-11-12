@@ -1,0 +1,700 @@
+# FROZEN R4a-ii groups and controls (2026-11-12, D-024), generated from the CORRECTED TRAIN partition only,
+# before any R4a training, by scripts/freeze_r4a_groups.py (same algorithm as protocol r1; src/audit/groups.py).
+# Group membership follows the same mechanisms and rules as r1 but differs in columns, because feature definitions
+# and proxy twins differ in the corrected data. Do not edit. Check: .\run.cmd scripts/freeze_r4a_groups.py --check
+protocol: R4a-ii (D-024) groups and controls, frozen from the corrected TRAIN partition before any R4a training
+generated_from:
+  dataset: Engelen WTMC2021 Friday, aligned original DDoS window (D-005)
+  split_fingerprint: acd52bd8295ffe296824bb3aefe0aba0c048e2f50a6965ede4fe20e240a0a4dc
+  partition: train only
+  n_train_rows: 102496
+  inputs: 74
+  constant_on_train:
+  - Fwd URG Flags
+  - Bwd URG Flags
+  - URG Flag Count
+  - Subflow Bwd Packets
+  proxy_rule: exact equality or |pearson r| >= 0.999 on train (after train-median imputation)
+  random_seed_rule: RandomState(7000 + 100*group_index + draw_index), group order ['A_flag_defects', 'B_appendix_closed',
+    'U_documented_union']
+  separability: '|ROC AUC(train label, raw train column) - 0.5|'
+model_inputs:
+- Destination Port
+- Flow Duration
+- Total Fwd Packets
+- Total Backward Packets
+- Total Length of Fwd Packets
+- Total Length of Bwd Packets
+- Fwd Packet Length Max
+- Fwd Packet Length Min
+- Fwd Packet Length Mean
+- Fwd Packet Length Std
+- Bwd Packet Length Max
+- Bwd Packet Length Min
+- Bwd Packet Length Mean
+- Bwd Packet Length Std
+- Flow Bytes/s
+- Flow Packets/s
+- Flow IAT Mean
+- Flow IAT Std
+- Flow IAT Max
+- Flow IAT Min
+- Fwd IAT Total
+- Fwd IAT Mean
+- Fwd IAT Std
+- Fwd IAT Max
+- Fwd IAT Min
+- Bwd IAT Total
+- Bwd IAT Mean
+- Bwd IAT Std
+- Bwd IAT Max
+- Bwd IAT Min
+- Fwd PSH Flags
+- Bwd PSH Flags
+- Fwd Header Length
+- Bwd Header Length
+- Fwd Packets/s
+- Bwd Packets/s
+- Min Packet Length
+- Max Packet Length
+- Packet Length Mean
+- Packet Length Std
+- Packet Length Variance
+- FIN Flag Count
+- SYN Flag Count
+- RST Flag Count
+- PSH Flag Count
+- ACK Flag Count
+- CWE Flag Count
+- ECE Flag Count
+- Down/Up Ratio
+- Average Packet Size
+- Avg Fwd Segment Size
+- Avg Bwd Segment Size
+- Fwd Header Length.1
+- Fwd Avg Bytes/Bulk
+- Fwd Avg Packets/Bulk
+- Fwd Avg Bulk Rate
+- Bwd Avg Bytes/Bulk
+- Bwd Avg Packets/Bulk
+- Bwd Avg Bulk Rate
+- Subflow Fwd Packets
+- Subflow Fwd Bytes
+- Subflow Bwd Bytes
+- Init_Win_bytes_forward
+- Init_Win_bytes_backward
+- act_data_pkt_fwd
+- min_seg_size_forward
+- Active Mean
+- Active Std
+- Active Max
+- Active Min
+- Idle Mean
+- Idle Std
+- Idle Max
+- Idle Min
+groups:
+  A_flag_defects:
+    columns:
+    - ACK Flag Count
+    - Bwd PSH Flags
+    - CWE Flag Count
+    - ECE Flag Count
+    - FIN Flag Count
+    - Fwd PSH Flags
+    - PSH Flag Count
+    - RST Flag Count
+    - SYN Flag Count
+    size: 9
+  B_appendix_closed:
+    columns:
+    - Avg Bwd Segment Size
+    - Bwd Packet Length Mean
+    - Fwd Header Length
+    - Fwd Header Length.1
+    - Init_Win_bytes_forward
+    - SYN Flag Count
+    - Total Fwd Packets
+    - min_seg_size_forward
+    size: 8
+  U_documented_union:
+    columns:
+    - ACK Flag Count
+    - Avg Bwd Segment Size
+    - Bwd PSH Flags
+    - Bwd Packet Length Mean
+    - Bwd Packets/s
+    - CWE Flag Count
+    - ECE Flag Count
+    - FIN Flag Count
+    - Flow IAT Mean
+    - Flow IAT Min
+    - Flow Packets/s
+    - Fwd Header Length
+    - Fwd Header Length.1
+    - Fwd PSH Flags
+    - Init_Win_bytes_forward
+    - PSH Flag Count
+    - RST Flag Count
+    - SYN Flag Count
+    - Total Fwd Packets
+    - min_seg_size_forward
+    size: 20
+proxy_clusters_multi:
+- - Average Packet Size
+  - Packet Length Mean
+- - Avg Bwd Segment Size
+  - Bwd Packet Length Mean
+- - Avg Fwd Segment Size
+  - Fwd Packet Length Mean
+- - Flow Duration
+  - Fwd IAT Total
+- - Fwd Header Length
+  - Fwd Header Length.1
+control_pool:
+  columns:
+  - Active Max
+  - Active Mean
+  - Active Min
+  - Active Std
+  - Average Packet Size
+  - Avg Fwd Segment Size
+  - Bwd Avg Bulk Rate
+  - Bwd Avg Bytes/Bulk
+  - Bwd Avg Packets/Bulk
+  - Bwd Header Length
+  - Bwd IAT Max
+  - Bwd IAT Mean
+  - Bwd IAT Min
+  - Bwd IAT Std
+  - Bwd IAT Total
+  - Bwd Packet Length Max
+  - Bwd Packet Length Min
+  - Bwd Packet Length Std
+  - Down/Up Ratio
+  - Flow Bytes/s
+  - Flow Duration
+  - Flow IAT Max
+  - Flow IAT Std
+  - Fwd Avg Bulk Rate
+  - Fwd Avg Bytes/Bulk
+  - Fwd Avg Packets/Bulk
+  - Fwd IAT Max
+  - Fwd IAT Mean
+  - Fwd IAT Min
+  - Fwd IAT Std
+  - Fwd IAT Total
+  - Fwd Packet Length Max
+  - Fwd Packet Length Mean
+  - Fwd Packet Length Min
+  - Fwd Packet Length Std
+  - Fwd Packets/s
+  - Idle Max
+  - Idle Mean
+  - Idle Min
+  - Idle Std
+  - Max Packet Length
+  - Min Packet Length
+  - Packet Length Mean
+  - Packet Length Std
+  - Packet Length Variance
+  - Subflow Bwd Bytes
+  - Subflow Fwd Bytes
+  - Subflow Fwd Packets
+  - Total Backward Packets
+  - Total Length of Bwd Packets
+  - Total Length of Fwd Packets
+  - act_data_pkt_fwd
+  n_clusters: 49
+unavailable_after_train_only_preprocessing:
+- Bwd URG Flags
+- Fwd URG Flags
+- URG Flag Count
+controls:
+  A_flag_defects:
+    random:
+    - - Bwd Avg Packets/Bulk
+      - Bwd Header Length
+      - Down/Up Ratio
+      - Flow Bytes/s
+      - Fwd Avg Bulk Rate
+      - Fwd IAT Std
+      - Max Packet Length
+      - Packet Length Std
+      - Total Length of Bwd Packets
+    - - Avg Fwd Segment Size
+      - Bwd Avg Bulk Rate
+      - Bwd IAT Total
+      - Flow Bytes/s
+      - Fwd Packet Length Mean
+      - Fwd Packet Length Std
+      - Max Packet Length
+      - Subflow Bwd Bytes
+      - Subflow Fwd Bytes
+    - - Active Mean
+      - Active Std
+      - Bwd IAT Mean
+      - Fwd IAT Max
+      - Fwd Packet Length Min
+      - Idle Mean
+      - Idle Min
+      - Max Packet Length
+      - Packet Length Variance
+    - - Active Std
+      - Bwd IAT Max
+      - Flow Bytes/s
+      - Fwd IAT Mean
+      - Fwd Packet Length Min
+      - Idle Max
+      - Idle Mean
+      - Packet Length Std
+      - Total Length of Bwd Packets
+    - - Active Max
+      - Active Mean
+      - Average Packet Size
+      - Bwd IAT Mean
+      - Flow Bytes/s
+      - Idle Mean
+      - Min Packet Length
+      - Packet Length Mean
+      - Total Length of Bwd Packets
+    - - Average Packet Size
+      - Bwd Header Length
+      - Down/Up Ratio
+      - Fwd IAT Max
+      - Idle Std
+      - Packet Length Mean
+      - Subflow Bwd Bytes
+      - Total Length of Fwd Packets
+      - act_data_pkt_fwd
+    - - Bwd IAT Mean
+      - Bwd Packet Length Max
+      - Down/Up Ratio
+      - Flow Bytes/s
+      - Flow Duration
+      - Fwd IAT Max
+      - Fwd IAT Total
+      - Fwd Packet Length Std
+      - Total Backward Packets
+    - - Active Min
+      - Bwd Avg Bulk Rate
+      - Bwd Avg Bytes/Bulk
+      - Bwd IAT Total
+      - Bwd Packet Length Max
+      - Bwd Packet Length Std
+      - Fwd Avg Bytes/Bulk
+      - Idle Max
+      - Packet Length Variance
+    - - Bwd Header Length
+      - Bwd IAT Mean
+      - Fwd IAT Mean
+      - Fwd IAT Min
+      - Idle Mean
+      - Min Packet Length
+      - Packet Length Variance
+      - Subflow Fwd Bytes
+      - Subflow Fwd Packets
+    - - Active Max
+      - Avg Fwd Segment Size
+      - Flow Duration
+      - Fwd IAT Mean
+      - Fwd IAT Total
+      - Fwd Packet Length Max
+      - Fwd Packet Length Mean
+      - Min Packet Length
+      - Packet Length Variance
+    group_mean_separability: 0.2189
+    random_mean_separability:
+    - 0.2859
+    - 0.3222
+    - 0.2693
+    - 0.2539
+    - 0.2899
+    - 0.3239
+    - 0.2829
+    - 0.246
+    - 0.2483
+    - 0.3583
+  B_appendix_closed:
+    random:
+    - - Average Packet Size
+      - Bwd Avg Bulk Rate
+      - Bwd IAT Std
+      - Flow Bytes/s
+      - Fwd IAT Mean
+      - Idle Max
+      - Packet Length Mean
+      - Total Length of Fwd Packets
+    - - Bwd IAT Mean
+      - Bwd Packet Length Max
+      - Fwd IAT Mean
+      - Fwd Packet Length Max
+      - Fwd Packet Length Min
+      - Fwd Packets/s
+      - Idle Min
+      - Packet Length Std
+    - - Active Max
+      - Active Min
+      - Average Packet Size
+      - Bwd Avg Bulk Rate
+      - Bwd Packet Length Max
+      - Down/Up Ratio
+      - Fwd Avg Packets/Bulk
+      - Packet Length Mean
+    - - Active Max
+      - Bwd Header Length
+      - Bwd IAT Max
+      - Idle Mean
+      - Packet Length Std
+      - Packet Length Variance
+      - Subflow Bwd Bytes
+      - Subflow Fwd Packets
+    - - Active Mean
+      - Bwd Packet Length Std
+      - Flow Duration
+      - Flow IAT Std
+      - Fwd IAT Mean
+      - Fwd IAT Total
+      - Fwd Packet Length Max
+      - Fwd Packets/s
+    - - Bwd Avg Bulk Rate
+      - Bwd Packet Length Min
+      - Bwd Packet Length Std
+      - Fwd IAT Max
+      - Fwd IAT Std
+      - Fwd Packets/s
+      - Max Packet Length
+      - Total Length of Fwd Packets
+    - - Active Mean
+      - Bwd Avg Bytes/Bulk
+      - Flow IAT Max
+      - Flow IAT Std
+      - Fwd Packet Length Std
+      - Max Packet Length
+      - Total Backward Packets
+      - act_data_pkt_fwd
+    - - Average Packet Size
+      - Bwd IAT Min
+      - Bwd Packet Length Max
+      - Flow Bytes/s
+      - Flow IAT Std
+      - Idle Min
+      - Packet Length Mean
+      - Total Length of Bwd Packets
+    - - Active Max
+      - Active Mean
+      - Bwd IAT Mean
+      - Flow IAT Max
+      - Fwd Avg Bulk Rate
+      - Idle Std
+      - Packet Length Std
+      - Subflow Bwd Bytes
+    - - Bwd Avg Packets/Bulk
+      - Bwd IAT Std
+      - Bwd Packet Length Max
+      - Flow Bytes/s
+      - Fwd IAT Std
+      - Fwd Packets/s
+      - Total Backward Packets
+      - Total Length of Bwd Packets
+    group_mean_separability: 0.3289
+    random_mean_separability:
+    - 0.2884
+    - 0.3412
+    - 0.2897
+    - 0.2812
+    - 0.3271
+    - 0.3425
+    - 0.2285
+    - 0.3391
+    - 0.2455
+    - 0.2772
+  U_documented_union:
+    random:
+    - - Active Min
+      - Bwd Header Length
+      - Bwd IAT Max
+      - Bwd IAT Min
+      - Bwd Packet Length Std
+      - Down/Up Ratio
+      - Flow Duration
+      - Fwd Avg Bytes/Bulk
+      - Fwd IAT Max
+      - Fwd IAT Mean
+      - Fwd IAT Std
+      - Fwd IAT Total
+      - Fwd Packet Length Std
+      - Fwd Packets/s
+      - Idle Min
+      - Min Packet Length
+      - Subflow Fwd Bytes
+      - Subflow Fwd Packets
+      - Total Backward Packets
+      - Total Length of Fwd Packets
+    - - Active Max
+      - Active Mean
+      - Active Std
+      - Avg Fwd Segment Size
+      - Bwd Avg Bulk Rate
+      - Bwd Header Length
+      - Bwd IAT Max
+      - Bwd IAT Total
+      - Down/Up Ratio
+      - Fwd Avg Bulk Rate
+      - Fwd IAT Mean
+      - Fwd Packet Length Mean
+      - Fwd Packets/s
+      - Idle Max
+      - Max Packet Length
+      - Min Packet Length
+      - Subflow Bwd Bytes
+      - Total Backward Packets
+      - Total Length of Fwd Packets
+      - act_data_pkt_fwd
+    - - Active Max
+      - Active Mean
+      - Active Std
+      - Average Packet Size
+      - Bwd Header Length
+      - Bwd Packet Length Std
+      - Flow Bytes/s
+      - Flow IAT Max
+      - Flow IAT Std
+      - Fwd Avg Bytes/Bulk
+      - Fwd IAT Mean
+      - Fwd IAT Min
+      - Fwd IAT Std
+      - Fwd Packet Length Std
+      - Idle Std
+      - Packet Length Mean
+      - Subflow Bwd Bytes
+      - Subflow Fwd Bytes
+      - Total Length of Fwd Packets
+      - act_data_pkt_fwd
+    - - Active Max
+      - Bwd Avg Bulk Rate
+      - Bwd IAT Min
+      - Bwd Packet Length Min
+      - Bwd Packet Length Std
+      - Flow IAT Std
+      - Fwd Avg Bulk Rate
+      - Fwd IAT Max
+      - Fwd IAT Mean
+      - Fwd IAT Min
+      - Fwd Packets/s
+      - Idle Max
+      - Idle Mean
+      - Idle Std
+      - Packet Length Std
+      - Subflow Bwd Bytes
+      - Subflow Fwd Packets
+      - Total Backward Packets
+      - Total Length of Bwd Packets
+      - Total Length of Fwd Packets
+    - - Active Max
+      - Avg Fwd Segment Size
+      - Bwd Avg Bulk Rate
+      - Bwd Avg Bytes/Bulk
+      - Bwd IAT Max
+      - Bwd IAT Std
+      - Bwd IAT Total
+      - Flow Bytes/s
+      - Flow IAT Std
+      - Fwd Avg Bulk Rate
+      - Fwd Avg Bytes/Bulk
+      - Fwd IAT Mean
+      - Fwd IAT Min
+      - Fwd Packet Length Mean
+      - Fwd Packet Length Std
+      - Fwd Packets/s
+      - Packet Length Std
+      - Packet Length Variance
+      - Subflow Fwd Bytes
+      - Total Length of Bwd Packets
+    - - Active Mean
+      - Active Std
+      - Bwd Avg Bulk Rate
+      - Bwd Avg Packets/Bulk
+      - Bwd IAT Min
+      - Bwd Packet Length Min
+      - Flow Bytes/s
+      - Flow Duration
+      - Fwd Avg Bytes/Bulk
+      - Fwd IAT Max
+      - Fwd IAT Min
+      - Fwd IAT Total
+      - Fwd Packet Length Min
+      - Fwd Packet Length Std
+      - Idle Max
+      - Packet Length Variance
+      - Subflow Fwd Packets
+      - Total Length of Bwd Packets
+      - Total Length of Fwd Packets
+      - act_data_pkt_fwd
+    - - Active Min
+      - Bwd Avg Bulk Rate
+      - Bwd Avg Packets/Bulk
+      - Bwd IAT Std
+      - Bwd Packet Length Max
+      - Bwd Packet Length Min
+      - Down/Up Ratio
+      - Flow IAT Std
+      - Fwd Avg Bulk Rate
+      - Fwd Avg Packets/Bulk
+      - Fwd Packet Length Max
+      - Fwd Packet Length Std
+      - Fwd Packets/s
+      - Idle Max
+      - Idle Mean
+      - Idle Min
+      - Idle Std
+      - Max Packet Length
+      - Subflow Bwd Bytes
+      - act_data_pkt_fwd
+    - - Active Min
+      - Average Packet Size
+      - Avg Fwd Segment Size
+      - Bwd Avg Packets/Bulk
+      - Bwd IAT Max
+      - Bwd IAT Total
+      - Bwd Packet Length Std
+      - Down/Up Ratio
+      - Flow IAT Std
+      - Fwd Avg Packets/Bulk
+      - Fwd IAT Min
+      - Fwd Packet Length Mean
+      - Fwd Packet Length Std
+      - Fwd Packets/s
+      - Idle Mean
+      - Max Packet Length
+      - Min Packet Length
+      - Packet Length Mean
+      - Packet Length Variance
+      - Subflow Fwd Packets
+    - - Avg Fwd Segment Size
+      - Bwd Avg Bytes/Bulk
+      - Bwd IAT Min
+      - Bwd IAT Total
+      - Bwd Packet Length Min
+      - Bwd Packet Length Std
+      - Flow Duration
+      - Flow IAT Std
+      - Fwd Avg Packets/Bulk
+      - Fwd IAT Min
+      - Fwd IAT Std
+      - Fwd IAT Total
+      - Fwd Packet Length Mean
+      - Idle Max
+      - Idle Min
+      - Min Packet Length
+      - Subflow Bwd Bytes
+      - Total Backward Packets
+      - Total Length of Bwd Packets
+      - act_data_pkt_fwd
+    - - Active Max
+      - Average Packet Size
+      - Bwd Avg Bulk Rate
+      - Bwd IAT Min
+      - Bwd IAT Std
+      - Bwd IAT Total
+      - Bwd Packet Length Max
+      - Bwd Packet Length Min
+      - Fwd Avg Bytes/Bulk
+      - Fwd IAT Min
+      - Fwd Packet Length Std
+      - Fwd Packets/s
+      - Idle Max
+      - Idle Mean
+      - Idle Min
+      - Idle Std
+      - Packet Length Mean
+      - Packet Length Variance
+      - Total Backward Packets
+      - Total Length of Fwd Packets
+    group_mean_separability: 0.2664
+    random_mean_separability:
+    - 0.2685
+    - 0.2605
+    - 0.2628
+    - 0.2531
+    - 0.2536
+    - 0.2075
+    - 0.2318
+    - 0.2871
+    - 0.2683
+    - 0.2481
+separability_train:
+  Destination Port: 0.1813
+  Flow Duration: 0.2909
+  Total Fwd Packets: 0.2701
+  Total Backward Packets: 0.2342
+  Total Length of Fwd Packets: 0.4486
+  Total Length of Bwd Packets: 0.4471
+  Fwd Packet Length Max: 0.4483
+  Fwd Packet Length Min: 0.3181
+  Fwd Packet Length Mean: 0.4483
+  Fwd Packet Length Std: 0.181
+  Bwd Packet Length Max: 0.4982
+  Bwd Packet Length Min: 0.3167
+  Bwd Packet Length Mean: 0.4975
+  Bwd Packet Length Std: 0.4998
+  Flow Bytes/s: 0.1374
+  Flow Packets/s: 0.2926
+  Flow IAT Mean: 0.2885
+  Flow IAT Std: 0.3005
+  Flow IAT Max: 0.3072
+  Flow IAT Min: 0.1792
+  Fwd IAT Total: 0.2985
+  Fwd IAT Mean: 0.2983
+  Fwd IAT Std: 0.3215
+  Fwd IAT Max: 0.3139
+  Fwd IAT Min: 0.0739
+  Bwd IAT Total: 0.1972
+  Bwd IAT Mean: 0.2126
+  Bwd IAT Std: 0.2441
+  Bwd IAT Max: 0.2081
+  Bwd IAT Min: 0.1998
+  Fwd PSH Flags: 0.2246
+  Bwd PSH Flags: 0.2359
+  Fwd Header Length: 0.2567
+  Bwd Header Length: 0.2189
+  Fwd Packets/s: 0.2841
+  Bwd Packets/s: 0.297
+  Min Packet Length: 0.3178
+  Max Packet Length: 0.4914
+  Packet Length Mean: 0.4765
+  Packet Length Std: 0.4937
+  Packet Length Variance: 0.4937
+  FIN Flag Count: 0.2585
+  SYN Flag Count: 0.3297
+  RST Flag Count: 0.4375
+  PSH Flag Count: 0.2244
+  ACK Flag Count: 0.2583
+  CWE Flag Count: 0.0004
+  ECE Flag Count: 0.0003
+  Down/Up Ratio: 0.3798
+  Average Packet Size: 0.4765
+  Avg Fwd Segment Size: 0.4483
+  Avg Bwd Segment Size: 0.4975
+  Fwd Header Length.1: 0.2567
+  Fwd Avg Bytes/Bulk: 0.0324
+  Fwd Avg Packets/Bulk: 0.0324
+  Fwd Avg Bulk Rate: 0.0324
+  Bwd Avg Bytes/Bulk: 0.0576
+  Bwd Avg Packets/Bulk: 0.051
+  Bwd Avg Bulk Rate: 0.0641
+  Subflow Fwd Packets: 0.0072
+  Subflow Fwd Bytes: 0.4482
+  Subflow Bwd Bytes: 0.4839
+  Init_Win_bytes_forward: 0.2656
+  Init_Win_bytes_backward: 0.3215
+  act_data_pkt_fwd: 0.0598
+  min_seg_size_forward: 0.2576
+  Active Mean: 0.1963
+  Active Std: 0.0573
+  Active Max: 0.1807
+  Active Min: 0.2096
+  Idle Mean: 0.1638
+  Idle Std: 0.0575
+  Idle Max: 0.1614
+  Idle Min: 0.1765

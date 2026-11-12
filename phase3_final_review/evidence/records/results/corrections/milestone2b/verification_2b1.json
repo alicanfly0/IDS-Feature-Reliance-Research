@@ -1,0 +1,78 @@
+{
+  "date": "2026-11-10",
+  "milestone": "2B.1 verification hardening",
+  "base_commit": "21b2d7d",
+  "issue": "correct_arr --verify and tests/test_milestone2b.py compared saved float results by exact JSON equality; cross-environment summation-order differences (~5.55e-17) could fail verification of numerically identical results.",
+  "correction": {
+    "file": "src/audit/correct_arr.py",
+    "function": "compare_results",
+    "float_rule": "|actual - expected| <= ATOL + RTOL * |expected|",
+    "RTOL": 1e-10,
+    "ATOL": 1e-12,
+    "justification": "Importances are means over 200 rows (float32-stored, float64 arithmetic); ARR divides sums of <= 20 of them. Reordering error is bounded by ~n*eps relative (200 * 2.2e-16 = 4.4e-14). RTOL leaves >1000x margin and is 5 orders below the smallest reported ARR digit (1e-5). ATOL covers legitimately ~0 quantities.",
+    "exact": "strings (feature names, variant ids, SHA-256), ints (K, row ids, sizes), bools, None, dict keys, list length and order (rankings, memberships)",
+    "nonfinite": "NaN equals only NaN; infinities must be identical; saved output is written with allow_nan=False",
+    "unchanged": "SHA-256 integrity of the 96 protected artifacts; independent-ARR 1e-12 cross-check inside calculate(); scripts/verify_m2b_arr.py (already tolerance-based, 1e-12)"
+  },
+  "tests": {
+    "targeted": {
+      "command": ".\\run.cmd -m pytest tests/test_milestone2b.py -q -p no:cacheprovider",
+      "passed": 15,
+      "failed": 0,
+      "new_regression_tests": [
+        "test_comparator_accepts_cross_platform_float_noise",
+        "test_comparator_rejects_genuinely_wrong_arr[1e-06, 1e-09, -2e-08]",
+        "test_comparator_keeps_discrete_results_exact",
+        "test_comparator_nonfinite_and_type_handling",
+        "test_verify_cli_uses_tolerance_but_rejects_tampering"
+      ]
+    },
+    "full_suite": {
+      "command": ".\\run.cmd -m pytest -q -p no:cacheprovider -rfEs",
+      "status": "interrupted during collection",
+      "error": "tests/test_audit.py: ImportError, numba/experimental/jitclass/_box.cp311-win_amd64.pyd blocked by an Application Control policy (Smart App Control). shap imports numba at module load."
+    },
+    "strongest_available": {
+      "command": ".\\run.cmd -m pytest -q -p no:cacheprovider -rfEs --ignore=tests/test_audit.py",
+      "passed": 121,
+      "failed": 0,
+      "skipped": 0,
+      "deselected": 0,
+      "uncollected_environment_blocked": 16,
+      "uncollected_module": "tests/test_audit.py",
+      "note": "Not a full-suite pass. The 16 tests were not run anywhere in this milestone."
+    },
+    "change_since_2b": "PyTorch loads again (the 2B record had torch shm.dll blocked; test_ae_xgb.py and the 4 deselected torch tests now pass). Observed after the user uninstalled Codex; cause not established."
+  },
+  "environment_investigation": {
+    "smart_app_control_state": "VerifiedAndReputablePolicyState = 1 (enforced); VerifiedAndReputableDesktop policy activated 2026-10-20",
+    "first_project_block": "2026-11-09 18:29 (Numba _typeconv), none before; Milestone 0-2A ran locally on 2026-11-07/08 with the same packages",
+    "currently_blocked": [
+      "numba/np/ufunc/_internal.cp311-win_amd64.pyd",
+      "numba/experimental/jitclass/_box.cp311-win_amd64.pyd"
+    ],
+    "classification": "OS security policy (Code Integrity events 3033/3077), not a dependency or code failure: the same pinned wheels load in other environments and loaded here before 2026-11-09",
+    "fresh_reinstall_test": "Identical pinned packages in a new temporary venv were also blocked (2026-11-10); venv deleted; no system change",
+    "other_local_environments": "python311-embed (no packages, import restrictions, D-014) and the WindowsApps alias: no permitted environment with shap/numba; WSL not installed",
+    "not_done": "No security setting changed, no exclusions, no policy edits, no untrusted binaries, no tests removed or hidden"
+  },
+  "recovery_steps": [
+    "Run the full suite on Colab Free (D-015 Amendment 1, D-016): the notebook's test cell runs `python -m pytest -q -rs`. Before that, add `shap` to the notebook's missing-package list if Colab lacks it (not changed here).",
+    "Optional, user action only: install WSL (`wsl --install`, admin) and test whether Linux wheels load; untested.",
+    "Not recommended by the user: turning Smart App Control off (cannot be re-enabled without reinstalling Windows)."
+  ],
+  "integrity": {
+    "command": ".\\run.cmd -m src.audit.correct_arr --verify",
+    "protected_files": 96,
+    "sha256_equal": true,
+    "independent_check": ".\\run.cmd scripts/verify_m2b_arr.py: 192 ARR values agree, max absolute discrepancy 5.55e-17",
+    "outputs_regenerated": false
+  },
+  "constraints": {
+    "training": false,
+    "SHAP_recomputed": false,
+    "uploads": false,
+    "pushes": false,
+    "paid_compute": false
+  }
+}

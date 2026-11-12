@@ -31,7 +31,11 @@ the authors' writing guidance. Every number below comes from `stats_r4a.json`,
 
 Design D as in r1. The estimand is d = Δ_group − Δ_control on the error rate. Tests are exact sign-flip, Holm over 3, SESOI 0.001.
 
-| Group (inputs removed) | mean Δ group | mean Δ control | mean d [95% interval] | p exact | p Holm | Reading |
+*Correction (Phase III evidence audit, 2026-11-12): the interval below is the pre-registered
+Bonferroni-consistent t-interval at 1 − 0.05/3 = 98.33 % (TOST at 96.67 %), as computed by
+`src/evaluation/stats_3b.reading`; an earlier version of this note mislabelled it "95 %".*
+
+| Group (inputs removed) | mean Δ group | mean Δ control | mean d [98.33% interval] | p exact | p Holm | Reading |
 |---|---|---|---|---|---|---|
 | A: TCP flag-count defects (9) | +0.000005 | +0.000009 | −0.000005 [−0.000051, +0.000042] | 1.000 | 1.000 | practical equivalence at the SESOI |
 | B: TCP appendix (8) | +0.000000 | −0.000014 | +0.000014 [−0.000021, +0.000048] | 0.453 | 1.000 | practical equivalence at the SESOI |

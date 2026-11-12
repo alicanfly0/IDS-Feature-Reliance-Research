@@ -1,0 +1,59 @@
+{
+ "population": "baseline test partition (33,877 rows; already inspected in Milestones 1A-2A)",
+ "run": "ae_xgb_d008_trackB-seed0-cpu-565a8b9e",
+ "threshold": 0.5,
+ "n_rows": 33877,
+ "rows_with_|margin|<0.01": 0,
+ "torch_threads": 10,
+ "device": "cpu",
+ "results": [
+  {
+   "method": "runner path: ae.encode batch 8192 (saved row order)",
+   "max_abs_prob_diff_vs_saved": 2.9660034206457908e-08,
+   "bitwise_equal_prob_vs_saved": true,
+   "max_abs_margin_diff_vs_runner": 0.0,
+   "rows_margin_diff_gt_1e-3": 0,
+   "threshold_crossings_vs_saved": 0
+  },
+  {
+   "method": "CompositeModel float32 batch 8192",
+   "max_abs_prob_diff_vs_saved": 8.631362935496156e-08,
+   "bitwise_equal_prob_vs_saved": false,
+   "max_abs_margin_diff_vs_runner": 0.0,
+   "rows_margin_diff_gt_1e-3": 0,
+   "threshold_crossings_vs_saved": 0
+  },
+  {
+   "method": "CompositeModel float32 batch 65536",
+   "max_abs_prob_diff_vs_saved": 8.631362935496156e-08,
+   "bitwise_equal_prob_vs_saved": false,
+   "max_abs_margin_diff_vs_runner": 0.0,
+   "rows_margin_diff_gt_1e-3": 0,
+   "threshold_crossings_vs_saved": 0
+  },
+  {
+   "method": "CompositeModel float32 batch 1024",
+   "max_abs_prob_diff_vs_saved": 8.631362935496156e-08,
+   "bitwise_equal_prob_vs_saved": false,
+   "max_abs_margin_diff_vs_runner": 0.0,
+   "rows_margin_diff_gt_1e-3": 0,
+   "threshold_crossings_vs_saved": 0
+  },
+  {
+   "method": "CompositeModel float32 batch 8192, shuffled order",
+   "max_abs_prob_diff_vs_saved": 8.631362935496156e-08,
+   "bitwise_equal_prob_vs_saved": false,
+   "max_abs_margin_diff_vs_runner": 0.0,
+   "rows_margin_diff_gt_1e-3": 0,
+   "threshold_crossings_vs_saved": 0
+  },
+  {
+   "method": "CompositeModel float64",
+   "max_abs_prob_diff_vs_saved": 0.0008868888248654283,
+   "bitwise_equal_prob_vs_saved": false,
+   "max_abs_margin_diff_vs_runner": 1.5708975791931152,
+   "rows_margin_diff_gt_1e-3": 16,
+   "threshold_crossings_vs_saved": 0
+  }
+ ]
+}

@@ -1,0 +1,871 @@
+{
+  "scope": "ae_xgb_d008_trackB",
+  "split_fingerprint": "50bd994880abbe151738993e299b90a6e50fb5ffae235a72677bb7813c447f44",
+  "data_provenance": {
+    "archive": "MachineLearningCSV.zip",
+    "archive_sha256": "c3f26274b36c837ccf28ffd2dbf4582941c30b3ee70a635c6e5b2f87c4727928",
+    "member": "MachineLearningCVE/Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+    "member_crc32": "57439907",
+    "csv_sha256": "6ff1580f5f81c0ae28a26f7631721018577f5f7c5e0feac28b795fcfe7b411ee"
+  },
+  "partition_rows": {
+    "train": 157998,
+    "val": 33834,
+    "test": 33877
+  },
+  "note": "single-feature models fitted on train only; ranked on validation; test reported, not used for choices",
+  "destination_port": {
+    "per_class": {
+      "ddos": {
+        "rows": 128025,
+        "distinct_ports": 4,
+        "top_ports": {
+          "80": 128022,
+          "64869": 1,
+          "64873": 1,
+          "27636": 1
+        },
+        "share_port_80": 0.999977
+      },
+      "benign": {
+        "rows": 97684,
+        "distinct_ports": 23943,
+        "top_ports": {
+          "53": 31950,
+          "443": 13479,
+          "80": 8923,
+          "8080": 510,
+          "123": 362,
+          "22": 342,
+          "137": 274,
+          "389": 259,
+          "88": 173,
+          "21": 167
+        },
+        "share_port_80": 0.091346
+      }
+    },
+    "per_partition": {
+      "train": {
+        "ddos_port80": 89575,
+        "ddos_other": 2,
+        "benign_port80": 6288,
+        "benign_other": 62133
+      },
+      "val": {
+        "ddos_port80": 19215,
+        "ddos_other": 0,
+        "benign_port80": 1335,
+        "benign_other": 13284
+      },
+      "test": {
+        "ddos_port80": 19232,
+        "ddos_other": 1,
+        "benign_port80": 1300,
+        "benign_other": 13344
+      }
+    },
+    "rule_port80_is_ddos": {
+      "val": {
+        "accuracy": 0.960543,
+        "precision": 0.935036,
+        "recall": 1.0,
+        "f1": 0.966428,
+        "mcc": 0.921764,
+        "auroc": 0.95434,
+        "confusion_matrix": {
+          "tn": 13284,
+          "fp": 1335,
+          "fn": 0,
+          "tp": 19215
+        }
+      },
+      "test": {
+        "accuracy": 0.961596,
+        "precision": 0.936684,
+        "recall": 0.999948,
+        "f1": 0.967283,
+        "mcc": 0.923804,
+        "auroc": 0.955587,
+        "confusion_matrix": {
+          "tn": 13344,
+          "fp": 1300,
+          "fn": 1,
+          "tp": 19232
+        }
+      }
+    },
+    "port_lookup_fitted_on_train": {
+      "val": {
+        "accuracy": 0.880712,
+        "precision": 0.826416,
+        "recall": 1.0,
+        "f1": 0.904959,
+        "mcc": 0.773473,
+        "auroc": 0.954272,
+        "confusion_matrix": {
+          "tn": 10583,
+          "fp": 4036,
+          "fn": 0,
+          "tp": 19215
+        },
+        "unseen_ports_rows": 2700
+      },
+      "test": {
+        "accuracy": 0.88166,
+        "precision": 0.827511,
+        "recall": 1.0,
+        "f1": 0.905615,
+        "mcc": 0.775221,
+        "auroc": 0.955606,
+        "confusion_matrix": {
+          "tn": 10635,
+          "fp": 4009,
+          "fn": 0,
+          "tp": 19233
+        },
+        "unseen_ports_rows": 2710
+      }
+    },
+    "benign_port80_rows_with_ddos_rate_in_train": 0.934406
+  },
+  "single_feature_trees_top15": [
+    {
+      "feature": "Fwd Packet Length Max",
+      "depth1_val_mcc": 0.763173,
+      "depth1_val_accuracy": 0.874978,
+      "depth1_test_mcc": 0.764932,
+      "depth1_test_accuracy": 0.875934,
+      "depth1_threshold": 21.0,
+      "depth1_left_is_ddos": true,
+      "depth2_val_mcc": 0.763173,
+      "depth2_val_accuracy": 0.874978,
+      "depth2_test_mcc": 0.764932,
+      "depth2_test_accuracy": 0.875934
+    },
+    {
+      "feature": "Fwd Packet Length Mean",
+      "depth1_val_mcc": 0.762325,
+      "depth1_val_accuracy": 0.874505,
+      "depth1_test_mcc": 0.764085,
+      "depth1_test_accuracy": 0.875461,
+      "depth1_threshold": 10.0652174949646,
+      "depth1_left_is_ddos": true,
+      "depth2_val_mcc": 0.762325,
+      "depth2_val_accuracy": 0.874505,
+      "depth2_test_mcc": 0.764085,
+      "depth2_test_accuracy": 0.875461
+    },
+    {
+      "feature": "Avg Fwd Segment Size",
+      "depth1_val_mcc": 0.762325,
+      "depth1_val_accuracy": 0.874505,
+      "depth1_test_mcc": 0.764085,
+      "depth1_test_accuracy": 0.875461,
+      "depth1_threshold": 10.0652174949646,
+      "depth1_left_is_ddos": true,
+      "depth2_val_mcc": 0.762325,
+      "depth2_val_accuracy": 0.874505,
+      "depth2_test_mcc": 0.764085,
+      "depth2_test_accuracy": 0.875461
+    },
+    {
+      "feature": "Init_Win_bytes_forward",
+      "depth1_val_mcc": 0.73743,
+      "depth1_val_accuracy": 0.860702,
+      "depth1_test_mcc": 0.740219,
+      "depth1_test_accuracy": 0.862237,
+      "depth1_threshold": 255.5,
+      "depth1_left_is_ddos": false,
+      "depth2_val_mcc": 0.808802,
+      "depth2_val_accuracy": 0.900573,
+      "depth2_test_mcc": 0.810219,
+      "depth2_test_accuracy": 0.901319
+    },
+    {
+      "feature": "act_data_pkt_fwd",
+      "depth1_val_mcc": 0.696375,
+      "depth1_val_accuracy": 0.841313,
+      "depth1_test_mcc": 0.699532,
+      "depth1_test_accuracy": 0.84243,
+      "depth1_threshold": 1.5,
+      "depth1_left_is_ddos": false,
+      "depth2_val_mcc": 0.756661,
+      "depth2_val_accuracy": 0.874387,
+      "depth2_test_mcc": 0.760489,
+      "depth2_test_accuracy": 0.875993
+    },
+    {
+      "feature": "Bwd Packet Length Min",
+      "depth1_val_mcc": 0.674105,
+      "depth1_val_accuracy": 0.825649,
+      "depth1_test_mcc": 0.676485,
+      "depth1_test_accuracy": 0.826844,
+      "depth1_threshold": 1.0,
+      "depth1_left_is_ddos": true,
+      "depth2_val_mcc": 0.674699,
+      "depth2_val_accuracy": 0.825826,
+      "depth2_test_mcc": 0.676536,
+      "depth2_test_accuracy": 0.826785
+    },
+    {
+      "feature": "Fwd IAT Total",
+      "depth1_val_mcc": 0.67402,
+      "depth1_val_accuracy": 0.825176,
+      "depth1_test_mcc": 0.677224,
+      "depth1_test_accuracy": 0.826874,
+      "depth1_threshold": 388.5,
+      "depth1_left_is_ddos": false,
+      "depth2_val_mcc": 0.67402,
+      "depth2_val_accuracy": 0.825176,
+      "depth2_test_mcc": 0.677224,
+      "depth2_test_accuracy": 0.826874
+    },
+    {
+      "feature": "Fwd IAT Max",
+      "depth1_val_mcc": 0.673966,
+      "depth1_val_accuracy": 0.825235,
+      "depth1_test_mcc": 0.676921,
+      "depth1_test_accuracy": 0.826756,
+      "depth1_threshold": 365.5,
+      "depth1_left_is_ddos": false,
+      "depth2_val_mcc": 0.673966,
+      "depth2_val_accuracy": 0.825235,
+      "depth2_test_mcc": 0.676921,
+      "depth2_test_accuracy": 0.826756
+    },
+    {
+      "feature": "Fwd IAT Std",
+      "depth1_val_mcc": 0.673538,
+      "depth1_val_accuracy": 0.829166,
+      "depth1_test_mcc": 0.680094,
+      "depth1_test_accuracy": 0.831833,
+      "depth1_threshold": 51.38770866394043,
+      "depth1_left_is_ddos": false,
+      "depth2_val_mcc": 0.702693,
+      "depth2_val_accuracy": 0.847343,
+      "depth2_test_mcc": 0.709558,
+      "depth2_test_accuracy": 0.8504
+    },
+    {
+      "feature": "Total Fwd Packets",
+      "depth1_val_mcc": 0.668733,
+      "depth1_val_accuracy": 0.826033,
+      "depth1_test_mcc": 0.674298,
+      "depth1_test_accuracy": 0.828409,
+      "depth1_threshold": 2.5,
+      "depth1_left_is_ddos": false,
+      "depth2_val_mcc": 0.737632,
+      "depth2_val_accuracy": 0.863983,
+      "depth2_test_mcc": 0.744956,
+      "depth2_test_accuracy": 0.867462
+    },
+    {
+      "feature": "Subflow Fwd Packets",
+      "depth1_val_mcc": 0.668733,
+      "depth1_val_accuracy": 0.826033,
+      "depth1_test_mcc": 0.674298,
+      "depth1_test_accuracy": 0.828409,
+      "depth1_threshold": 2.5,
+      "depth1_left_is_ddos": false,
+      "depth2_val_mcc": 0.737632,
+      "depth2_val_accuracy": 0.863983,
+      "depth2_test_mcc": 0.744956,
+      "depth2_test_accuracy": 0.867462
+    },
+    {
+      "feature": "Fwd IAT Mean",
+      "depth1_val_mcc": 0.66769,
+      "depth1_val_accuracy": 0.821925,
+      "depth1_test_mcc": 0.670815,
+      "depth1_test_accuracy": 0.823627,
+      "depth1_threshold": 213.16666412353516,
+      "depth1_left_is_ddos": false,
+      "depth2_val_mcc": 0.720501,
+      "depth2_val_accuracy": 0.852161,
+      "depth2_test_mcc": 0.724427,
+      "depth2_test_accuracy": 0.854208
+    },
+    {
+      "feature": "Total Length of Fwd Packets",
+      "depth1_val_mcc": 0.662878,
+      "depth1_val_accuracy": 0.818467,
+      "depth1_test_mcc": 0.667582,
+      "depth1_test_accuracy": 0.821088,
+      "depth1_threshold": 62.5,
+      "depth1_left_is_ddos": true,
+      "depth2_val_mcc": 0.885479,
+      "depth2_val_accuracy": 0.941804,
+      "depth2_test_mcc": 0.888864,
+      "depth2_test_accuracy": 0.943531
+    },
+    {
+      "feature": "Subflow Fwd Bytes",
+      "depth1_val_mcc": 0.662878,
+      "depth1_val_accuracy": 0.818467,
+      "depth1_test_mcc": 0.667582,
+      "depth1_test_accuracy": 0.821088,
+      "depth1_threshold": 62.5,
+      "depth1_left_is_ddos": true,
+      "depth2_val_mcc": 0.885479,
+      "depth2_val_accuracy": 0.941804,
+      "depth2_test_mcc": 0.888864,
+      "depth2_test_accuracy": 0.943531
+    },
+    {
+      "feature": "Fwd Header Length",
+      "depth1_val_mcc": 0.66239,
+      "depth1_val_accuracy": 0.822723,
+      "depth1_test_mcc": 0.669685,
+      "depth1_test_accuracy": 0.826047,
+      "depth1_threshold": 68.0,
+      "depth1_left_is_ddos": false,
+      "depth2_val_mcc": 0.710049,
+      "depth2_val_accuracy": 0.849619,
+      "depth2_test_mcc": 0.716492,
+      "depth2_test_accuracy": 0.852466
+    }
+  ],
+  "single_feature_trees_top10_by_depth2": [
+    {
+      "feature": "Destination Port",
+      "depth1_val_mcc": 0.656252,
+      "depth1_val_accuracy": 0.814713,
+      "depth1_test_mcc": 0.652495,
+      "depth1_test_accuracy": 0.812557,
+      "depth1_threshold": 84.0,
+      "depth1_left_is_ddos": true,
+      "depth2_val_mcc": 0.921764,
+      "depth2_val_accuracy": 0.960543,
+      "depth2_test_mcc": 0.923804,
+      "depth2_test_accuracy": 0.961596
+    },
+    {
+      "feature": "Total Length of Bwd Packets",
+      "depth1_val_mcc": 0.623562,
+      "depth1_val_accuracy": 0.781137,
+      "depth1_test_mcc": 0.621451,
+      "depth1_test_accuracy": 0.780323,
+      "depth1_threshold": 11598.5,
+      "depth1_left_is_ddos": false,
+      "depth2_val_mcc": 0.88983,
+      "depth2_val_accuracy": 0.943991,
+      "depth2_test_mcc": 0.888096,
+      "depth2_test_accuracy": 0.943059
+    },
+    {
+      "feature": "Subflow Bwd Bytes",
+      "depth1_val_mcc": 0.623562,
+      "depth1_val_accuracy": 0.781137,
+      "depth1_test_mcc": 0.621451,
+      "depth1_test_accuracy": 0.780323,
+      "depth1_threshold": 11598.5,
+      "depth1_left_is_ddos": false,
+      "depth2_val_mcc": 0.88983,
+      "depth2_val_accuracy": 0.943991,
+      "depth2_test_mcc": 0.888096,
+      "depth2_test_accuracy": 0.943059
+    },
+    {
+      "feature": "Total Length of Fwd Packets",
+      "depth1_val_mcc": 0.662878,
+      "depth1_val_accuracy": 0.818467,
+      "depth1_test_mcc": 0.667582,
+      "depth1_test_accuracy": 0.821088,
+      "depth1_threshold": 62.5,
+      "depth1_left_is_ddos": true,
+      "depth2_val_mcc": 0.885479,
+      "depth2_val_accuracy": 0.941804,
+      "depth2_test_mcc": 0.888864,
+      "depth2_test_accuracy": 0.943531
+    },
+    {
+      "feature": "Subflow Fwd Bytes",
+      "depth1_val_mcc": 0.662878,
+      "depth1_val_accuracy": 0.818467,
+      "depth1_test_mcc": 0.667582,
+      "depth1_test_accuracy": 0.821088,
+      "depth1_threshold": 62.5,
+      "depth1_left_is_ddos": true,
+      "depth2_val_mcc": 0.885479,
+      "depth2_val_accuracy": 0.941804,
+      "depth2_test_mcc": 0.888864,
+      "depth2_test_accuracy": 0.943531
+    },
+    {
+      "feature": "Bwd Packet Length Mean",
+      "depth1_val_mcc": 0.645519,
+      "depth1_val_accuracy": 0.78897,
+      "depth1_test_mcc": 0.645252,
+      "depth1_test_accuracy": 0.788736,
+      "depth1_threshold": 1657.2025756835938,
+      "depth1_left_is_ddos": false,
+      "depth2_val_mcc": 0.88301,
+      "depth2_val_accuracy": 0.940474,
+      "depth2_test_mcc": 0.880932,
+      "depth2_test_accuracy": 0.939398
+    },
+    {
+      "feature": "Avg Bwd Segment Size",
+      "depth1_val_mcc": 0.645519,
+      "depth1_val_accuracy": 0.78897,
+      "depth1_test_mcc": 0.645252,
+      "depth1_test_accuracy": 0.788736,
+      "depth1_threshold": 1657.2025756835938,
+      "depth1_left_is_ddos": false,
+      "depth2_val_mcc": 0.88301,
+      "depth2_val_accuracy": 0.940474,
+      "depth2_test_mcc": 0.880932,
+      "depth2_test_accuracy": 0.939398
+    },
+    {
+      "feature": "Bwd Packet Length Max",
+      "depth1_val_mcc": 0.641891,
+      "depth1_val_accuracy": 0.785305,
+      "depth1_test_mcc": 0.641065,
+      "depth1_test_accuracy": 0.785075,
+      "depth1_threshold": 4372.0,
+      "depth1_left_is_ddos": false,
+      "depth2_val_mcc": 0.874328,
+      "depth2_val_accuracy": 0.936809,
+      "depth2_test_mcc": 0.872382,
+      "depth2_test_accuracy": 0.935738
+    },
+    {
+      "feature": "Init_Win_bytes_forward",
+      "depth1_val_mcc": 0.73743,
+      "depth1_val_accuracy": 0.860702,
+      "depth1_test_mcc": 0.740219,
+      "depth1_test_accuracy": 0.862237,
+      "depth1_threshold": 255.5,
+      "depth1_left_is_ddos": false,
+      "depth2_val_mcc": 0.808802,
+      "depth2_val_accuracy": 0.900573,
+      "depth2_test_mcc": 0.810219,
+      "depth2_test_accuracy": 0.901319
+    },
+    {
+      "feature": "Fwd Packet Length Max",
+      "depth1_val_mcc": 0.763173,
+      "depth1_val_accuracy": 0.874978,
+      "depth1_test_mcc": 0.764932,
+      "depth1_test_accuracy": 0.875934,
+      "depth1_threshold": 21.0,
+      "depth1_left_is_ddos": true,
+      "depth2_val_mcc": 0.763173,
+      "depth2_val_accuracy": 0.874978,
+      "depth2_test_mcc": 0.764932,
+      "depth2_test_accuracy": 0.875934
+    }
+  ],
+  "features_with_depth1_val_mcc_above": {
+    "0.9": 0,
+    "0.95": 0,
+    "0.99": 0
+  },
+  "features_with_depth2_val_mcc_above": {
+    "0.9": 1,
+    "0.95": 0,
+    "0.99": 0
+  },
+  "port80_conditional_single_features": {
+    "port80_rows": {
+      "train": {
+        "rows": 95863,
+        "ddos": 89575,
+        "benign": 6288
+      },
+      "val": {
+        "rows": 20550,
+        "ddos": 19215,
+        "benign": 1335
+      },
+      "test": {
+        "rows": 20532,
+        "ddos": 19232,
+        "benign": 1300
+      }
+    },
+    "top": [
+      {
+        "feature": "Total Length of Fwd Packets",
+        "threshold": 110.0,
+        "val_mcc": 0.71033,
+        "val_accuracy": 0.968905,
+        "val_confusion": {
+          "tn": 696,
+          "fp": 639,
+          "fn": 0,
+          "tp": 19215
+        },
+        "test_mcc": 0.700958,
+        "test_accuracy": 0.968829,
+        "test_confusion": {
+          "tn": 660,
+          "fp": 640,
+          "fn": 0,
+          "tp": 19232
+        }
+      },
+      {
+        "feature": "Fwd Packet Length Max",
+        "threshold": 77.0,
+        "val_mcc": 0.71033,
+        "val_accuracy": 0.968905,
+        "val_confusion": {
+          "tn": 696,
+          "fp": 639,
+          "fn": 0,
+          "tp": 19215
+        },
+        "test_mcc": 0.700958,
+        "test_accuracy": 0.968829,
+        "test_confusion": {
+          "tn": 660,
+          "fp": 640,
+          "fn": 0,
+          "tp": 19232
+        }
+      },
+      {
+        "feature": "Fwd Packet Length Std",
+        "threshold": 20.380507469177246,
+        "val_mcc": 0.71033,
+        "val_accuracy": 0.968905,
+        "val_confusion": {
+          "tn": 696,
+          "fp": 639,
+          "fn": 0,
+          "tp": 19215
+        },
+        "test_mcc": 0.700958,
+        "test_accuracy": 0.968829,
+        "test_confusion": {
+          "tn": 660,
+          "fp": 640,
+          "fn": 0,
+          "tp": 19232
+        }
+      },
+      {
+        "feature": "Subflow Fwd Bytes",
+        "threshold": 110.0,
+        "val_mcc": 0.71033,
+        "val_accuracy": 0.968905,
+        "val_confusion": {
+          "tn": 696,
+          "fp": 639,
+          "fn": 0,
+          "tp": 19215
+        },
+        "test_mcc": 0.700958,
+        "test_accuracy": 0.968829,
+        "test_confusion": {
+          "tn": 660,
+          "fp": 640,
+          "fn": 0,
+          "tp": 19232
+        }
+      },
+      {
+        "feature": "Fwd Packet Length Mean",
+        "threshold": 10.104650974273682,
+        "val_mcc": 0.708744,
+        "val_accuracy": 0.968759,
+        "val_confusion": {
+          "tn": 693,
+          "fp": 642,
+          "fn": 0,
+          "tp": 19215
+        },
+        "test_mcc": 0.69931,
+        "test_accuracy": 0.968683,
+        "test_confusion": {
+          "tn": 657,
+          "fp": 643,
+          "fn": 0,
+          "tp": 19232
+        }
+      },
+      {
+        "feature": "Avg Fwd Segment Size",
+        "threshold": 10.104650974273682,
+        "val_mcc": 0.708744,
+        "val_accuracy": 0.968759,
+        "val_confusion": {
+          "tn": 693,
+          "fp": 642,
+          "fn": 0,
+          "tp": 19215
+        },
+        "test_mcc": 0.69931,
+        "test_accuracy": 0.968683,
+        "test_confusion": {
+          "tn": 657,
+          "fp": 643,
+          "fn": 0,
+          "tp": 19232
+        }
+      },
+      {
+        "feature": "Init_Win_bytes_backward",
+        "threshold": 229.5,
+        "val_mcc": 0.688923,
+        "val_accuracy": 0.966959,
+        "val_confusion": {
+          "tn": 656,
+          "fp": 679,
+          "fn": 0,
+          "tp": 19215
+        },
+        "test_mcc": 0.676441,
+        "test_accuracy": 0.966686,
+        "test_confusion": {
+          "tn": 616,
+          "fp": 684,
+          "fn": 0,
+          "tp": 19232
+        }
+      },
+      {
+        "feature": "min_seg_size_forward",
+        "threshold": 24.0,
+        "val_mcc": 0.659629,
+        "val_accuracy": 0.96438,
+        "val_confusion": {
+          "tn": 603,
+          "fp": 732,
+          "fn": 0,
+          "tp": 19215
+        },
+        "test_mcc": 0.634535,
+        "test_accuracy": 0.963179,
+        "test_confusion": {
+          "tn": 544,
+          "fp": 756,
+          "fn": 0,
+          "tp": 19232
+        }
+      },
+      {
+        "feature": "Init_Win_bytes_forward",
+        "threshold": 12141.5,
+        "val_mcc": 0.657458,
+        "val_accuracy": 0.964234,
+        "val_confusion": {
+          "tn": 625,
+          "fp": 710,
+          "fn": 25,
+          "tp": 19190
+        },
+        "test_mcc": 0.636445,
+        "test_accuracy": 0.963374,
+        "test_confusion": {
+          "tn": 572,
+          "fp": 728,
+          "fn": 24,
+          "tp": 19208
+        }
+      },
+      {
+        "feature": "act_data_pkt_fwd",
+        "threshold": 1.5,
+        "val_mcc": 0.635406,
+        "val_accuracy": 0.959854,
+        "val_confusion": {
+          "tn": 766,
+          "fp": 569,
+          "fn": 256,
+          "tp": 18959
+        },
+        "test_mcc": 0.65101,
+        "test_accuracy": 0.96279,
+        "test_confusion": {
+          "tn": 748,
+          "fp": 552,
+          "fn": 212,
+          "tp": 19020
+        }
+      }
+    ]
+  },
+  "removal_overlap": {
+    "Destination Port": {
+      "dropped": [
+        "Destination Port"
+      ],
+      "n_features": 77,
+      "distinct_vectors": 221262,
+      "partition_overlap": {
+        "train_val": 357,
+        "train_test": 364,
+        "val_test": 163
+      },
+      "rows_with_train_twin": {
+        "val": {
+          "rows_with_train_twin": 357,
+          "ddos": 0,
+          "benign": 357
+        },
+        "test": {
+          "rows_with_train_twin": 364,
+          "ddos": 0,
+          "benign": 364
+        }
+      },
+      "exclude_eval_twins": {
+        "val_excluded": 357,
+        "test_excluded": 391,
+        "evaluation_population": {
+          "train": {
+            "rows": 157998,
+            "ddos": 89577,
+            "benign": 68421
+          },
+          "val": {
+            "rows": 33477,
+            "ddos": 19215,
+            "benign": 14262
+          },
+          "test": {
+            "rows": 33486,
+            "ddos": 19233,
+            "benign": 14253
+          }
+        },
+        "excluded_test_rows_port80": 11,
+        "excluded_test_rows_top_ports": {
+          "137": 20,
+          "80": 11,
+          "443": 11,
+          "20878": 3,
+          "21": 2
+        },
+        "evaluation_fingerprint": "0435302bf798010dec7b4251f3a489b81ea17cbe5c9078784d5306d9d9796319"
+      },
+      "conflicting_label_groups": 0,
+      "conflicting_label_rows": 0,
+      "conflicting_label_rows_per_partition": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      }
+    }
+  },
+  "baseline_errors": {
+    "val": [
+      {
+        "source_row": 1408,
+        "y_true": 0,
+        "prob_ddos": 0.952719,
+        "Destination Port": 80.0,
+        "Fwd Packet Length Max": 6.0,
+        "Fwd Packet Length Mean": 6.0,
+        "Avg Fwd Segment Size": 6.0,
+        "Init_Win_bytes_forward": 256.0,
+        "act_data_pkt_fwd": 2.0
+      },
+      {
+        "source_row": 6913,
+        "y_true": 0,
+        "prob_ddos": 0.998301,
+        "Destination Port": 21.0,
+        "Fwd Packet Length Max": 6.0,
+        "Fwd Packet Length Mean": 6.0,
+        "Avg Fwd Segment Size": 6.0,
+        "Init_Win_bytes_forward": 255.0,
+        "act_data_pkt_fwd": 2.0
+      },
+      {
+        "source_row": 96534,
+        "y_true": 1,
+        "prob_ddos": 0.337023,
+        "Destination Port": 80.0,
+        "Fwd Packet Length Max": 6.0,
+        "Fwd Packet Length Mean": 6.0,
+        "Avg Fwd Segment Size": 6.0,
+        "Init_Win_bytes_forward": 256.0,
+        "act_data_pkt_fwd": 3.0
+      },
+      {
+        "source_row": 164691,
+        "y_true": 0,
+        "prob_ddos": 0.945344,
+        "Destination Port": 443.0,
+        "Fwd Packet Length Max": 6.0,
+        "Fwd Packet Length Mean": 6.0,
+        "Avg Fwd Segment Size": 6.0,
+        "Init_Win_bytes_forward": 254.0,
+        "act_data_pkt_fwd": 2.0
+      },
+      {
+        "source_row": 174203,
+        "y_true": 0,
+        "prob_ddos": 0.992624,
+        "Destination Port": 80.0,
+        "Fwd Packet Length Max": 313.0,
+        "Fwd Packet Length Mean": 106.3333333,
+        "Avg Fwd Segment Size": 106.3333333,
+        "Init_Win_bytes_forward": 8192.0,
+        "act_data_pkt_fwd": 2.0
+      }
+    ],
+    "test": [
+      {
+        "source_row": 5245,
+        "y_true": 0,
+        "prob_ddos": 0.991804,
+        "Destination Port": 443.0,
+        "Fwd Packet Length Max": 6.0,
+        "Fwd Packet Length Mean": 6.0,
+        "Avg Fwd Segment Size": 6.0,
+        "Init_Win_bytes_forward": 254.0,
+        "act_data_pkt_fwd": 2.0
+      },
+      {
+        "source_row": 5246,
+        "y_true": 0,
+        "prob_ddos": 0.988189,
+        "Destination Port": 443.0,
+        "Fwd Packet Length Max": 6.0,
+        "Fwd Packet Length Mean": 6.0,
+        "Avg Fwd Segment Size": 6.0,
+        "Init_Win_bytes_forward": 254.0,
+        "act_data_pkt_fwd": 2.0
+      },
+      {
+        "source_row": 99515,
+        "y_true": 1,
+        "prob_ddos": 0.001048,
+        "Destination Port": 80.0,
+        "Fwd Packet Length Max": 6.0,
+        "Fwd Packet Length Mean": 6.0,
+        "Avg Fwd Segment Size": 6.0,
+        "Init_Win_bytes_forward": 256.0,
+        "act_data_pkt_fwd": 2.0
+      },
+      {
+        "source_row": 110943,
+        "y_true": 1,
+        "prob_ddos": 3.3e-05,
+        "Destination Port": 64869.0,
+        "Fwd Packet Length Max": 6.0,
+        "Fwd Packet Length Mean": 6.0,
+        "Avg Fwd Segment Size": 6.0,
+        "Init_Win_bytes_forward": 229.0,
+        "act_data_pkt_fwd": 0.0
+      },
+      {
+        "source_row": 155712,
+        "y_true": 0,
+        "prob_ddos": 0.999862,
+        "Destination Port": 443.0,
+        "Fwd Packet Length Max": 517.0,
+        "Fwd Packet Length Mean": 47.83333333,
+        "Avg Fwd Segment Size": 47.83333333,
+        "Init_Win_bytes_forward": 8192.0,
+        "act_data_pkt_fwd": 23.0
+      }
+    ]
+  }
+}

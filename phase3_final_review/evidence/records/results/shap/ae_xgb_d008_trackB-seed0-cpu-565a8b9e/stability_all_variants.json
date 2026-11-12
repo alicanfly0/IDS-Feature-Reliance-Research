@@ -1,0 +1,509 @@
+{
+  "variants": [
+    "variant-bg100x0-ex200x0-p10-6739863fb0a7",
+    "variant-bg100x0-ex200x0-p5-b7c52b2147b1",
+    "variant-bg100x0-ex200x1-p5-70f2da7216d3",
+    "variant-bg100x1-ex200x0-p5-23b830722e20",
+    "variant-bg100x1-ex200x1-p5-17ca221e1e36",
+    "variant-bg200x0-ex200x0-p5-572ea7658299"
+  ],
+  "stability": {
+    "spearman_all_features": {
+      "variant-bg100x0-ex200x0-p10-6739863fb0a7": {
+        "variant-bg100x0-ex200x0-p10-6739863fb0a7": 1.0,
+        "variant-bg100x0-ex200x0-p5-b7c52b2147b1": 0.9988,
+        "variant-bg100x0-ex200x1-p5-70f2da7216d3": 0.9973,
+        "variant-bg100x1-ex200x0-p5-23b830722e20": 0.995,
+        "variant-bg100x1-ex200x1-p5-17ca221e1e36": 0.995,
+        "variant-bg200x0-ex200x0-p5-572ea7658299": 0.998
+      },
+      "variant-bg100x0-ex200x0-p5-b7c52b2147b1": {
+        "variant-bg100x0-ex200x0-p10-6739863fb0a7": 0.9988,
+        "variant-bg100x0-ex200x0-p5-b7c52b2147b1": 1.0,
+        "variant-bg100x0-ex200x1-p5-70f2da7216d3": 0.9976,
+        "variant-bg100x1-ex200x0-p5-23b830722e20": 0.9961,
+        "variant-bg100x1-ex200x1-p5-17ca221e1e36": 0.9958,
+        "variant-bg200x0-ex200x0-p5-572ea7658299": 0.9993
+      },
+      "variant-bg100x0-ex200x1-p5-70f2da7216d3": {
+        "variant-bg100x0-ex200x0-p10-6739863fb0a7": 0.9973,
+        "variant-bg100x0-ex200x0-p5-b7c52b2147b1": 0.9976,
+        "variant-bg100x0-ex200x1-p5-70f2da7216d3": 1.0,
+        "variant-bg100x1-ex200x0-p5-23b830722e20": 0.9945,
+        "variant-bg100x1-ex200x1-p5-17ca221e1e36": 0.9971,
+        "variant-bg200x0-ex200x0-p5-572ea7658299": 0.9967
+      },
+      "variant-bg100x1-ex200x0-p5-23b830722e20": {
+        "variant-bg100x0-ex200x0-p10-6739863fb0a7": 0.995,
+        "variant-bg100x0-ex200x0-p5-b7c52b2147b1": 0.9961,
+        "variant-bg100x0-ex200x1-p5-70f2da7216d3": 0.9945,
+        "variant-bg100x1-ex200x0-p5-23b830722e20": 1.0,
+        "variant-bg100x1-ex200x1-p5-17ca221e1e36": 0.9978,
+        "variant-bg200x0-ex200x0-p5-572ea7658299": 0.9971
+      },
+      "variant-bg100x1-ex200x1-p5-17ca221e1e36": {
+        "variant-bg100x0-ex200x0-p10-6739863fb0a7": 0.995,
+        "variant-bg100x0-ex200x0-p5-b7c52b2147b1": 0.9958,
+        "variant-bg100x0-ex200x1-p5-70f2da7216d3": 0.9971,
+        "variant-bg100x1-ex200x0-p5-23b830722e20": 0.9978,
+        "variant-bg100x1-ex200x1-p5-17ca221e1e36": 1.0,
+        "variant-bg200x0-ex200x0-p5-572ea7658299": 0.996
+      },
+      "variant-bg200x0-ex200x0-p5-572ea7658299": {
+        "variant-bg100x0-ex200x0-p10-6739863fb0a7": 0.998,
+        "variant-bg100x0-ex200x0-p5-b7c52b2147b1": 0.9993,
+        "variant-bg100x0-ex200x1-p5-70f2da7216d3": 0.9967,
+        "variant-bg100x1-ex200x0-p5-23b830722e20": 0.9971,
+        "variant-bg100x1-ex200x1-p5-17ca221e1e36": 0.996,
+        "variant-bg200x0-ex200x0-p5-572ea7658299": 1.0
+      }
+    },
+    "spearman_top20_union": {
+      "features": 22,
+      "min": 0.9729,
+      "matrix": {
+        "variant-bg100x0-ex200x0-p10-6739863fb0a7": {
+          "variant-bg100x0-ex200x0-p10-6739863fb0a7": 1.0,
+          "variant-bg100x0-ex200x0-p5-b7c52b2147b1": 0.9944,
+          "variant-bg100x0-ex200x1-p5-70f2da7216d3": 0.9729,
+          "variant-bg100x1-ex200x0-p5-23b830722e20": 0.9763,
+          "variant-bg100x1-ex200x1-p5-17ca221e1e36": 0.974,
+          "variant-bg200x0-ex200x0-p5-572ea7658299": 0.9921
+        },
+        "variant-bg100x0-ex200x0-p5-b7c52b2147b1": {
+          "variant-bg100x0-ex200x0-p10-6739863fb0a7": 0.9944,
+          "variant-bg100x0-ex200x0-p5-b7c52b2147b1": 1.0,
+          "variant-bg100x0-ex200x1-p5-70f2da7216d3": 0.9763,
+          "variant-bg100x1-ex200x0-p5-23b830722e20": 0.9808,
+          "variant-bg100x1-ex200x1-p5-17ca221e1e36": 0.9729,
+          "variant-bg200x0-ex200x0-p5-572ea7658299": 0.9977
+        },
+        "variant-bg100x0-ex200x1-p5-70f2da7216d3": {
+          "variant-bg100x0-ex200x0-p10-6739863fb0a7": 0.9729,
+          "variant-bg100x0-ex200x0-p5-b7c52b2147b1": 0.9763,
+          "variant-bg100x0-ex200x1-p5-70f2da7216d3": 1.0,
+          "variant-bg100x1-ex200x0-p5-23b830722e20": 0.9729,
+          "variant-bg100x1-ex200x1-p5-17ca221e1e36": 0.9831,
+          "variant-bg200x0-ex200x0-p5-572ea7658299": 0.9785
+        },
+        "variant-bg100x1-ex200x0-p5-23b830722e20": {
+          "variant-bg100x0-ex200x0-p10-6739863fb0a7": 0.9763,
+          "variant-bg100x0-ex200x0-p5-b7c52b2147b1": 0.9808,
+          "variant-bg100x0-ex200x1-p5-70f2da7216d3": 0.9729,
+          "variant-bg100x1-ex200x0-p5-23b830722e20": 1.0,
+          "variant-bg100x1-ex200x1-p5-17ca221e1e36": 0.9808,
+          "variant-bg200x0-ex200x0-p5-572ea7658299": 0.9752
+        },
+        "variant-bg100x1-ex200x1-p5-17ca221e1e36": {
+          "variant-bg100x0-ex200x0-p10-6739863fb0a7": 0.974,
+          "variant-bg100x0-ex200x0-p5-b7c52b2147b1": 0.9729,
+          "variant-bg100x0-ex200x1-p5-70f2da7216d3": 0.9831,
+          "variant-bg100x1-ex200x0-p5-23b830722e20": 0.9808,
+          "variant-bg100x1-ex200x1-p5-17ca221e1e36": 1.0,
+          "variant-bg200x0-ex200x0-p5-572ea7658299": 0.9729
+        },
+        "variant-bg200x0-ex200x0-p5-572ea7658299": {
+          "variant-bg100x0-ex200x0-p10-6739863fb0a7": 0.9921,
+          "variant-bg100x0-ex200x0-p5-b7c52b2147b1": 0.9977,
+          "variant-bg100x0-ex200x1-p5-70f2da7216d3": 0.9785,
+          "variant-bg100x1-ex200x0-p5-23b830722e20": 0.9752,
+          "variant-bg100x1-ex200x1-p5-17ca221e1e36": 0.9729,
+          "variant-bg200x0-ex200x0-p5-572ea7658299": 1.0
+        }
+      }
+    },
+    "top5_intersection": [
+      "ACK Flag Count",
+      "Average Packet Size",
+      "PSH Flag Count",
+      "Packet Length Mean"
+    ],
+    "top5_intersection_size": 4,
+    "top10_intersection": [
+      "ACK Flag Count",
+      "Average Packet Size",
+      "Bwd Packet Length Max",
+      "Destination Port",
+      "Fwd IAT Total",
+      "Idle Max",
+      "PSH Flag Count",
+      "Packet Length Mean"
+    ],
+    "top10_intersection_size": 8,
+    "top20_intersection": [
+      "ACK Flag Count",
+      "Average Packet Size",
+      "Bwd Packet Length Max",
+      "Destination Port",
+      "Down/Up Ratio",
+      "Flow Duration",
+      "Fwd IAT Max",
+      "Fwd IAT Total",
+      "Idle Max",
+      "Idle Mean",
+      "Idle Std",
+      "Init_Win_bytes_forward",
+      "Max Packet Length",
+      "PSH Flag Count",
+      "Packet Length Mean",
+      "Packet Length Std",
+      "URG Flag Count",
+      "min_seg_size_forward"
+    ],
+    "top20_intersection_size": 18,
+    "arr_merged_range": {
+      "direct": {
+        "2": [
+          0.0,
+          0.0
+        ],
+        "5": [
+          0.0,
+          0.0
+        ],
+        "10": [
+          0.0,
+          0.0
+        ],
+        "20": [
+          0.0,
+          0.0
+        ]
+      },
+      "shortcut": {
+        "2": [
+          0.0,
+          0.0
+        ],
+        "5": [
+          0.0,
+          0.0
+        ],
+        "10": [
+          0.0,
+          0.07591524401598058
+        ],
+        "20": [
+          0.07369319422648694,
+          0.0867171146903254
+        ]
+      },
+      "all": {
+        "2": [
+          0.0,
+          0.0
+        ],
+        "5": [
+          0.0,
+          0.1460553641462896
+        ],
+        "10": [
+          0.08483528482563092,
+          0.16434558911088037
+        ],
+        "20": [
+          0.13064573557561332,
+          0.1490768777273937
+        ]
+      }
+    }
+  },
+  "mean_importance_merged_top20": {
+    "ACK Flag Count": 2.3492,
+    "Average Packet Size": 1.6876,
+    "Packet Length Mean": 1.4731,
+    "PSH Flag Count": 1.1794,
+    "Bwd Packet Length Max": 1.103,
+    "Destination Port": 1.0805,
+    "Fwd IAT Total": 0.9201,
+    "Idle Max": 0.9182,
+    "Init_Win_bytes_forward": 0.8976,
+    "Flow Duration": 0.8901,
+    "Idle Mean": 0.8624,
+    "Down/Up Ratio": 0.8118,
+    "Max Packet Length": 0.7987,
+    "Packet Length Std": 0.6974,
+    "min_seg_size_forward": 0.5817,
+    "Idle Std": 0.4822,
+    "URG Flag Count": 0.4646,
+    "Flow IAT Std": 0.3757,
+    "Fwd IAT Max": 0.3667,
+    "Min Packet Length": 0.3475
+  },
+  "rank_per_variant": {
+    "variant-bg100x0-ex200x0-p10-6739863fb0a7": {
+      "ACK Flag Count": 1,
+      "Average Packet Size": 2,
+      "Packet Length Mean": 3,
+      "PSH Flag Count": 4,
+      "Bwd Packet Length Max": 5,
+      "Destination Port": 6,
+      "Fwd IAT Total": 8,
+      "Idle Max": 9,
+      "Init_Win_bytes_forward": 7,
+      "Flow Duration": 11,
+      "Idle Mean": 10,
+      "Down/Up Ratio": 13,
+      "Max Packet Length": 12,
+      "Packet Length Std": 14,
+      "min_seg_size_forward": 15,
+      "Idle Std": 17,
+      "URG Flag Count": 16,
+      "Flow IAT Std": 19,
+      "Fwd IAT Max": 18,
+      "Min Packet Length": 22
+    },
+    "variant-bg100x0-ex200x0-p5-b7c52b2147b1": {
+      "ACK Flag Count": 1,
+      "Average Packet Size": 2,
+      "Packet Length Mean": 3,
+      "PSH Flag Count": 4,
+      "Bwd Packet Length Max": 6,
+      "Destination Port": 5,
+      "Fwd IAT Total": 8,
+      "Idle Max": 9,
+      "Init_Win_bytes_forward": 7,
+      "Flow Duration": 11,
+      "Idle Mean": 10,
+      "Down/Up Ratio": 12,
+      "Max Packet Length": 13,
+      "Packet Length Std": 14,
+      "min_seg_size_forward": 15,
+      "Idle Std": 16,
+      "URG Flag Count": 17,
+      "Flow IAT Std": 18,
+      "Fwd IAT Max": 19,
+      "Min Packet Length": 20
+    },
+    "variant-bg100x0-ex200x1-p5-70f2da7216d3": {
+      "ACK Flag Count": 1,
+      "Average Packet Size": 2,
+      "Packet Length Mean": 3,
+      "PSH Flag Count": 4,
+      "Bwd Packet Length Max": 5,
+      "Destination Port": 6,
+      "Fwd IAT Total": 7,
+      "Idle Max": 8,
+      "Init_Win_bytes_forward": 10,
+      "Flow Duration": 9,
+      "Idle Mean": 13,
+      "Down/Up Ratio": 11,
+      "Max Packet Length": 12,
+      "Packet Length Std": 14,
+      "min_seg_size_forward": 17,
+      "Idle Std": 15,
+      "URG Flag Count": 16,
+      "Flow IAT Std": 20,
+      "Fwd IAT Max": 19,
+      "Min Packet Length": 18
+    },
+    "variant-bg100x1-ex200x0-p5-23b830722e20": {
+      "ACK Flag Count": 1,
+      "Average Packet Size": 2,
+      "Packet Length Mean": 3,
+      "PSH Flag Count": 5,
+      "Bwd Packet Length Max": 6,
+      "Destination Port": 4,
+      "Fwd IAT Total": 9,
+      "Idle Max": 7,
+      "Init_Win_bytes_forward": 10,
+      "Flow Duration": 8,
+      "Idle Mean": 11,
+      "Down/Up Ratio": 12,
+      "Max Packet Length": 13,
+      "Packet Length Std": 14,
+      "min_seg_size_forward": 15,
+      "Idle Std": 16,
+      "URG Flag Count": 17,
+      "Flow IAT Std": 18,
+      "Fwd IAT Max": 19,
+      "Min Packet Length": 22
+    },
+    "variant-bg100x1-ex200x1-p5-17ca221e1e36": {
+      "ACK Flag Count": 1,
+      "Average Packet Size": 2,
+      "Packet Length Mean": 3,
+      "PSH Flag Count": 4,
+      "Bwd Packet Length Max": 5,
+      "Destination Port": 6,
+      "Fwd IAT Total": 9,
+      "Idle Max": 8,
+      "Init_Win_bytes_forward": 11,
+      "Flow Duration": 7,
+      "Idle Mean": 10,
+      "Down/Up Ratio": 12,
+      "Max Packet Length": 13,
+      "Packet Length Std": 14,
+      "min_seg_size_forward": 15,
+      "Idle Std": 16,
+      "URG Flag Count": 17,
+      "Flow IAT Std": 21,
+      "Fwd IAT Max": 18,
+      "Min Packet Length": 19
+    },
+    "variant-bg200x0-ex200x0-p5-572ea7658299": {
+      "ACK Flag Count": 1,
+      "Average Packet Size": 2,
+      "Packet Length Mean": 3,
+      "PSH Flag Count": 4,
+      "Bwd Packet Length Max": 5,
+      "Destination Port": 6,
+      "Fwd IAT Total": 8,
+      "Idle Max": 9,
+      "Init_Win_bytes_forward": 7,
+      "Flow Duration": 11,
+      "Idle Mean": 10,
+      "Down/Up Ratio": 12,
+      "Max Packet Length": 13,
+      "Packet Length Std": 14,
+      "min_seg_size_forward": 15,
+      "Idle Std": 16,
+      "URG Flag Count": 17,
+      "Flow IAT Std": 18,
+      "Fwd IAT Max": 20,
+      "Min Packet Length": 19
+    }
+  },
+  "arr_merged": {
+    "variant-bg100x0-ex200x0-p10-6739863fb0a7": {
+      "2": {
+        "direct": 0.0,
+        "shortcut": 0.0,
+        "all": 0.0
+      },
+      "5": {
+        "direct": 0.0,
+        "shortcut": 0.0,
+        "all": 0.0
+      },
+      "10": {
+        "direct": 0.0,
+        "shortcut": 0.07591524401598058,
+        "all": 0.16256164135899978
+      },
+      "20": {
+        "direct": 0.0,
+        "shortcut": 0.08208015557067065,
+        "all": 0.1417157318925141
+      }
+    },
+    "variant-bg100x0-ex200x0-p5-b7c52b2147b1": {
+      "2": {
+        "direct": 0.0,
+        "shortcut": 0.0,
+        "all": 0.0
+      },
+      "5": {
+        "direct": 0.0,
+        "shortcut": 0.0,
+        "all": 0.14323080230958207
+      },
+      "10": {
+        "direct": 0.0,
+        "shortcut": 0.07369357826069774,
+        "all": 0.16327580457723967
+      },
+      "20": {
+        "direct": 0.0,
+        "shortcut": 0.08107136011840595,
+        "all": 0.1420642635228593
+      }
+    },
+    "variant-bg100x0-ex200x1-p5-70f2da7216d3": {
+      "2": {
+        "direct": 0.0,
+        "shortcut": 0.0,
+        "all": 0.0
+      },
+      "5": {
+        "direct": 0.0,
+        "shortcut": 0.0,
+        "all": 0.0
+      },
+      "10": {
+        "direct": 0.0,
+        "shortcut": 0.06760649080268943,
+        "all": 0.15091056156338387
+      },
+      "20": {
+        "direct": 0.0,
+        "shortcut": 0.07369319422648694,
+        "all": 0.13064573557561332
+      }
+    },
+    "variant-bg100x1-ex200x0-p5-23b830722e20": {
+      "2": {
+        "direct": 0.0,
+        "shortcut": 0.0,
+        "all": 0.0
+      },
+      "5": {
+        "direct": 0.0,
+        "shortcut": 0.0,
+        "all": 0.1460553641462896
+      },
+      "10": {
+        "direct": 0.0,
+        "shortcut": 0.07342976578831538,
+        "all": 0.16434558911088037
+      },
+      "20": {
+        "direct": 0.0,
+        "shortcut": 0.0867171146903254,
+        "all": 0.1490768777273937
+      }
+    },
+    "variant-bg100x1-ex200x1-p5-17ca221e1e36": {
+      "2": {
+        "direct": 0.0,
+        "shortcut": 0.0,
+        "all": 0.0
+      },
+      "5": {
+        "direct": 0.0,
+        "shortcut": 0.0,
+        "all": 0.0
+      },
+      "10": {
+        "direct": 0.0,
+        "shortcut": 0.0,
+        "all": 0.08483528482563092
+      },
+      "20": {
+        "direct": 0.0,
+        "shortcut": 0.07854244235163312,
+        "all": 0.13710881635136885
+      }
+    },
+    "variant-bg200x0-ex200x0-p5-572ea7658299": {
+      "2": {
+        "direct": 0.0,
+        "shortcut": 0.0,
+        "all": 0.0
+      },
+      "5": {
+        "direct": 0.0,
+        "shortcut": 0.0,
+        "all": 0.0
+      },
+      "10": {
+        "direct": 0.0,
+        "shortcut": 0.07423003337444609,
+        "all": 0.15653458201124423
+      },
+      "20": {
+        "direct": 0.0,
+        "shortcut": 0.08307391855956126,
+        "all": 0.1389299119394805
+      }
+    }
+  },
+  "runtime_seconds": {
+    "variant-bg100x0-ex200x0-p10-6739863fb0a7": 118.62,
+    "variant-bg100x0-ex200x0-p5-b7c52b2147b1": 39.89,
+    "variant-bg100x0-ex200x1-p5-70f2da7216d3": 33.85,
+    "variant-bg100x1-ex200x0-p5-23b830722e20": 33.85,
+    "variant-bg100x1-ex200x1-p5-17ca221e1e36": 35.6,
+    "variant-bg200x0-ex200x0-p5-572ea7658299": 91.0
+  }
+}

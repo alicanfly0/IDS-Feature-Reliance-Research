@@ -1,0 +1,1879 @@
+{
+ "n": 22049,
+ "n_ddos": 14168,
+ "n_scored": 110,
+ "population": "R4a-ii family-common test (Engelen corrected Friday)",
+ "runs": {
+  "r1_A_s0": {
+   "benign_fpr": 0.0002537749016622256,
+   "ddos_recall": 0.8003952569169961,
+   "error_rate": 0.12835049208580887,
+   "errors": 2830,
+   "fn": 2828,
+   "fp": 2,
+   "log_loss": 0.3915579649708212,
+   "mcc": 0.7672431174858867,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_A-seed0-cuda-325a7aae"
+  },
+  "r1_A_s1": {
+   "benign_fpr": 0.0002537749016622256,
+   "ddos_recall": 0.9815782044042913,
+   "error_rate": 0.011927978593133475,
+   "errors": 263,
+   "fn": 261,
+   "fp": 2,
+   "log_loss": 0.03760628591581423,
+   "mcc": 0.9745348902593808,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_A-seed1-cuda-0444f41a"
+  },
+  "r1_A_s2": {
+   "benign_fpr": 0.00038066235249333843,
+   "ddos_recall": 0.9087380011293055,
+   "error_rate": 0.05877817588099234,
+   "errors": 1296,
+   "fn": 1293,
+   "fp": 3,
+   "log_loss": 0.15752968622454142,
+   "mcc": 0.883220437615162,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_A-seed2-cuda-16855736"
+  },
+  "r1_A_s3": {
+   "benign_fpr": 0.09338916381169902,
+   "ddos_recall": 0.9869424054206662,
+   "error_rate": 0.04177060184135335,
+   "errors": 921,
+   "fn": 185,
+   "fp": 736,
+   "log_loss": 0.09852971317465521,
+   "mcc": 0.9090216619254881,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_A-seed3-cuda-36b2c70a"
+  },
+  "r1_A_s4": {
+   "benign_fpr": 0.0006344372541555641,
+   "ddos_recall": 0.9986589497459063,
+   "error_rate": 0.001088484738536895,
+   "errors": 24,
+   "fn": 19,
+   "fp": 5,
+   "log_loss": 0.0044046437206835525,
+   "mcc": 0.9976322574231101,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_A-seed4-cuda-e220628b"
+  },
+  "r1_A_s5": {
+   "benign_fpr": 0.0006344372541555641,
+   "ddos_recall": 0.9830604178430266,
+   "error_rate": 0.011111615039230804,
+   "errors": 245,
+   "fn": 240,
+   "fp": 5,
+   "log_loss": 0.042999625219155645,
+   "mcc": 0.9762284029598159,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_A-seed5-cuda-0a236008"
+  },
+  "r1_A_s6": {
+   "benign_fpr": 0.0002537749016622256,
+   "ddos_recall": 0.9909655561829475,
+   "error_rate": 0.005895959000408181,
+   "errors": 130,
+   "fn": 128,
+   "fp": 2,
+   "log_loss": 0.021640140694119018,
+   "mcc": 0.987285745712175,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_A-seed6-cuda-44ec1ae6"
+  },
+  "r1_A_s7": {
+   "benign_fpr": 0.0001268874508311128,
+   "ddos_recall": 0.9827780914737436,
+   "error_rate": 0.011111615039230804,
+   "errors": 245,
+   "fn": 244,
+   "fp": 1,
+   "log_loss": 0.04343587214477214,
+   "mcc": 0.9762516236351129,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_A-seed7-cuda-3441d263"
+  },
+  "r1_A_s8": {
+   "benign_fpr": 0.38104301484583175,
+   "ddos_recall": 0.9624505928853755,
+   "error_rate": 0.16032473128033017,
+   "errors": 3535,
+   "fn": 532,
+   "fp": 3003,
+   "log_loss": 0.1993575798585256,
+   "mcc": 0.6475352012389108,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_A-seed8-cuda-355d23e4"
+  },
+  "r1_A_s9": {
+   "benign_fpr": 0.0010150996066489023,
+   "ddos_recall": 0.9789666854884246,
+   "error_rate": 0.013878180416345412,
+   "errors": 306,
+   "fn": 298,
+   "fp": 8,
+   "log_loss": 0.029699960304538208,
+   "mcc": 0.9704233689469929,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_A-seed9-cuda-2466a9db"
+  },
+  "r1_Actl0_s0": {
+   "benign_fpr": 0.16685699784291333,
+   "ddos_recall": 0.00042348955392433656,
+   "error_rate": 0.7019365957639803,
+   "errors": 15477,
+   "fn": 14162,
+   "fp": 1315,
+   "log_loss": 1.178047796404657,
+   "mcc": -0.33609000481644047,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Actl0-seed0-cuda-74e0f9cb"
+  },
+  "r1_Actl1_s1": {
+   "benign_fpr": 0.26024616165461234,
+   "ddos_recall": 0.9995765104460757,
+   "error_rate": 0.09329221279876639,
+   "errors": 2057,
+   "fn": 6,
+   "fp": 2051,
+   "log_loss": 0.4515241453054275,
+   "mcc": 0.8031453306927263,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Actl1-seed1-cuda-47bd200a"
+  },
+  "r1_Actl2_s2": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 4.369839880913962,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Actl2-seed2-cuda-c175922f"
+  },
+  "r1_Actl3_s3": {
+   "benign_fpr": 0.0008882121558177896,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6428862986983537,
+   "errors": 14175,
+   "fn": 14168,
+   "fp": 7,
+   "log_loss": 3.711655273105991,
+   "mcc": -0.023893904927003204,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Actl3-seed3-cuda-36b37a3c"
+  },
+  "r1_Actl4_s4": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 3.3915495196243053,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Actl4-seed4-cuda-13c913ad"
+  },
+  "r1_Actl5_s5": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 5.4000127433158065,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Actl5-seed5-cuda-f690fba9"
+  },
+  "r1_Actl6_s6": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 4.073262001391847,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Actl6-seed6-cuda-f3a2c10b"
+  },
+  "r1_Actl7_s7": {
+   "benign_fpr": 0.2877807384849638,
+   "ddos_recall": 0.08794466403162056,
+   "error_rate": 0.6889201324323099,
+   "errors": 15190,
+   "fn": 12922,
+   "fp": 2268,
+   "log_loss": 0.6519892367137232,
+   "mcc": -0.261650551208247,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Actl7-seed7-cuda-7fecb4de"
+  },
+  "r1_Actl8_s8": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 2.855288617174838,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Actl8-seed8-cuda-6f3677c6"
+  },
+  "r1_Actl9_s9": {
+   "benign_fpr": 0.0005075498033244512,
+   "ddos_recall": 0.04686617730095991,
+   "error_rate": 0.6126354936731825,
+   "errors": 13508,
+   "fn": 13504,
+   "fp": 4,
+   "log_loss": 0.5358846316698371,
+   "mcc": 0.12962037379537925,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Actl9-seed9-cuda-1d1dcb6c"
+  },
+  "r1_B_s0": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 2.4847954861660577,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_B-seed0-cuda-30211c51"
+  },
+  "r1_B_s1": {
+   "benign_fpr": 0.00038066235249333843,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6427048845752642,
+   "errors": 14171,
+   "fn": 14168,
+   "fp": 3,
+   "log_loss": 2.9791700715158824,
+   "mcc": -0.015640813449606782,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_B-seed1-cuda-fcd5d235"
+  },
+  "r1_B_s2": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 3.4169500494156733,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_B-seed2-cuda-d395c262"
+  },
+  "r1_B_s3": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 2.948812051710629,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_B-seed3-cuda-f28139d0"
+  },
+  "r1_B_s4": {
+   "benign_fpr": 0.0020301992132978047,
+   "ddos_recall": 0.0,
+   "error_rate": 0.643294480475305,
+   "errors": 14184,
+   "fn": 14168,
+   "fp": 16,
+   "log_loss": 4.5709679881911915,
+   "mcc": -0.0361315659538356,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_B-seed4-cuda-d8b98835"
+  },
+  "r1_B_s5": {
+   "benign_fpr": 0.0005075498033244512,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6427502381060366,
+   "errors": 14172,
+   "fn": 14168,
+   "fp": 4,
+   "log_loss": 1.4033696877370139,
+   "mcc": -0.0180608653333342,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_B-seed5-cuda-d443ebcc"
+  },
+  "r1_B_s6": {
+   "benign_fpr": 0.00038066235249333843,
+   "ddos_recall": 0.000282326369282891,
+   "error_rate": 0.6425234704521747,
+   "errors": 14167,
+   "fn": 14164,
+   "fp": 3,
+   "log_loss": 1.2328374158976902,
+   "mcc": -0.0026453484320651684,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_B-seed6-cuda-d100c073"
+  },
+  "r1_B_s7": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 2.665063151472975,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_B-seed7-cuda-7652d35b"
+  },
+  "r1_B_s8": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 4.627566501269675,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_B-seed8-cuda-9078e949"
+  },
+  "r1_B_s9": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 3.180405003726496,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_B-seed9-cuda-6095fc0d"
+  },
+  "r1_Bctl0_s0": {
+   "benign_fpr": 0.01357695723892907,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6474216517755907,
+   "errors": 14275,
+   "fn": 14168,
+   "fp": 107,
+   "log_loss": 5.074736126198496,
+   "mcc": -0.0936305110459272,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Bctl0-seed0-cuda-69d3c92e"
+  },
+  "r1_Bctl1_s1": {
+   "benign_fpr": 0.0007613247049866769,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6428409451675813,
+   "errors": 14174,
+   "fn": 14168,
+   "fp": 6,
+   "log_loss": 2.4671471527127715,
+   "mcc": -0.022120955658137598,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Bctl1-seed1-cuda-4ef41cc7"
+  },
+  "r1_Bctl2_s2": {
+   "benign_fpr": 0.07346783403121432,
+   "ddos_recall": 0.1466685488424619,
+   "error_rate": 0.5745838813551635,
+   "errors": 12669,
+   "fn": 12090,
+   "fp": 579,
+   "log_loss": 1.7977124819764558,
+   "mcc": 0.107758907921748,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Bctl2-seed2-cuda-eb0c1c20"
+  },
+  "r1_Bctl3_s3": {
+   "benign_fpr": 0.07384849638370765,
+   "ddos_recall": 0.0001411631846414455,
+   "error_rate": 0.6688738718309221,
+   "errors": 14748,
+   "fn": 14166,
+   "fp": 582,
+   "log_loss": 1.7051394370979613,
+   "mcc": -0.21998028794233385,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Bctl3-seed3-cuda-007218f1"
+  },
+  "r1_Bctl4_s4": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 4.808492154668315,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Bctl4-seed4-cuda-9adabf7f"
+  },
+  "r1_Bctl5_s5": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 3.2008901701449894,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Bctl5-seed5-cuda-123b6dc7"
+  },
+  "r1_Bctl6_s6": {
+   "benign_fpr": 0.16520746098210887,
+   "ddos_recall": 0.05942970073404856,
+   "error_rate": 0.6634314481382375,
+   "errors": 14628,
+   "fn": 13326,
+   "fp": 1302,
+   "log_loss": 1.1217561300116439,
+   "mcc": -0.17109835076315197,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Bctl6-seed6-cuda-06d8859d"
+  },
+  "r1_Bctl7_s7": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 2.4319911782229724,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Bctl7-seed7-cuda-3a3ac14a"
+  },
+  "r1_Bctl8_s8": {
+   "benign_fpr": 0.0008882121558177896,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6428862986983537,
+   "errors": 14175,
+   "fn": 14168,
+   "fp": 7,
+   "log_loss": 3.936370597534734,
+   "mcc": -0.023893904927003204,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Bctl8-seed8-cuda-96004b7a"
+  },
+  "r1_Bctl9_s9": {
+   "benign_fpr": 0.04923233092247177,
+   "ddos_recall": 0.3365330321852061,
+   "error_rate": 0.4439203591999637,
+   "errors": 9788,
+   "fn": 9400,
+   "fp": 388,
+   "log_loss": 2.6313645981470266,
+   "mcc": 0.32529079846433523,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Bctl9-seed9-cuda-72112b94"
+  },
+  "r1_C_s0": {
+   "benign_fpr": 0.03261007486359599,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6542246813914463,
+   "errors": 14425,
+   "fn": 14168,
+   "fp": 257,
+   "log_loss": 3.244931443954834,
+   "mcc": -0.14560678974067826,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_C-seed0-cuda-70e5e369"
+  },
+  "r1_C_s1": {
+   "benign_fpr": 0.23613754599670092,
+   "ddos_recall": 0.8295454545454546,
+   "error_rate": 0.1939316975826568,
+   "errors": 4276,
+   "fn": 2415,
+   "fp": 1861,
+   "log_loss": 0.7020073370514224,
+   "mcc": 0.5851441280952001,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_C-seed1-cuda-9ae38d4f"
+  },
+  "r1_C_s2": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 1.4771853497346115,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_C-seed2-cuda-39b73989"
+  },
+  "r1_C_s3": {
+   "benign_fpr": 0.03235629996193377,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6541339743299016,
+   "errors": 14423,
+   "fn": 14168,
+   "fp": 255,
+   "log_loss": 1.5778365326176393,
+   "mcc": -0.1450324646281713,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_C-seed3-cuda-e13fd957"
+  },
+  "r1_C_s4": {
+   "benign_fpr": 0.0030452988199467074,
+   "ddos_recall": 0.0,
+   "error_rate": 0.643657308721484,
+   "errors": 14192,
+   "fn": 14168,
+   "fp": 24,
+   "log_loss": 2.2356261308454983,
+   "mcc": -0.04425998604418359,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_C-seed4-cuda-ef6701f1"
+  },
+  "r1_C_s5": {
+   "benign_fpr": 0.0001268874508311128,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6426141775137194,
+   "errors": 14169,
+   "fn": 14168,
+   "fp": 1,
+   "log_loss": 4.238064681091491,
+   "mcc": -0.009029818274894172,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_C-seed5-cuda-cc938e31"
+  },
+  "r1_C_s6": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 4.740225593249953,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_C-seed6-cuda-49a285b5"
+  },
+  "r1_C_s7": {
+   "benign_fpr": 0.0010150996066489023,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6429316522291261,
+   "errors": 14176,
+   "fn": 14168,
+   "fp": 8,
+   "log_loss": 3.552395128487365,
+   "mcc": -0.025544238270942557,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_C-seed7-cuda-22eb64c3"
+  },
+  "r1_C_s8": {
+   "benign_fpr": 0.001903311762466692,
+   "ddos_recall": 0.7543760587238848,
+   "error_rate": 0.15851059004943535,
+   "errors": 3495,
+   "fn": 3480,
+   "fp": 15,
+   "log_loss": 0.4435043009389941,
+   "mcc": 0.7215419085080893,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_C-seed8-cuda-be5a4a12"
+  },
+  "r1_C_s9": {
+   "benign_fpr": 0.09935287400076133,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6780806385777133,
+   "errors": 14951,
+   "fn": 14168,
+   "fp": 783,
+   "log_loss": 3.184611138096331,
+   "mcc": -0.2572773694376046,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_C-seed9-cuda-6ed4315d"
+  },
+  "r1_Cctl0_s0": {
+   "benign_fpr": 0.0029184113691155945,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6436119551907116,
+   "errors": 14191,
+   "fn": 14168,
+   "fp": 23,
+   "log_loss": 4.066979846838723,
+   "mcc": -0.043327108918971145,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Cctl0-seed0-cuda-69526f06"
+  },
+  "r1_Cctl1_s1": {
+   "benign_fpr": 0.00038066235249333843,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6427048845752642,
+   "errors": 14171,
+   "fn": 14168,
+   "fp": 3,
+   "log_loss": 4.500945470635268,
+   "mcc": -0.015640813449606782,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Cctl1-seed1-cuda-c71fe21e"
+  },
+  "r1_Cctl2_s2": {
+   "benign_fpr": 0.06547392462885421,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6659712458614904,
+   "errors": 14684,
+   "fn": 14168,
+   "fp": 516,
+   "log_loss": 2.83357876845083,
+   "mcc": -0.20755642942264696,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Cctl2-seed2-cuda-4ed79287"
+  },
+  "r1_Cctl3_s3": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 3.253991192919319,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Cctl3-seed3-cuda-d2b5e648"
+  },
+  "r1_Cctl4_s4": {
+   "benign_fpr": 0.026011927420378125,
+   "ddos_recall": 0.46816770186335405,
+   "error_rate": 0.35103632817814867,
+   "errors": 7740,
+   "fn": 7535,
+   "fp": 205,
+   "log_loss": 1.2169365432660295,
+   "mcc": 0.45811742146882145,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Cctl4-seed4-cuda-89c17d8d"
+  },
+  "r1_Cctl5_s5": {
+   "benign_fpr": 0.014211394493084634,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6476484194294526,
+   "errors": 14280,
+   "fn": 14168,
+   "fp": 112,
+   "log_loss": 4.525988829963511,
+   "mcc": -0.09580407984909863,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Cctl5-seed5-cuda-5c61f43d"
+  },
+  "r1_Cctl6_s6": {
+   "benign_fpr": 0.0008882121558177896,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6428862986983537,
+   "errors": 14175,
+   "fn": 14168,
+   "fp": 7,
+   "log_loss": 1.7746929867888428,
+   "mcc": -0.023893904927003204,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Cctl6-seed6-cuda-b6631311"
+  },
+  "r1_Cctl7_s7": {
+   "benign_fpr": 0.0001268874508311128,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6426141775137194,
+   "errors": 14169,
+   "fn": 14168,
+   "fp": 1,
+   "log_loss": 3.9548048879825988,
+   "mcc": -0.009029818274894172,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Cctl7-seed7-cuda-b4a52a3a"
+  },
+  "r1_Cctl8_s8": {
+   "benign_fpr": 0.2388021824641543,
+   "ddos_recall": 0.024915302089215132,
+   "error_rate": 0.7119143725339018,
+   "errors": 15697,
+   "fn": 13815,
+   "fp": 1882,
+   "log_loss": 3.8647635247118237,
+   "mcc": -0.33962858909379884,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Cctl8-seed8-cuda-e43e6575"
+  },
+  "r1_Cctl9_s9": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 1.0670140652794278,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Cctl9-seed9-cuda-22ed6acf"
+  },
+  "r1_D_s0": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 2.362384414440611,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_D-seed0-cuda-18368e25"
+  },
+  "r1_D_s1": {
+   "benign_fpr": 0.20505012054307828,
+   "ddos_recall": 0.7358130999435347,
+   "error_rate": 0.2430495714091342,
+   "errors": 5359,
+   "fn": 3743,
+   "fp": 1616,
+   "log_loss": 0.467028255557597,
+   "mcc": 0.5109055666256811,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_D-seed1-cuda-3542a691"
+  },
+  "r1_D_s2": {
+   "benign_fpr": 0.0001268874508311128,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6426141775137194,
+   "errors": 14169,
+   "fn": 14168,
+   "fp": 1,
+   "log_loss": 4.315498768818913,
+   "mcc": -0.009029818274894172,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_D-seed2-cuda-4ba81eb0"
+  },
+  "r1_D_s3": {
+   "benign_fpr": 0.00038066235249333843,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6427048845752642,
+   "errors": 14171,
+   "fn": 14168,
+   "fp": 3,
+   "log_loss": 3.3248563104647686,
+   "mcc": -0.015640813449606782,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_D-seed3-cuda-be308a41"
+  },
+  "r1_D_s4": {
+   "benign_fpr": 0.0008882121558177896,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6428862986983537,
+   "errors": 14175,
+   "fn": 14168,
+   "fp": 7,
+   "log_loss": 4.913742224615612,
+   "mcc": -0.023893904927003204,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_D-seed4-cuda-0b31142c"
+  },
+  "r1_D_s5": {
+   "benign_fpr": 0.0035528486232711586,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6438387228445734,
+   "errors": 14196,
+   "fn": 14168,
+   "fp": 28,
+   "log_loss": 2.5497191575267535,
+   "mcc": -0.04781059049219796,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_D-seed5-cuda-9ff33afa"
+  },
+  "r1_D_s6": {
+   "benign_fpr": 0.06686968658799644,
+   "ddos_recall": 0.5760163749294184,
+   "error_rate": 0.2963399700666697,
+   "errors": 6534,
+   "fn": 6007,
+   "fp": 527,
+   "log_loss": 0.6280404279787931,
+   "mcc": 0.4993539309713573,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_D-seed6-cuda-cb8615fb"
+  },
+  "r1_D_s7": {
+   "benign_fpr": 0.0011419870574800152,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6429770057598984,
+   "errors": 14177,
+   "fn": 14168,
+   "fp": 9,
+   "log_loss": 2.7794140008434174,
+   "mcc": -0.027094370795111282,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_D-seed7-cuda-ec9d765f"
+  },
+  "r1_D_s8": {
+   "benign_fpr": 0.015099606648902423,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6479658941448592,
+   "errors": 14287,
+   "fn": 14168,
+   "fp": 119,
+   "log_loss": 1.4085304056773387,
+   "mcc": -0.09876834467473847,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_D-seed8-cuda-45ee38e5"
+  },
+  "r1_D_s9": {
+   "benign_fpr": 0.00317218627077782,
+   "ddos_recall": 0.00924618859401468,
+   "error_rate": 0.6377613497210758,
+   "errors": 14062,
+   "fn": 14037,
+   "fp": 25,
+   "log_loss": 2.2568190834066204,
+   "mcc": 0.03473001363625116,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_D-seed9-cuda-c62ab336"
+  },
+  "r1_Dctl0_s0": {
+   "benign_fpr": 0.04973988072579622,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6603474080457163,
+   "errors": 14560,
+   "fn": 14168,
+   "fp": 392,
+   "log_loss": 2.5206177050316194,
+   "mcc": -0.18038793857053714,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Dctl0-seed0-cuda-07062094"
+  },
+  "r1_Dctl1_s1": {
+   "benign_fpr": 0.009389671361502348,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6459249852601024,
+   "errors": 14242,
+   "fn": 14168,
+   "fp": 74,
+   "log_loss": 2.378485796957008,
+   "mcc": -0.07780634746904626,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Dctl1-seed1-cuda-cf4bd579"
+  },
+  "r1_Dctl2_s2": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 4.95467392897971,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Dctl2-seed2-cuda-2b083a0c"
+  },
+  "r1_Dctl3_s3": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 2.0796931136957983,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Dctl3-seed3-cuda-35d0336b"
+  },
+  "r1_Dctl4_s4": {
+   "benign_fpr": 0.0007613247049866769,
+   "ddos_recall": 0.000282326369282891,
+   "error_rate": 0.6426595310444918,
+   "errors": 14170,
+   "fn": 14164,
+   "fp": 6,
+   "log_loss": 3.5829748806602684,
+   "mcc": -0.010781594649582223,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Dctl4-seed4-cuda-95a5ee5f"
+  },
+  "r1_Dctl5_s5": {
+   "benign_fpr": 0.0016495368608044664,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6431584198829879,
+   "errors": 14181,
+   "fn": 14168,
+   "fp": 13,
+   "log_loss": 4.780964865350062,
+   "mcc": -0.03256633639643815,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Dctl5-seed5-cuda-2e73fb67"
+  },
+  "r1_Dctl6_s6": {
+   "benign_fpr": 0.0001268874508311128,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6426141775137194,
+   "errors": 14169,
+   "fn": 14168,
+   "fp": 1,
+   "log_loss": 2.2440291484963826,
+   "mcc": -0.009029818274894172,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Dctl6-seed6-cuda-98e448e7"
+  },
+  "r1_Dctl7_s7": {
+   "benign_fpr": 0.01852556782134247,
+   "ddos_recall": 0.0009881422924901185,
+   "error_rate": 0.6485554900449,
+   "errors": 14300,
+   "fn": 14154,
+   "fp": 146,
+   "log_loss": 2.4202151652985084,
+   "mcc": -0.09902339814014527,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Dctl7-seed7-cuda-1d19fa0e"
+  },
+  "r1_Dctl8_s8": {
+   "benign_fpr": 0.028803451338662606,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6528640754682752,
+   "errors": 14395,
+   "fn": 14168,
+   "fp": 227,
+   "log_loss": 0.9471301629080898,
+   "mcc": -0.1367506071532607,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Dctl8-seed8-cuda-0c343520"
+  },
+  "r1_Dctl9_s9": {
+   "benign_fpr": 0.009009009009009009,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6457889246677854,
+   "errors": 14239,
+   "fn": 14168,
+   "fp": 71,
+   "log_loss": 4.824873814075313,
+   "mcc": -0.07620767291561274,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Dctl9-seed9-cuda-9dc074f9"
+  },
+  "r1_U_s0": {
+   "benign_fpr": 0.0010150996066489023,
+   "ddos_recall": 0.9935770750988142,
+   "error_rate": 0.004489999546464693,
+   "errors": 99,
+   "fn": 91,
+   "fp": 8,
+   "log_loss": 0.015050509054712021,
+   "mcc": 0.9902811677095794,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_U-seed0-cuda-c982bfd2"
+  },
+  "r1_U_s1": {
+   "benign_fpr": 0.0001268874508311128,
+   "ddos_recall": 0.9946357989836251,
+   "error_rate": 0.0034922218694725385,
+   "errors": 77,
+   "fn": 76,
+   "fp": 1,
+   "log_loss": 0.013315890790736022,
+   "mcc": 0.9924405568216979,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_U-seed1-cuda-8754c676"
+  },
+  "r1_U_s2": {
+   "benign_fpr": 0.0005075498033244512,
+   "ddos_recall": 0.9997176736307171,
+   "error_rate": 0.000362828246178965,
+   "errors": 8,
+   "fn": 4,
+   "fp": 4,
+   "log_loss": 0.001999599406753779,
+   "mcc": 0.9992101238273926,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_U-seed2-cuda-a8139a05"
+  },
+  "r1_U_s3": {
+   "benign_fpr": 0.0005075498033244512,
+   "ddos_recall": 0.9885657820440429,
+   "error_rate": 0.007528686108213525,
+   "errors": 166,
+   "fn": 162,
+   "fp": 4,
+   "log_loss": 0.022784146375164793,
+   "mcc": 0.9838013106618447,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_U-seed3-cuda-9c29f852"
+  },
+  "r1_U_s4": {
+   "benign_fpr": 0.0002537749016622256,
+   "ddos_recall": 0.9812958780350085,
+   "error_rate": 0.012109392716222958,
+   "errors": 267,
+   "fn": 265,
+   "fp": 2,
+   "log_loss": 0.035503720441378214,
+   "mcc": 0.9741553164556234,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_U-seed4-cuda-8ebdacdd"
+  },
+  "r1_U_s5": {
+   "benign_fpr": 0.0020301992132978047,
+   "ddos_recall": 0.9990118577075099,
+   "error_rate": 0.001360605923171119,
+   "errors": 30,
+   "fn": 14,
+   "fp": 16,
+   "log_loss": 0.0048417346497688085,
+   "mcc": 0.9970378170048184,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_U-seed5-cuda-e9f3bf24"
+  },
+  "r1_U_s6": {
+   "benign_fpr": 0.0007613247049866769,
+   "ddos_recall": 0.9990118577075099,
+   "error_rate": 0.0009070706154474126,
+   "errors": 20,
+   "fn": 14,
+   "fp": 6,
+   "log_loss": 0.004954250087972468,
+   "mcc": 0.9980260654111632,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_U-seed6-cuda-d1bcec52"
+  },
+  "r1_U_s7": {
+   "benign_fpr": 0.0005075498033244512,
+   "ddos_recall": 0.9903303218520609,
+   "error_rate": 0.006394847838904259,
+   "errors": 141,
+   "fn": 137,
+   "fp": 4,
+   "log_loss": 0.02137038149324024,
+   "mcc": 0.9862147675605739,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_U-seed7-cuda-8de0e7dc"
+  },
+  "r1_U_s8": {
+   "benign_fpr": 0.0002537749016622256,
+   "ddos_recall": 0.9954827780914738,
+   "error_rate": 0.0029933330309764613,
+   "errors": 66,
+   "fn": 64,
+   "fp": 2,
+   "log_loss": 0.009193270266871112,
+   "mcc": 0.9935134265999369,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_U-seed8-cuda-546a9905"
+  },
+  "r1_U_s9": {
+   "benign_fpr": 0.0006344372541555641,
+   "ddos_recall": 0.9995765104460757,
+   "error_rate": 0.0004988888384960769,
+   "errors": 11,
+   "fn": 6,
+   "fp": 5,
+   "log_loss": 0.0031996785464544234,
+   "mcc": 0.9989139557068153,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_U-seed9-cuda-e299a5d6"
+  },
+  "r1_Uctl0_s0": {
+   "benign_fpr": 0.0001268874508311128,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6426141775137194,
+   "errors": 14169,
+   "fn": 14168,
+   "fp": 1,
+   "log_loss": 3.6695009873748456,
+   "mcc": -0.009029818274894172,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Uctl0-seed0-cuda-6d08a215"
+  },
+  "r1_Uctl1_s1": {
+   "benign_fpr": 0.003933510975764497,
+   "ddos_recall": 0.11180124223602485,
+   "error_rate": 0.5721347906934555,
+   "errors": 12615,
+   "fn": 12584,
+   "fp": 31,
+   "log_loss": 1.649454727550055,
+   "mcc": 0.19841455370023314,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Uctl1-seed1-cuda-c0af7bea"
+  },
+  "r1_Uctl2_s2": {
+   "benign_fpr": 0.0012688745083111281,
+   "ddos_recall": 7.058159232072275e-05,
+   "error_rate": 0.6429770057598984,
+   "errors": 14177,
+   "fn": 14167,
+   "fp": 10,
+   "log_loss": 2.4129362691255443,
+   "mcc": -0.025717307503552653,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Uctl2-seed2-cuda-092a937e"
+  },
+  "r1_Uctl3_s3": {
+   "benign_fpr": 0.6003045298819947,
+   "ddos_recall": 0.0,
+   "error_rate": 0.8571363780670325,
+   "errors": 18899,
+   "fn": 14168,
+   "fp": 4731,
+   "log_loss": 4.152222874375511,
+   "mcc": -0.7007953584250685,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Uctl3-seed3-cuda-c7794439"
+  },
+  "r1_Uctl4_s4": {
+   "benign_fpr": 0.006851922344880091,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6450179146446551,
+   "errors": 14222,
+   "fn": 14168,
+   "fp": 54,
+   "log_loss": 2.6962811615878373,
+   "mcc": -0.06643523982308325,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Uctl4-seed4-cuda-7e0062e3"
+  },
+  "r1_Uctl5_s5": {
+   "benign_fpr": 0.005709935287400076,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6446097328677037,
+   "errors": 14213,
+   "fn": 14168,
+   "fp": 45,
+   "log_loss": 1.2585211821221673,
+   "mcc": -0.06063439506674553,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Uctl5-seed5-cuda-3a025dda"
+  },
+  "r1_Uctl6_s6": {
+   "benign_fpr": 0.00545616038573785,
+   "ddos_recall": 0.0,
+   "error_rate": 0.644519025806159,
+   "errors": 14211,
+   "fn": 14168,
+   "fp": 43,
+   "log_loss": 1.113835763529354,
+   "mcc": -0.05926895687903525,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Uctl6-seed6-cuda-c5469cb7"
+  },
+  "r1_Uctl7_s7": {
+   "benign_fpr": 0.08945565283593453,
+   "ddos_recall": 0.19409937888198758,
+   "error_rate": 0.5498208535534491,
+   "errors": 12123,
+   "fn": 11418,
+   "fp": 705,
+   "log_loss": 0.5607725327430746,
+   "mcc": 0.137958255443912,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Uctl7-seed7-cuda-0a0e2273"
+  },
+  "r1_Uctl8_s8": {
+   "benign_fpr": 0.09275472655754347,
+   "ddos_recall": 0.0,
+   "error_rate": 0.67572225497755,
+   "errors": 14899,
+   "fn": 14168,
+   "fp": 731,
+   "log_loss": 1.23361438100952,
+   "mcc": -0.24828419230316426,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Uctl8-seed8-cuda-7d18cd07"
+  },
+  "r1_Uctl9_s9": {
+   "benign_fpr": 0.0001268874508311128,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6426141775137194,
+   "errors": 14169,
+   "fn": 14168,
+   "fp": 1,
+   "log_loss": 5.583974401494161,
+   "mcc": -0.009029818274894172,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_Uctl9-seed9-cuda-638ce646"
+  },
+  "r1_full_s0": {
+   "benign_fpr": 0.0,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6425688239829471,
+   "errors": 14168,
+   "fn": 14168,
+   "fp": 0,
+   "log_loss": 3.7275010687889734,
+   "mcc": 0.0,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_full-seed0-cuda-01d4c9ee"
+  },
+  "r1_full_s1": {
+   "benign_fpr": 0.0001268874508311128,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6426141775137194,
+   "errors": 14169,
+   "fn": 14168,
+   "fp": 1,
+   "log_loss": 2.4596700951338923,
+   "mcc": -0.009029818274894172,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_full-seed1-cuda-252ddd28"
+  },
+  "r1_full_s2": {
+   "benign_fpr": 0.03527471133104936,
+   "ddos_recall": 0.000282326369282891,
+   "error_rate": 0.6549956914145766,
+   "errors": 14442,
+   "fn": 14164,
+   "fp": 278,
+   "log_loss": 3.2100895338460567,
+   "mcc": -0.14924322961463893,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_full-seed2-cuda-556228fc"
+  },
+  "r1_full_s3": {
+   "benign_fpr": 0.032483187412764875,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6541793278606739,
+   "errors": 14424,
+   "fn": 14168,
+   "fp": 256,
+   "log_loss": 2.690777105574108,
+   "mcc": -0.14531989773479476,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_full-seed3-cuda-09de4373"
+  },
+  "r1_full_s4": {
+   "benign_fpr": 0.003299073721608933,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6437480157830288,
+   "errors": 14194,
+   "fn": 14168,
+   "fp": 26,
+   "log_loss": 1.5886779826614725,
+   "mcc": -0.04606934577425536,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_full-seed4-cuda-b6453906"
+  },
+  "r1_full_s5": {
+   "benign_fpr": 0.0007613247049866769,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6428409451675813,
+   "errors": 14174,
+   "fn": 14168,
+   "fp": 6,
+   "log_loss": 3.9143010740090123,
+   "mcc": -0.022120955658137598,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_full-seed5-cuda-4152c5c9"
+  },
+  "r1_full_s6": {
+   "benign_fpr": 0.06674279913716534,
+   "ddos_recall": 0.005364201016374929,
+   "error_rate": 0.6629779128305139,
+   "errors": 14618,
+   "fn": 14092,
+   "fp": 526,
+   "log_loss": 3.495287675281099,
+   "mcc": -0.1805013196124586,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_full-seed6-cuda-f8cd43f0"
+  },
+  "r1_full_s7": {
+   "benign_fpr": 0.09275472655754347,
+   "ddos_recall": 0.8785996612083569,
+   "error_rate": 0.11116150392308041,
+   "errors": 2451,
+   "fn": 1720,
+   "fp": 731,
+   "log_loss": 0.29862499914853013,
+   "mcc": 0.7680310129220304,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_full-seed7-cuda-88d06036"
+  },
+  "r1_full_s8": {
+   "benign_fpr": 0.0025377490166222563,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6434758945983945,
+   "errors": 14188,
+   "fn": 14168,
+   "fp": 20,
+   "log_loss": 4.734307645171392,
+   "mcc": -0.04039998619478415,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_full-seed8-cuda-ba108f69"
+  },
+  "r1_full_s9": {
+   "benign_fpr": 0.0001268874508311128,
+   "ddos_recall": 0.0,
+   "error_rate": 0.6426141775137194,
+   "errors": 14169,
+   "fn": 14168,
+   "fp": 1,
+   "log_loss": 2.129769030245352,
+   "mcc": -0.009029818274894172,
+   "n": 22049,
+   "numerical_sensitivity": {
+    "alt_batch": 65536,
+    "max_abs_margin_diff": 0.0,
+    "threshold_crossings": 0
+   },
+   "run": "ae3b_r1_full-seed9-cuda-60551598"
+  }
+ },
+ "status": "descriptive (D-024): definitions differ for >= 16 inputs"
+}

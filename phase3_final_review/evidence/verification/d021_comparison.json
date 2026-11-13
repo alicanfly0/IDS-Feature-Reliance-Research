@@ -1,0 +1,143 @@
+{
+ "rule": "D-021 (approved 2026-11-11): AE cap 100, cap-200 sensitivity where the cap is hit",
+ "applies_to": "r1 (approved with the r1 grid). D-024 (R4a) does not extend D-021; the 17 capped R4a fits are a declared limitation.",
+ "fits": {
+  "r1_D_s0": {
+   "primary": {
+    "run": "ae3b_r1_D-seed0-cuda-18368e25",
+    "ae_best_epoch": 99,
+    "ae_epochs_run": 100,
+    "errors": 8,
+    "fp": 3,
+    "fn": 5,
+    "mcc": 0.9995022919471628,
+    "monday_fp": 1172,
+    "monday_fpr": 0.0023679637935911423
+   },
+   "cap200": {
+    "run": "ae3b_r1_D_cap200-seed0-cuda-dff458b8",
+    "ae_best_epoch": 113,
+    "ae_epochs_run": 124,
+    "stopped": "early stopping at epoch 123 (patience 10)",
+    "errors": 9,
+    "fp": 3,
+    "fn": 6,
+    "mcc": 0.999440092867033,
+    "monday_fp": 1138,
+    "monday_fpr": 0.0022992685982139247,
+    "git_commit": "b6297226d6dc0eb946603fc2f66c44b8db816fee",
+    "environment_fingerprint": "be81b4d6da06489e4692ce2f0dd5acb6918e422dfc2a2a900cd2ba39fbdb1a8b"
+   }
+  },
+  "r1_D_s5": {
+   "primary": {
+    "run": "ae3b_r1_D-seed5-cuda-9ff33afa",
+    "ae_best_epoch": 95,
+    "ae_epochs_run": 100,
+    "errors": 14,
+    "fp": 5,
+    "fn": 9,
+    "mcc": 0.9991290461095884,
+    "monday_fp": 1051,
+    "monday_fpr": 0.0021234897159251626
+   },
+   "cap200": {
+    "run": "ae3b_r1_D_cap200-seed5-cuda-f8e41ff3",
+    "ae_best_epoch": 103,
+    "ae_epochs_run": 114,
+    "stopped": "early stopping at epoch 113 (patience 10)",
+    "errors": 13,
+    "fp": 5,
+    "fn": 8,
+    "mcc": 0.9991912375112575,
+    "monday_fp": 1135,
+    "monday_fpr": 0.002293207257445347,
+    "git_commit": "b6297226d6dc0eb946603fc2f66c44b8db816fee",
+    "environment_fingerprint": "be81b4d6da06489e4692ce2f0dd5acb6918e422dfc2a2a900cd2ba39fbdb1a8b"
+   }
+  }
+ },
+ "endpoints": {
+  "error_rate": {
+   "primary": {
+    "mean_d": 0.00014831406259458807,
+    "p_exact": 0.005859375,
+    "p_holm": 0.046875,
+    "interval_99_5": [
+     2.546677669548194e-05,
+     0.0002711613484936942
+    ],
+    "reading": "difference (below SESOI or interval overlaps it)"
+   },
+   "cap200_sensitivity": {
+    "d": [
+     0.0001816090562382711,
+     6.05363520794237e-05,
+     -6.0536352079423725e-05,
+     0.0001210727041588474,
+     0.0001210727041588474,
+     0.00018160905623827107,
+     0.0003329499364368303,
+     0.00021187723227798294,
+     0.00012107270415884738,
+     0.0002118772322779829
+    ],
+    "mean_d": 0.00014831406259458807,
+    "p_exact": 0.005859375,
+    "n_nonzero": 10,
+    "interval_99_5": [
+     2.6600078464582755e-05,
+     0.0002700280467245934
+    ],
+    "interval_99_tost": [
+     4.110901522778967e-05,
+     0.00025551910996138646
+    ],
+    "p_holm": 0.046875,
+    "holm_reject": true,
+    "reading": "difference (below SESOI or interval overlaps it)"
+   }
+  },
+  "fpr": {
+   "primary": {
+    "mean_d": 0.0002545763122802764,
+    "p_exact": 0.34375,
+    "p_holm": 1.0,
+    "interval_99_5": [
+     -0.0006760309202071917,
+     0.0011851835447677444
+    ],
+    "reading": "inconclusive"
+   },
+   "cap200_sensitivity": {
+    "d": [
+     0.0004727845799490846,
+     0.00010102234614296681,
+     0.0016769709459732492,
+     -0.0006283589930092535,
+     -0.00046874368610336616,
+     0.0012243908352527581,
+     0.0008788944114438114,
+     -0.00035559865842324317,
+     -0.0006748292722350184,
+     0.0004202529599547421
+    ],
+    "mean_d": 0.0002646785468945731,
+    "p_exact": 0.3359375,
+    "n_nonzero": 10,
+    "interval_99_5": [
+     -0.0006871952749102005,
+     0.0012165523686993467
+    ],
+    "interval_99_tost": [
+     -0.0005737269895210207,
+     0.0011030840833101668
+    ],
+    "p_holm": 1.0,
+    "holm_reject": false,
+    "reading": "inconclusive"
+   }
+  }
+ },
+ "other_holm_decisions_changed": []
+}

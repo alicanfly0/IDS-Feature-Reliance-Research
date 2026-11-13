@@ -1,0 +1,91 @@
+{
+ "monday_kept_sha256": "bb10b3098b65a4f57730e4aebb0be5d7b4e5ec534e775254a2e73d7a6d0dc7fa",
+ "population_test_sha256": "2893fd3c5eca6aa53d078103599093293ae6872a1c82d22ed968f4577e7e53bc",
+ "rule": "D-021: AE cap 100 with cap-200 sensitivity where the cap is hit",
+ "runs": {
+  "r1_D_s0_cap200": {
+   "autoencoder": {
+    "best_epoch": 113,
+    "best_val_mse": 1.5929574654935883e-06,
+    "epochs_run": 124,
+    "stopped": "early stopping at epoch 123 (patience 10)"
+   },
+   "config_file": "configs/experiments/sensitivity/d021_r1_D_s0_cap200.yaml",
+   "config_file_sha256": "8a6b86e31f22bc825f875dfe714346369b06759f918d7b1fb7873238fdb7dd69",
+   "config_hash": "dff458b8d7f1e095ed8c3665c3b1e920a17cecab52d4f24e25f7df27e5982fbb",
+   "device": "cuda",
+   "environment_fingerprint": "be81b4d6da06489e4692ce2f0dd5acb6918e422dfc2a2a900cd2ba39fbdb1a8b",
+   "git_commit": "b6297226d6dc0eb946603fc2f66c44b8db816fee",
+   "input_dim": 66,
+   "monday": {
+    "clopper_pearson_95": [
+     0.002167745282491045,
+     0.002436671038934559
+    ],
+    "false_positives": 1138,
+    "fpr": 0.0022992685982139247,
+    "n": 494940,
+    "numerical_sensitivity": {
+     "alt_batch": 65536,
+     "max_abs_margin_diff": 0.0,
+     "threshold_crossings": 0
+    }
+   },
+   "predictions_test_sha256": "f360745ee3c1b46b586b8b348b79348d540d5312511f5102be944b48ea4e3fb7",
+   "primary_entry": "r1_D_s0",
+   "run": "ae3b_r1_D_cap200-seed0-cuda-dff458b8",
+   "test": {
+    "error_rate": 0.00027241358435740664,
+    "errors": 9,
+    "fn": 6,
+    "fp": 3,
+    "log_loss": 0.0013742323797799273,
+    "mcc": 0.999440092867033,
+    "n": 33038
+   },
+   "xgb_best_iteration": 164
+  },
+  "r1_D_s5_cap200": {
+   "autoencoder": {
+    "best_epoch": 103,
+    "best_val_mse": 2.0174818647994534e-06,
+    "epochs_run": 114,
+    "stopped": "early stopping at epoch 113 (patience 10)"
+   },
+   "config_file": "configs/experiments/sensitivity/d021_r1_D_s5_cap200.yaml",
+   "config_file_sha256": "1705adb403b6016bef042e31d02fa288b139d72c87c077dcd9f20138341f29c2",
+   "config_hash": "f8e41ff3219d1dbecd16493f3652b422aaebf045f55251acc8c17c159634a29f",
+   "device": "cuda",
+   "environment_fingerprint": "be81b4d6da06489e4692ce2f0dd5acb6918e422dfc2a2a900cd2ba39fbdb1a8b",
+   "git_commit": "b6297226d6dc0eb946603fc2f66c44b8db816fee",
+   "input_dim": 66,
+   "monday": {
+    "clopper_pearson_95": [
+     0.002161859580959895,
+     0.0024304342069326446
+    ],
+    "false_positives": 1135,
+    "fpr": 0.002293207257445347,
+    "n": 494940,
+    "numerical_sensitivity": {
+     "alt_batch": 65536,
+     "max_abs_margin_diff": 0.0,
+     "threshold_crossings": 0
+    }
+   },
+   "predictions_test_sha256": "793bde9985970826d193c29d58ccd6b4744c0a92523d102f40d1b1e9bae95ea5",
+   "primary_entry": "r1_D_s5",
+   "run": "ae3b_r1_D_cap200-seed5-cuda-f8e41ff3",
+   "test": {
+    "error_rate": 0.000393486288516254,
+    "errors": 13,
+    "fn": 8,
+    "fp": 5,
+    "log_loss": 0.001251830254517583,
+    "mcc": 0.9991912375112575,
+    "n": 33038
+   },
+   "xgb_best_iteration": 202
+  }
+ }
+}

@@ -163,7 +163,11 @@ Only models trained **without the TCP flag-count features** transfer. This is th
 - 93.7% of N1 random-split test rows and 81.0% of N2's repeat a training/meta/validation vector.
 - One N2 benign vector makes up 17.7% of the data.
 
-**Reading:** the ensemble is unstable across seeds, and duplicate-aware splitting removes most of its apparent skill. No unseen-network generalisation was evaluated, so none is claimed.
+**Reading:**
+- The ensemble is unstable across seeds, and under duplicate-aware splitting it loses most of its apparent skill.
+- **N1's own base model is unaffected** (MCC 0.939 → 0.940). The N1 ensemble collapse therefore comes from the stacking step (poor cross-network base transfer, changed meta-sample composition), not from losing duplicated test rows.
+- Only the N2 base model's drop (0.906 → 0.150) is directly tied to holding out whole duplicate groups.
+- No unseen-network generalisation was evaluated (that is Wardana's Scenario 3), so none is claimed.
 
 ## 6. Attribution (SHAP / ARR)
 
@@ -188,10 +192,12 @@ Only models trained **without the TCP flag-count features** transfer. This is th
 1. **In-domain saturation.**
    - The CICIDS2017 Friday DDoS benchmark is saturated for AE-XGBoost: 99.98% accuracy, MCC 0.9996.
    - Removing any documented artifact group changes errors by at most about 6 per 33,038.
-   - **Statistical:** A, D and U are Holm-significant but below the SESOI; B and C are practically equivalent.
+   - **Statistical:** A, D and U are Holm-significant but below the SESOI; B and C are practically equivalent *at the pre-declared margin*. That margin (SESOI 0.001 ≈ 33 errors) is generous relative to a full-model baseline of about 6 errors, so equivalence means "no effect larger than about 33 errors", not proof of no feature dependence.
 2. **Transfer depends on the flag-count features** (descriptive). Models trained on the original extractor's features do **not** transfer to the corrected extractor's flows (DDoS recall 0.09) unless the TCP flag-count group is excluded (0.96–0.99). High in-domain accuracy coexists with dependence on extractor-specific feature definitions.
-3. **Corrected data shows no group dependence.** Within the corrected data the task stays near-perfect and no group shows any dependence (equivalence within ±SESOI, near a zero-error floor).
-4. **Duplicates inflate scores.** Duplicate rows inflate reported scores in UNSW-NB15 (DCNN MCC 0.784 → 0.719, measured on the same models) and NetFlow-v2 (MES-DNN collapses under duplicate-aware splits).
+3. **Corrected data shows no measurable group dependence.** Within the corrected data the task stays near-perfect. No group shows dependence beyond the margin: equivalence within ±SESOI (≈ 22 errors) against a baseline of about 2 errors, near a zero-error floor. This rules out large effects only.
+4. **Duplicates inflate scores.**
+   - UNSW-NB15: DCNN MCC 0.784 → 0.719, measured on the same models.
+   - NetFlow-v2: the N2 own base model falls from 0.906 to 0.150 under a duplicate-aware split. The N1 base model is unchanged (0.94), so the ensemble collapse is mainly a stacking effect, not duplicate inflation.
 5. **Attribution is not reliance.** SHAP concentration on defect features did not predict the in-domain cost of removing them. Interventions and cross-extractor tests are needed to support reliance claims.
 
 ## 8. Main limitations

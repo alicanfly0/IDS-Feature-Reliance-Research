@@ -18,7 +18,15 @@ No essential result is missing. All 195 fits and 220 inference evaluations are p
 - The two networks have attack prevalence 4.0% vs 64.0%.
 - Replace with the per-network values in `PHASE3_BASELINE_COMPARISON.md`.
 
-**OI-3. Wardana scenario numbering.**
+**OI-3. Wardana scenario numbering. RESOLVED 2026-11-13.**
+- Checked against the PDF text (`pypdf` extraction of `paper2.pdf`):
+  - Scenario 1 = per-network DNNs, cross-tested (Table 9);
+  - Scenario 2 = the integrated stack MES-DNN0, tested per network (Table 10; average 96.67% / F1 95.36%);
+  - Scenario 3 = new-network integration (Table 11).
+- The paper's Fig. 2/3 captions carry swapped labels.
+- `docs/BASELINE_ADAPTATIONS.md` has been corrected. Our setting is the two-network analogue of Scenario 2.
+- Original note follows.
+
 - The handover records the 96.67% / 95.36% result as Table 10 "scenario 2", and the new-network result as Table 11 "scenario 3".
 - `docs/BASELINE_ADAPTATIONS.md` calls our all-networks-integrated setting "scenario 1" and calls "scenario 2" the unseen network.
 - Which author table matches our setting must be confirmed against the PDF (Tables 10–11) before citing it in the comparison.
@@ -35,7 +43,13 @@ No essential result is missing. All 195 fits and 220 inference evaluations are p
 
 ## Reproducibility limits
 
-**OI-6. R4a run folders are not in the repository.**
+**OI-6. R4a run folders: PARTLY PRESERVED (status 2026-11-13; see `PHASE3_FINAL_SIGNOFF.md` §2).**
+- The original Colab VM expired, and its complete copy is gone.
+- 22 of 70 run folders are complete on Drive and now also on the laptop (`results/runs/r4a_drive_copy_2026-11-13/`, archive SHA-256 `3f74ff75…f4e0`). Their predictions re-score identically to the pre-expiry record.
+- For the other 48, the surviving evidence is the pre-expiry, hash-matched prediction check and the committed aggregate.
+- Original note follows.
+
+**OI-6 (original). R4a run folders are not in the repository.**
 - The 70 R4a-ii run folders (about 1.2 GB) exist only on the Colab VM (`/content/r4a_local`) and on a Drive that is full (`cnet-r4a/`).
 - Their predictions were re-scored read-only on the VM; the packaged JSON's SHA-256 was matched.
 - If the Colab session ends before a download, independent re-scoring from predictions will require Drive access. Drive holds 63 complete copies plus those flushed later; the VM copy is the complete one.
@@ -57,7 +71,12 @@ No essential result is missing. All 195 fits and 220 inference evaluations are p
 
 ## Scientific limits (state in the paper; not fixable by more analysis within scope)
 
-**OI-10. Convergence.**
+**OI-10. Convergence: r1 part RESOLVED 2026-11-13 by the D-021 cap-200 sensitivity.**
+- Both capped r1 fits (D s0, s5) were retrained at cap 200 and early-stopped (epochs 124, 114). Errors went 8→9 and 14→13, so group D's mean contrast and its Holm decision are unchanged.
+- R4a's 17 capped fits fall outside D-021, because D-024 did not extend it. They remain a declared limitation.
+- Original note follows.
+
+**OI-10 (original). Convergence.**
 - 19 autoencoders reached the 100-epoch cap without early stopping: 2 in r1 (group D, seeds 0 and 5) and 17 in R4a (in the B, B-control and U views).
 - Their test errors are within the normal range.
 - It is unknown whether longer training would change any contrast. Not re-run (constraint).

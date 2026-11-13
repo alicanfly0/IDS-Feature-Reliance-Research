@@ -172,7 +172,7 @@ This audit was **read-only**: nothing was trained, no SHAP was rerun, and no fro
    - Averaging incompatible populations should be replaced by per-network values in Phase IV:
      - random: N1 accuracy 0.941, F1 0.665, MCC 0.658; N2 accuracy 0.769, F1 0.764, MCC 0.625;
      - duplicate-aware: N1 accuracy 0.536, F1 0.087, MCC 0.001; N2 accuracy 0.699, F1 0.804, MCC 0.242.
-4. **Wardana comparison scenario**
+4. **Wardana comparison scenario** (RESOLVED 2026-11-13, from the PDF text: Scenario 2 = integrated stack, Table 10; Scenario 3 = new network, Table 11; `docs/BASELINE_ADAPTATIONS.md` corrected)
    - The paper compares our setting (all networks integrated) with Wardana's 96.67% / 95.36%, which the handover records as their *scenario 2* (Table 10).
    - `docs/BASELINE_ADAPTATIONS.md` calls our setting "scenario 1" and calls scenario 2 "unseen network", while the handover calls the new-network case scenario 3 (Table 11).
    - The numbering must be checked against the PDF before Phase IV; see open issues.

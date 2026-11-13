@@ -25,8 +25,8 @@
 | Data | NF-UNSW-NB15-v2, NF-ToN-IoT-v2, NF-BoT-IoT-v2, NF-CSE-CIC-IDS2018-v2, NF-UQ-NIDS-v2 (Table 3 counts below the official totals) | N1 NF-UNSW-NB15-v2 (all 2,390,275 flows); N2 a uniform NF-ToN-IoT-v2 subsample of equal size (default_rng(42), from 16,940,496) |
 | Inputs | 39 | Same 39 (43 NetFlow features minus 4 IP/port fields) |
 | Protocol | Random 70/30; 10% of train as meta sample; 10% of test as validation; scenarios incl. new-network integration | 63/7/3/27% disjoint partitions per network; **random** and **duplicate-aware** (each exact vector in one partition, partitioner v2); 5 seeds each; all networks integrated |
-| Metrics | Table 10 ("scenario 2"): accuracy 96.67%, recall 95.17%, precision 95.82%, F1 95.36%. Table 11 (new network): accuracy 89.23%, F1 71.09%. | **Per network**, ensemble, mean [range] over 5 seeds (table below) |
-| Material differences | | 2 vs 5 networks; ToN subsample; input transform; a duplicate-aware mode the paper does not use; scenario numbering to be checked (open issue OI-3) |
+| Metrics | **Scenario 2** (integrated five-network stack MES-DNN0, tested on each network TS1–TS5; Table 10): average accuracy 96.67%, recall 95.17%, precision 95.82%, F1 95.36%; per-network accuracy 87.92–99.84%. **Scenario 3** (new-network integration; Table 11): average accuracy 89.23%, F1 71.09%. Scenario numbering checked against the PDF text on 2026-11-13. | **Per network**, ensemble, mean [range] over 5 seeds (table below). Our setting is the two-network analogue of Scenario 2. |
+| Material differences | | 2 vs 5 networks; ToN subsample; input transform; a duplicate-aware mode the paper does not use. Their Table 10 is per network, so a per-network description is possible; a ranked comparison is still not fair. |
 | Fair to compare? | No | Our ensemble's instability and its collapse under duplicate-aware splits are findings about the adaptation and about duplication, not about their five-network model |
 
 **Our MES-DNN ensemble results, per network, mean [range] over 5 seeds:**
@@ -48,6 +48,11 @@
 **Cross-network base models (MCC):**
 - N1 base on N2: 0.053 (random), 0.459 (duplicate-aware).
 - N2 base on N1: −0.03 (random), −0.07 (duplicate-aware).
+
+**Interpretation (revised after the independent audit):**
+- N1's own base model keeps MCC ≈ 0.94 under **both** split modes (0.939 random, 0.940 duplicate-aware).
+- The N1 ensemble collapse (0.658 → 0.001) is therefore **not** explained by losing duplicated test rows. It arises in the stacking step: the meta-model sees only the two base scores, the N2 base model transfers badly to N1 (MCC ≈ −0.03 to −0.07), and duplicate-aware partitioning also changes the meta-sample composition.
+- Only the **N2 own base model** (0.906 → 0.150) shows a drop directly attributable to holding out whole duplicate groups. Even there, the giant 422,766-row benign group also changes partition composition.
 
 **Not claimed:** a faithful five-network reproduction, or generalisation to an unseen network (none was held out).
 

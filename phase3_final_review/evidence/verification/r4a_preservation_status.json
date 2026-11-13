@@ -1,0 +1,334 @@
+{
+ "date": "2026-11-13",
+ "drive_folder": "second Colab account: My Drive/cnet-r4a (runs/, splits/, analysis_r4a/ empty)",
+ "original_vm": "expired; its complete local copy (/content/r4a_local, 70 runs) no longer exists",
+ "counts": {
+  "complete on Drive; predictions re-scored and equal to the verified record": 22,
+  "folder only, artefacts missing (never uploaded: quota full)": 32,
+  "absent from Drive (never uploaded: quota full)": 16
+ },
+ "runs": {
+  "ae3b_r4a_A-seed0-cuda-92374900": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "de01cbe50b2f527f8ca8990ca26e5ed803db2daf303d2d1375392ee515296688",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_A-seed1-cuda-0c2bc9cf": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "8cdeb40570a9ac503682f1507e8d921c8218b17fedc71d6456e3636c8d7ff0c0",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_A-seed2-cuda-40ef8cfe": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "e15ab7b25e651f67e90a4f434b321a9dbf17b394d6848fde856328554ba5227b",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_A-seed3-cuda-ca052284": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "5d609e4efbc8963b3f0ad24d320b67e669dfd943f9e512a4f64ced4a4b4e4eef",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_A-seed4-cuda-266b59f0": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "d4d07c753111574af1be9c437ae9500203d7b1081b462476dfa4becbad81e954",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_A-seed5-cuda-71186d67": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "d68fbe2e71c9b58d255275246740c3ea03bf5b01b5f690e509e73b323c176a50",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_A-seed6-cuda-a39eb0bd": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "68e39c4c468348bb6e25e59b671bd3d91c1a15e7e27c5e349d7e8c759cd62e7a",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_A-seed7-cuda-264bfaa0": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "20ead621d923e49373e0343ca510c8818233e1ea05417a0c83fe11f2ea89bcf4",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_A-seed8-cuda-3a3189e1": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "6c3533a8f9679662cbcf33b687c6e765f04d5bf32e5e123046a221a71ae10a46",
+   "checkpoint_ae_best": true,
+   "n_files": 15
+  },
+  "ae3b_r4a_A-seed9-cuda-8c042249": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "ecf2b49158e0380f13efa1b18cd71e9c5816650936c28650f2da08a81acc606f",
+   "checkpoint_ae_best": true,
+   "n_files": 15
+  },
+  "ae3b_r4a_Actl0-seed0-cuda-cf23cf6c": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "e320a2473856982079973bc244be308843e1ec1fadcdc6909ea5f9eea7c54ac6",
+   "checkpoint_ae_best": true,
+   "n_files": 15
+  },
+  "ae3b_r4a_Actl1-seed1-cuda-336e1b36": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "6031a4f4633874d1b4f26be72ae1d9c8f4a9992eda415cc19442da932dbce4d9",
+   "checkpoint_ae_best": true,
+   "n_files": 15
+  },
+  "ae3b_r4a_Actl2-seed2-cuda-bdc38bf2": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": [
+    "checkpoints/ae_best.pt",
+    "data_report.json",
+    "effective_config.json",
+    "environment-20261112T112906.json",
+    "identity.json",
+    "preprocessor.json"
+   ]
+  },
+  "ae3b_r4a_Actl3-seed3-cuda-baeba843": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_Actl4-seed4-cuda-8d91f796": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_Actl5-seed5-cuda-c45438a6": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_Actl6-seed6-cuda-9e139cdf": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_Actl7-seed7-cuda-3e0c2631": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": [
+    "checkpoints/ae_best.pt"
+   ]
+  },
+  "ae3b_r4a_Actl8-seed8-cuda-d75883ae": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_Actl9-seed9-cuda-67de0871": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_B-seed0-cuda-010fa578": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_B-seed1-cuda-4b416589": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_B-seed2-cuda-d37973c2": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_B-seed3-cuda-9b3770a3": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_B-seed4-cuda-1a90f45e": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_B-seed5-cuda-165ee773": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_B-seed6-cuda-1162621d": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_B-seed7-cuda-e1ee7fe3": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_B-seed8-cuda-c2a7b1d7": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_B-seed9-cuda-c4a98fa1": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_Bctl0-seed0-cuda-9fe1785d": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_Bctl1-seed1-cuda-4c3b5a55": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_Bctl2-seed2-cuda-b07921eb": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_Bctl3-seed3-cuda-d51226a3": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_Bctl4-seed4-cuda-f4297141": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_Bctl5-seed5-cuda-381fe632": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_Bctl6-seed6-cuda-07d75ebc": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_Bctl7-seed7-cuda-b5b3c203": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_Bctl8-seed8-cuda-dc48048d": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_Bctl9-seed9-cuda-3aadd3ee": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_U-seed0-cuda-1aa8cc56": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_U-seed1-cuda-39e117a5": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_U-seed2-cuda-50350876": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_U-seed3-cuda-070b9556": {
+   "state": "folder only, artefacts missing (never uploaded: quota full)",
+   "files_present": []
+  },
+  "ae3b_r4a_U-seed4-cuda-658d12a2": {
+   "state": "absent from Drive (never uploaded: quota full)"
+  },
+  "ae3b_r4a_U-seed5-cuda-8806cf70": {
+   "state": "absent from Drive (never uploaded: quota full)"
+  },
+  "ae3b_r4a_U-seed6-cuda-dda9f8d8": {
+   "state": "absent from Drive (never uploaded: quota full)"
+  },
+  "ae3b_r4a_U-seed7-cuda-c609b2cd": {
+   "state": "absent from Drive (never uploaded: quota full)"
+  },
+  "ae3b_r4a_U-seed8-cuda-42f7c6fa": {
+   "state": "absent from Drive (never uploaded: quota full)"
+  },
+  "ae3b_r4a_U-seed9-cuda-8d9083c9": {
+   "state": "absent from Drive (never uploaded: quota full)"
+  },
+  "ae3b_r4a_Uctl0-seed0-cuda-bfd0d500": {
+   "state": "absent from Drive (never uploaded: quota full)"
+  },
+  "ae3b_r4a_Uctl1-seed1-cuda-f6b51197": {
+   "state": "absent from Drive (never uploaded: quota full)"
+  },
+  "ae3b_r4a_Uctl2-seed2-cuda-8860bf70": {
+   "state": "absent from Drive (never uploaded: quota full)"
+  },
+  "ae3b_r4a_Uctl3-seed3-cuda-1d0fde77": {
+   "state": "absent from Drive (never uploaded: quota full)"
+  },
+  "ae3b_r4a_Uctl4-seed4-cuda-f9de4903": {
+   "state": "absent from Drive (never uploaded: quota full)"
+  },
+  "ae3b_r4a_Uctl5-seed5-cuda-d6be00c4": {
+   "state": "absent from Drive (never uploaded: quota full)"
+  },
+  "ae3b_r4a_Uctl6-seed6-cuda-806693af": {
+   "state": "absent from Drive (never uploaded: quota full)"
+  },
+  "ae3b_r4a_Uctl7-seed7-cuda-18d440d9": {
+   "state": "absent from Drive (never uploaded: quota full)"
+  },
+  "ae3b_r4a_Uctl8-seed8-cuda-fd1070e5": {
+   "state": "absent from Drive (never uploaded: quota full)"
+  },
+  "ae3b_r4a_Uctl9-seed9-cuda-a427cdf0": {
+   "state": "absent from Drive (never uploaded: quota full)"
+  },
+  "ae3b_r4a_full-seed0-cuda-a6a61943": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "d7f3fbfd4cd53044b495baaae79193a0e132988aa0887e7ba3bff5ce130ea651",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_full-seed1-cuda-5000602d": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "5307c26ebfd60aae433796eadd8389b14bc581354fcedcb3a0397c4cc95a88db",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_full-seed2-cuda-bced756b": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "246c93fea2691ec3ea2f6c1cdfa2ac2a375309dc4ed4a8fe454a1f1b144fede0",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_full-seed3-cuda-812e2a06": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "d5c84d939171ad929542f81d57919bcc45934dd2d8f830280ad4505974a1610c",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_full-seed4-cuda-36117430": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "b9a2aba409fcc4ea8bc29cf555fbcd50e56579a68deb4724d398efdfed616be8",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_full-seed5-cuda-93570195": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "94d853094e5beaefbf9edf058f98e8d011479e3c9b8fedd252641cf84b3f0e4b",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_full-seed6-cuda-3254ec8a": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "5617e674070c93b7ffe8d5bd9f732024fafcf4ab115afba2e2c175d706ecd454",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_full-seed7-cuda-3aa1143f": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "95d5439e5ea116304bf0d3d03e4e25371b7869e15788ff59691fa797e0a519df",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_full-seed8-cuda-3b658465": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "2713108ec132af960b079701d01082a8b4b3ff8acf489f76f9750f0956710fb0",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  },
+  "ae3b_r4a_full-seed9-cuda-3768884a": {
+   "state": "complete on Drive; predictions re-scored and equal to the verified record",
+   "predictions_test_sha256": "866fb6af678c740cf7fbe5118f5b1c2899b8b979e67349312b5d1ade97f13e9a",
+   "checkpoint_ae_best": true,
+   "n_files": 16
+  }
+ },
+ "surviving_evidence_for_all_70": [
+  "results/r4a/aggregate_r4a.json (committed 85a2ed2)",
+  "phase3_final_review/evidence/verification/r4a_predictions_colab_check.json (SHA-256 130da7c0...)",
+  "results/r4a/stats_r4a.json, r4a_i_scores.json"
+ ]
+}

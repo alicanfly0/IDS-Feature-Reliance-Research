@@ -3,6 +3,7 @@
 This package is for an independent reviewer. Nothing in it trains a model or runs SHAP.
 
 **Start here:**
+0. `PHASE3_FINAL_SIGNOFF.md`: response to the independent audit (2026-11-13), covering R4a preservation, the D-021 sensitivity and the reporting corrections
 1. `PHASE3_EXECUTIVE_RESULTS.md`
 2. `PHASE3_EXPERIMENT_AUDIT.md`
 3. `PHASE3_OPEN_ISSUES.md`

@@ -2,7 +2,7 @@
 
 **Inputs:** `CNET_PHASE4_REVISION2_INDEPENDENT_QA.md` and `CNET_PHASE4_REVISION2_CLAUDE_FINAL_POLISH.md`.
 
-**Base:** the 15-page PDF from commit `30f523a`.
+**Base:** the 15-page PDF from commit `1864341`.
 
 **Scope:** every change below was made and checked in the compiled PDF.
 - No experiment was rerun.
@@ -35,3 +35,7 @@
 - 20 references.
 
 These are unchanged from the previous version. Figure and table numbering is also unchanged.
+
+## Repository link (2026-11-15, after publishing)
+
+The code-availability statement now gives the public repository, https://github.com/alicanfly0/IDS-Feature-Reliance-Research, and notes that the datasets and model checkpoints are not included. The opening sentence of Appendix B now points to that repository instead of a local copy. No other text, number or figure changed. Pages 14 and 15; still 15 pages.

@@ -21,8 +21,8 @@ The two Python scripts read only the verified Phase III records and rewrite `pap
 |---|---|
 | Output | `paper/CNET_PhaseIV_Research_Paper.pdf` (copy of `main.pdf`) |
 | Pages | 15 (references on page 14; appendices A and B on page 15) |
-| Size | 311,998 bytes |
-| SHA-256 | `c41b93b467aac7e529d482388225755d6ea37796db02cfd07ac1dac97c6de902` |
+| Size | 312,078 bytes |
+| SHA-256 | `281936d72fdd06a3560c13a16a271abec2c284b3a73c2e4854cd8bbfe96dcecf` |
 | Errors | none |
 | Undefined references or citations | none |
 | Overfull boxes | none |

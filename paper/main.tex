@@ -1049,9 +1049,9 @@ UNSW-NB15~\cite{moustafa2015} and the NetFlow-v2 datasets~\cite{sarhan2022}. The
 redistributed with this work; SHA-256 checksums of the files used are recorded in the run records.
 
 \textit{Code availability.} The code, configurations, frozen protocols, run records and verification
-scripts are held in a local version-controlled repository; no public repository exists at the time of
-writing. They are available from the authors on request; Appendix~\ref{app:repro} lists the
-identifiers needed to check a rebuilt pipeline against the records.
+scripts are available at\newline\url{https://github.com/alicanfly0/IDS-Feature-Reliance-Research}. The
+datasets and model checkpoints are not included; Appendix~\ref{app:repro} lists the identifiers
+needed to check a rebuilt pipeline against the records.
 
 \textit{Funding.} This work received no external funding.
 
@@ -1081,8 +1081,8 @@ corrected-data full models on $T'^\star$.
 
 \section{Reproducibility record}
 \label{app:repro}
-The protocol files, code and run records are held in the authors' local repository and are
-available on request. Table~\ref{tab:repro} lists the identifiers that a rebuilt pipeline must
+The protocol files, code and run records are in the public repository named in the Declarations.
+Table~\ref{tab:repro} lists the identifiers that a rebuilt pipeline must
 reproduce. The frozen views are the full model, one view per group with all group members removed,
 and one view per control draw with $|G|$ randomly drawn inputs removed. Draw $d$ of group $G$ is
 generated with \texttt{RandomState}$(b+100g+d)$, where $g$ is the index of $G$ in the stated group

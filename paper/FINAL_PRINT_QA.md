@@ -1,7 +1,7 @@
 # Final print QA: Phase IV paper
 
 - **Paper:** "How Real Is 99% Accuracy? Auditing Feature Reliance in Network Intrusion Detection".
-- **PDF:** `paper/CNET_PhaseIV_Research_Paper.pdf`, 311,998 bytes, SHA-256 `c41b93b467aac7e529d482388225755d6ea37796db02cfd07ac1dac97c6de902`.
+- **PDF:** `paper/CNET_PhaseIV_Research_Paper.pdf`, 312,078 bytes, SHA-256 `281936d72fdd06a3560c13a16a271abec2c284b3a73c2e4854cd8bbfe96dcecf`.
 - **Checked:** 2026-11-15, after the edits in `CHANGELOG_FINAL.md`.
 
 ## Counts
@@ -59,7 +59,7 @@
 
 ## Unchanged results
 
-All number tokens extracted from this PDF were compared with the previous version (commit `30f523a`). The only tokens that differ are the removed phone digits. Every metric, population size, interval, p-value and count is identical.
+All number tokens extracted from this PDF were compared with the previous version (commit `1864341`). The only tokens that differ are the removed phone digits. Every metric, population size, interval, p-value and count is identical.
 
 ## F1–F4 and P1–P6
 

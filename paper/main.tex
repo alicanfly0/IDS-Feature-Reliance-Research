@@ -30,13 +30,13 @@
 \title{How Real Is 99\% Accuracy? Auditing Feature Reliance in Network Intrusion Detection}
 % Author names and affiliation: CLAUDE.md and the Phase II title block
 % (CNET_COMPLETE_PROJECT_HANDOVER.md lines 79-80). Roll numbers and section omitted at the authors' request.
-% Contact e-mails supplied by the authors in chat on 2026-11-15.
+% Contact e-mails supplied by the authors in chat on 2026-11-15; phone numbers removed for privacy (final polish).
 \author{Ali~Waseem~Abbasi and Muhammad~Mudassir%
 \thanks{The authors are with the Department of Artificial Intelligence and Data Science,
 National University of Computer and Emerging Sciences (FAST-NUCES), Islamabad, Pakistan.
 This paper reports the Computer Networks (CNET) course project, 2026.}%
-\thanks{A.~W.~Abbasi: e-mail aliwaseemabbasi@gmail.com.
-M.~Mudassir: e-mail mudassir7323@gmail.com.}}
+\thanks{E-mail: \nolinkurl{aliwaseemabbasi@gmail.com} (A.~W.~Abbasi);\\
+\nolinkurl{mudassir7323@gmail.com} (M.~Mudassir).}}
 
 \markboth{CNET Course Project, FAST-NUCES, 2026}{Abbasi and Mudassir: How Real Is 99\% Accuracy?}
 \maketitle
@@ -44,24 +44,24 @@ M.~Mudassir: e-mail mudassir7323@gmail.com.}}
 % ===================================================================== 2. Abstract
 \begin{abstract}
 Flow-based intrusion detectors often report accuracy above 99\% on public benchmarks, yet such
-scores do not show what a detector depends on. We audited three recent detectors and found that
+scores do not show what a detector depends on. Auditing three recent detectors, we found that
 near-perfect intrusion-detection performance can coexist with strong sensitivity to
 feature-extraction changes and with duplicate-driven score inflation. For an
 autoencoder--XGBoost detector on the CICIDS2017 Friday DDoS capture, 110 controlled fits removed
 literature-defined artifact feature groups or size-matched random sets under a duplicate-aware
-split, with exact sign-flip, Holm and equivalence tests. Full models made 5.8
-errors on average on 33,038 test flows (MCC 0.9996). Removing the TCP flag-count group, a two-feature
+split, with exact sign-flip, Holm and equivalence tests. Full models averaged 5.8 errors on
+33,038 test flows (MCC 0.9996). Removing the TCP flag-count group, a two-feature
 metadata group or the 20-feature union cost about 3 to 6 more errors than removing random
 features (Holm $p\le0.047$), inside a pre-declared margin of about 33 errors. Seventy further fits
-on the corrected capture of Engelen et~al.\ again reached near-zero error, and every group
-contrast was equivalent within the margin. Yet the original-trained models detected 8.8\% of
-corrected DDoS flows on average, against 95.7\% for models trained without the flag-count group.
-Duplicate handling changed the scores of two other detectors: the same five DCNN models fell from
+on the corrected capture of Engelen et~al.\ again reached near-zero error, with every group
+contrast equivalent within the margin. Yet original-trained models detected 8.8\% of corrected
+DDoS flows on average, against 95.7\% for models trained without the flag-count group.
+Duplicate handling also mattered: the same five DCNN models fell from
 MCC 0.784 to 0.719 on UNSW-NB15 once test rows with a training twin were removed, and an MES-DNN
-base model retrained under a duplicate-aware split fell from 0.906 to 0.150 on NF-ToN-IoT-v2. SHAP attribution
-concentrated on the flag-count features, although removing them barely changed in-domain error.
-Such scores need leakage controls and cross-extractor tests before they are read as detection
-ability.
+base model retrained under a duplicate-aware split fell from 0.906 to 0.150 on NF-ToN-IoT-v2.
+SHAP attribution concentrated on the flag-count features, although removing them barely changed
+in-domain error. Such scores need leakage controls and cross-extractor tests before they are
+read as detection ability.
 \end{abstract}
 % Abstract sources: verify_r1.json (full-model errors mean 5.8, MCC 0.999639); PHASE3_STATISTICAL_FINDINGS.csv
 % (A/D/U error-rate d = 0.097/0.148/0.182e-3 -> 3.2/4.9/6.0 errors on 33,038; Holm p 0.020/0.047/0.020);
@@ -127,7 +127,7 @@ For a stacked MES-DNN~\cite{wardana2026} on NetFlow-v2 data, models are retraine
 and under a duplicate-aware split, a comparison of two training protocols.
 \item A direct comparison of attribution and intervention on the same task: SHAP mass is
 concentrated on the flag-count features, their removal changes in-domain error very little, and
-their presence decides cross-extractor transfer.
+their absence from training is associated with successful cross-extractor transfer.
 \end{enumerate}
 All three detectors are documented adaptations of the published designs; we do not claim to
 reproduce the source papers.
@@ -199,7 +199,7 @@ equivalence margin for the same detector. Table~\ref{tab:related} summarises the
 
 \begin{table*}[!t]
 \centering
-\caption{Related work and this study. Settings are as reported by the authors.}
+\caption{\upshape Related work and this study. Settings are as reported by the authors.}
 \label{tab:related}
 \footnotesize\renewcommand{\arraystretch}{1.18}
 \begin{tabular}{@{}L{2.3cm}L{3.0cm}L{2.5cm}L{2.2cm}L{2.7cm}L{3.0cm}@{}}
@@ -277,17 +277,6 @@ fitted on the training partition only.}
 \label{fig:dcnn}
 \end{figure}
 
-\begin{figure}[!t]
-\centering
-\resizebox{0.95\columnwidth}{!}{\input{figures/diag_mes.tex}}
-\caption{Two-network MES-DNN adaptation. Each base model is trained on its own network's base
-partition and frozen; every meta sample, from either network, is scored by both bases before the
-meta-model combines the two outputs. The whole pipeline is trained separately under each split
-protocol, so random and duplicate-aware results come from different models.}
-\label{fig:mes}
-\end{figure}
-
-
 \subsection{Preprocessing}
 Row rules that need no fitted statistic run before splitting: a row with a missing or infinite
 value, or with a negative flow duration, is removed (36 rows in the original file and 3 in the
@@ -333,9 +322,20 @@ registered ones. % configs/protocol/ablation_groups_3a_r1.yaml (proxy_rule, cont
 For the corrected capture the same algorithm re-derived A, B and U on the corrected training
 partition; groups C and D were not part of that design.
 
+% Fig. 4 is placed after subsection E's opening paragraph so that the twin-exclusion paragraph is not split by floats.
+\begin{figure}[!t]
+\centering
+\resizebox{0.95\columnwidth}{!}{\input{figures/diag_mes.tex}}
+\caption{Two-network MES-DNN adaptation. Each base model is trained on its own network's base
+partition and frozen; every meta sample, from either network, is scored by both bases before the
+meta-model combines the two outputs. The whole pipeline is trained separately under each split
+protocol, so random and duplicate-aware results come from different models.}
+\label{fig:mes}
+\end{figure}
+
 \begin{table*}[!t]
 \centering
-\caption{Frozen feature groups. $k$: inputs removed. r1: original capture; R4a: corrected capture,
+\caption{\upshape Frozen feature groups. $k$: inputs removed. r1: original capture; R4a: corrected capture,
 groups re-derived by the same algorithm on the corrected training partition. Groups C and D were
 not part of the R4a design.}
 \label{tab:groups}
@@ -493,11 +493,11 @@ corrected-capture evaluation and left cross-dataset transfer for future work.
 
 \begin{table*}[!t]
 \centering
-\caption{Published designs and our adaptations. Values of the published designs are as reported
+\caption{\upshape Published designs and our adaptations. Values of the published designs are as reported
 by their authors.}
 \label{tab:arch}
 \footnotesize\renewcommand{\arraystretch}{1.18}
-\begin{tabular}{@{}L{1.9cm}L{5.0cm}L{5.5cm}L{4.4cm}@{}}
+\begin{tabular}{@{}L{2.2cm}L{4.9cm}L{5.4cm}L{4.3cm}@{}}
 \toprule
 Model & Published design & Our adaptation & Main differences \\
 \midrule
@@ -525,7 +525,7 @@ after removing addresses and ports~\cite{sarhan2022}.
 
 \begin{table}[!t]
 \centering
-\caption{Datasets and evaluation populations (flows).}
+\caption{\upshape Datasets and evaluation populations (flows).}
 \label{tab:data}
 \footnotesize
 \begin{tabular}{@{}L{4.6cm}rr@{}}
@@ -603,7 +603,7 @@ attacks.
 
 \begin{table*}[!t]
 \centering
-\caption{AE-XGBoost full models, mean [min, max] over ten seeds. Benign recall is $1-\mathrm{FPR}$.}
+\caption{\upshape AE-XGBoost full models, mean [min, max] over ten seeds. Benign recall is $1-\mathrm{FPR}$.}
 \label{tab:full}
 \small
 
@@ -644,7 +644,7 @@ controlled intervention.
 
 \begin{table}[!t]
 \centering
-\caption{R4a-i: the 110 original-data models scored on the corrected population $T'^\star$
+\caption{\upshape R4a-i: the 110 original-data models scored on the corrected population $T'^\star$
 (22,049 flows, 14,168 DDoS). Mean [min, max] over ten models per view. Descriptive.}
 \label{tab:transfer}
 \footnotesize\setlength{\tabcolsep}{3.5pt}
@@ -680,7 +680,7 @@ not show that the model learned from leaked rows.
 
 \begin{table}[!t]
 \centering
-\caption{DCNN+SA on UNSW-NB15 (DoS positive), same five models on two populations. Mean [min, max].
+\caption{\upshape DCNN+SA on UNSW-NB15 (DoS positive), same five models on two populations. Mean [min, max].
 Filtered: test rows with a model-visible training twin removed.}
 \label{tab:dcnn}
 \footnotesize\setlength{\tabcolsep}{3.5pt}
@@ -723,7 +723,7 @@ duplicate-aware partitioning also changes the composition of the meta samples.
 
 \begin{table}[!t]
 \centering
-\caption{MES-DNN on each network's test partition (645,374 flows), MCC mean [min, max] over five
+\caption{\upshape MES-DNN on each network's test partition (645,374 flows), MCC mean [min, max] over five
 seeds. ``Other base'': the base model trained on the other network.}
 \label{tab:mes}
 \footnotesize\setlength{\tabcolsep}{3.5pt}
@@ -752,7 +752,7 @@ direct extraction-defect tier alone holds 55.0--60.8\% of the top-2 attribution 
 Read as a reliance claim, this would say that the detector depends on the defective flag counts.
 The intervention says otherwise for in-domain accuracy: retrained without group A, the model made
 about three more errors than with a random control (Section~\ref{sec:ablation}). For transfer, the
-same features decided the outcome (Table~\ref{tab:transfer}). The attribution pointed at the right
+absence of the same features from training was associated with success (Table~\ref{tab:transfer}). The attribution pointed at the right
 features, but it could not tell which of the two questions they matter for.
 
 For the other two detectors no artifact registry exists, so no ARR is computed. GradientExplainer
@@ -780,7 +780,7 @@ of our implementations is a reproduction, so no row supports a ranking.
 
 \begin{table*}[!t]
 \centering
-\caption{Author-reported results (marked $^{\dagger}$) and our adaptations. Not a head-to-head
+\caption{\upshape Author-reported results (marked $^{\dagger}$) and our adaptations. Not a head-to-head
 benchmark: the protocol columns list the differences that we know of. Ours: mean [min, max] over
 seeds.}
 \label{tab:compare}
@@ -852,7 +852,7 @@ almost three (0.068\% to 0.195\%) and the intervals exceed the margin.
 
 \begin{table*}[!t]
 \centering
-\caption{Ablation on the original capture (r1): pre-declared primary family of ten tests.
+\caption{\upshape Ablation on the original capture (r1): pre-declared primary family of ten tests.
 $\bar\Delta_G$, $\bar\Delta_R$: mean removal effect of the group and of its size-matched random
 control; $\bar d$: mean paired contrast; all $\times10^{-3}$ (SESOI $\delta=1$). Difference intervals
 are at 99.5\% and TOST intervals at 99\% (Bonferroni-consistent for $m=10$). $p_{\mathrm{Holm}}$: exact
@@ -889,7 +889,7 @@ window, prevalence (64.3\% against 58.2\%), at least 16 input definitions and gr
 
 \begin{table}[!t]
 \centering
-\caption{Ablation on the corrected capture. (a) R4a-ii primary family ($m=3$); difference
+\caption{\upshape Ablation on the corrected capture. (a) R4a-ii primary family ($m=3$); difference
 intervals at 98.33\%, TOST at 96.67\%. (b) Comparison of the mean contrasts with r1; the Welch
 interval is descriptive. Units $10^{-3}$.}
 \label{tab:r4a}
@@ -941,7 +941,7 @@ capture should be read as a property of that capture and extractor.
 
 \subsection{Attribution is not reliance}
 SHAP concentrated on the flag-count features, the in-domain ablation found them nearly redundant,
-and the transfer test found them decisive. The three results are consistent once each is read as
+and in the transfer test their absence was associated with success. The three results are consistent once each is read as
 answering its own question. An explanation reports which inputs one fitted model uses; an in-domain
 ablation reports whether the task can be solved without them; a cross-extractor test reports whether
 the model's rules survive a change in the inputs' meaning. A claim that a detector relies on a
@@ -996,7 +996,7 @@ some equivalence verdicts into inconclusive ones without changing any $p$-value.
 
 \begin{table}[!t]
 \centering
-\caption{Threats to validity and their effect on the conclusions.}
+\caption{\upshape Threats to validity and their effect on the conclusions.}
 \label{tab:limits}
 \footnotesize\setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{@{}L{2.5cm}L{5.6cm}@{}}
@@ -1073,7 +1073,7 @@ corrected-data full models on $T'^\star$.
 
 \begin{table}[!ht]
 \centering
-\caption{AE-XGBoost full models per seed. Positive class: DDoS.}
+\caption{\upshape AE-XGBoost full models per seed. Positive class: DDoS.}
 \label{tab:seeds}
 \footnotesize\setlength{\tabcolsep}{2.6pt}
 \input{tables/tab_seeds.tex}
@@ -1094,7 +1094,7 @@ fingerprint before a model is trained.
 
 \begin{table}[!ht]
 \centering
-\caption{Frozen identifiers of the two AE-XGBoost designs. Hashes are SHA-256 (first 16 hex
+\caption{\upshape Frozen identifiers of the two AE-XGBoost designs. Hashes are SHA-256 (first 16 hex
 digits); full values are in the run records.}
 \label{tab:repro}
 \footnotesize\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}

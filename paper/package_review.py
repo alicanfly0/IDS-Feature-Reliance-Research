@@ -1,4 +1,4 @@
-"""Build CNET_PHASE4_UPDATED_FINAL_REVIEW.zip (paper, sources, QA documents and the records the numbers come from).
+"""Build CNET_PHASE4_SUBMISSION_READY.zip (paper, sources, QA documents and the records the numbers come from).
 
     .\.venv\Scripts\python.exe paper\package_review.py
 
@@ -12,7 +12,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "CNET_PHASE4_UPDATED_FINAL_REVIEW.zip"
+OUT = ROOT / "CNET_PHASE4_SUBMISSION_READY.zip"
 
 FILES = [
     "paper/CNET_PhaseIV_Research_Paper.pdf",
@@ -23,6 +23,8 @@ FILES = [
     "paper/PAPER_CLAIM_EVIDENCE_MAP.md",
     "paper/BUILD_LOG.md",
     "paper/CHANGELOG_UPDATED_RUBRIC.md",
+    "paper/CHANGELOG_FINAL.md",
+    "paper/FINAL_PRINT_QA.md",
     "paper/main.log",
     "paper/main.blg",
     "paper/package_review.py",

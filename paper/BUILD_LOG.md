@@ -21,8 +21,8 @@ The two Python scripts read only the verified Phase III records and rewrite `pap
 |---|---|
 | Output | `paper/CNET_PhaseIV_Research_Paper.pdf` (copy of `main.pdf`) |
 | Pages | 15 (references on page 14; appendices A and B on page 15) |
-| Size | 314,493 bytes |
-| SHA-256 | `b250462b435ac22a30ae76396a6d46d5a680d67b1d5e02d4323bc13c001a589a` |
+| Size | 311,998 bytes |
+| SHA-256 | `c41b93b467aac7e529d482388225755d6ea37796db02cfd07ac1dac97c6de902` |
 | Errors | none |
 | Undefined references or citations | none |
 | Overfull boxes | none |
@@ -56,3 +56,7 @@ Full log: `paper/main.log`; BibTeX log: `paper/main.blg`.
 - Tables moved from `\scriptsize` to `\footnotesize` or `\small`; Tables II and V made full width.
 - Three source comments from the previous build had absorbed the prose that followed them on the same line; the text was restored and every inline comment rechecked.
 - Appendix B (Table XIV) added; a 35 pt overfull line in it fixed by allowing a break in a file name.
+
+## Final print polish (2026-11-15)
+
+Edits are listed in `CHANGELOG_FINAL.md`; checks in `FINAL_PRINT_QA.md`. Log after the final build: no errors, overfull boxes or undefined references; three underfull vertical boxes from column balancing.

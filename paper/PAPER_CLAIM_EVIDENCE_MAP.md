@@ -106,7 +106,7 @@ Main records:
 
 | Claim | Value | Source |
 |---|---|---|
-| Author contact details | e-mail and phone for both authors | supplied by the authors in chat, 2026-11-15 |
+| Author contact details | e-mail for both authors (phone numbers removed in the final polish) | supplied by the authors in chat, 2026-11-15 |
 | Funding; conflicts of interest | no external funding; no competing interests | confirmed by the authors in chat, 2026-11-15 |
 | Corrected R4a group members (Table II) | A: ACK, CWE, ECE, FIN, PSH, RST, SYN Flag Count, Fwd PSH Flags, Bwd PSH Flags (9); B: Bwd Packet Length Mean, Avg Bwd Segment Size, Fwd Header Length and duplicate, Init_Win_bytes_forward, SYN Flag Count, Total Fwd Packets, min_seg_size_forward (8); U: A ∪ B ∪ four C features (20) | `configs/protocol/r4a_groups_v1.yaml` → `groups` |
 | Control-draw rule and seed bases | `RandomState(b + 100g + d)`, b = 3000 (r1, order A, B, C, D, U), b = 7000 (R4a, order A, B, U) | `configs/protocol/ablation_groups_3a_r1.yaml`, `r4a_groups_v1.yaml` → `random_seed_rule` |

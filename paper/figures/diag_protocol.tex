@@ -25,7 +25,7 @@
 \node[box, below=of ct, text width=25mm, fill=black!16] (cs) {paired $d'_s$\\sign-flip, Holm (3), TOST};
 \draw[arr] (ct) -- (cs);
 % links
-\draw[arr, dashed] (of.north east) to[bend left=12] node[font=\scriptsize, above=1pt, align=center, fill=white, inner sep=1pt]{R4a-i: all 110 r1 models (every view)\\scored on $T'^\star$ (descriptive)} (ct.north);
+\draw[arr, dashed] (of.north east) to[bend left=12] node[font=\footnotesize, above=1pt, align=center, fill=white, inner sep=1pt]{R4a-i: all 110 r1 models (every view)\\scored on $T'^\star$ (descriptive)} (ct.north);
 \node[box, dashed, text width=62mm] (cmp) at ($(os.south)!0.5!(cs.south)+(0,-10mm)$) {between captures: compare mean contrasts $\bar d$ and $\bar d'$ only\\(no row pairing; Welch interval, descriptive)};
 \draw[arr, dotted] (os.south) -- (os.south |- cmp.north);
 \draw[arr, dotted] (cs.south) -- (cs.south |- cmp.north);

@@ -1,7 +1,7 @@
 # Final QA: Phase IV paper (revision for the updated rubric)
 
 - **Paper:** "How Real Is 99% Accuracy? Auditing Feature Reliance in Network Intrusion Detection".
-- **PDF:** `paper/CNET_PhaseIV_Research_Paper.pdf`, 15 pages. The SHA-256 is in `BUILD_LOG.md`.
+- **PDF:** `paper/CNET_PhaseIV_Research_Paper.pdf`, 15 pages. The SHA-256 is in `BUILD_LOG.md`. This report covers the revision for the updated rubric; the later print polish is covered by `FINAL_PRINT_QA.md`.
 - **Checked on:** 2026-11-15.
 - **Corrections:** each change for M1–M9, with its page, is in `CHANGELOG_UPDATED_RUBRIC.md`.
 
@@ -64,7 +64,7 @@ Every page was rendered at 100 dpi with PyMuPDF and inspected. Diagrams and plot
 ## 4. Author details and their sources
 
 - **Names and affiliation:** CLAUDE.md and the Phase II title block. Roll numbers and section are omitted at the authors' request.
-- **E-mail addresses and phone numbers:** supplied by the authors in chat on 2026-11-15. (The Phase II PDF lists university addresses of the form `{i232630, i232562}@isb.nu.edu.pk`. The paper uses the addresses the authors supplied.)
+- **E-mail addresses:** supplied by the authors in chat on 2026-11-15. Phone numbers were printed in the previous version and removed in the final polish for privacy. (The Phase II PDF lists university addresses of the form `{i232630, i232562}@isb.nu.edu.pk`. The paper uses the addresses the authors supplied.)
 - **Funding and conflicts:** "no external funding" and "no competing interests". The authors confirmed both in chat on 2026-11-15.
 
 ## 5. Items left open

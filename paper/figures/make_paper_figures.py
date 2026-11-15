@@ -227,14 +227,21 @@ def fig_errors():
     ax[1].set_ylim(10, 3e4)
     ax[1].set_xticks([0, 1], ["official", "filtered"])
     ax[1].set_ylabel("mean errors, log scale")
+    ax[1].set_xlabel("test rows")
     ax[1].set_title("(b) DCNN+SA", fontsize=8.5)
     ax[1].grid(axis="x", visible=False)
-    h = [Patch(facecolor="white", edgecolor=K, hatch="/////", label="FP, original / official"),
-         Patch(facecolor=G2, edgecolor=K, label="FN, original / official"),
-         Patch(facecolor="white", edgecolor=G1, hatch="....", label="FP, corrected (a)"),
-         Patch(facecolor=K, edgecolor=K, label="FN, corrected (a)")]
-    fig.legend(handles=h, frameon=False, ncol=2, loc="lower center", bbox_to_anchor=(0.5, -0.02), handlelength=1.4, columnspacing=1.0)
-    fig.tight_layout(rect=(0, 0.17, 1, 1), w_pad=0.8)
+    # one legend per panel, each naming its own populations
+    ha = [Patch(facecolor="white", edgecolor=K, hatch="/////", label="FP, original"),
+          Patch(facecolor=G2, edgecolor=K, label="FN, original"),
+          Patch(facecolor="white", edgecolor=G1, hatch="....", label="FP, corrected"),
+          Patch(facecolor=K, edgecolor=K, label="FN, corrected")]
+    ax[0].legend(handles=ha, frameon=False, ncol=2, loc="upper center", bbox_to_anchor=(0.5, -0.3),
+                 handlelength=1.3, columnspacing=0.8, handletextpad=0.4)
+    hb = [Patch(facecolor="white", edgecolor=K, hatch="/////", label="false pos."),
+          Patch(facecolor=G2, edgecolor=K, label="false neg.")]
+    ax[1].legend(handles=hb, frameon=False, ncol=1, loc="upper center", bbox_to_anchor=(0.5, -0.3),
+                 handlelength=1.3, handletextpad=0.4)
+    fig.tight_layout(w_pad=0.8)
     fig.savefig(OUT / "fig_errors.pdf"); plt.close(fig)
 
 

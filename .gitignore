@@ -59,3 +59,7 @@ paper/**/*.blg
 paper/**/*.synctex.gz
 paper/**/*.fdb_latexmk
 paper/**/*.fls
+
+# Local LaTeX engine (Tectonic, downloaded from its official GitHub release)
+tools/
+paper/main.pdf

@@ -1,6 +1,6 @@
 # Phase IV paper
 
-"How Real Is 99% Accuracy? Auditing Feature Reliance in Network Intrusion Detection", the final CNET paper by Ali Waseem Abbasi and Muhammad Mudassir. IEEEtran journal format, two columns, 13 pages.
+"How Real Is 99% Accuracy? Auditing Feature Reliance in Network Intrusion Detection", the final CNET paper by Ali Waseem Abbasi and Muhammad Mudassir. IEEEtran journal format, two columns, 15 pages (revised on 2026-11-15 for the updated Phase IV rubric; see `CHANGELOG_UPDATED_RUBRIC.md`).
 
 ## Files
 
@@ -12,7 +12,8 @@
 | `figures/diag_framework.tex`, `diag_aexgb.tex`, `diag_dcnn.tex`, `diag_mes.tex`, `diag_protocol.tex` | Figs. 1–5, editable TikZ sources, compiled with the paper. |
 | `figures/fig_*.pdf` | Figs. 6–12, vector plots. |
 | `figures/make_paper_figures.py` | Regenerates the seven plots from the verified records. |
-| `tables/tab_*.tex` | Result tables V–VIII, X, XI and XIII. |
+| `tables/tab_*.tex` | Result tables V–VIII, X, XI and XIII. Tables I–IV, IX, XII and XIV are written in `main.tex`. |
+| `CHANGELOG_UPDATED_RUBRIC.md` | M1–M9 corrections with PDF pages, and the 14-part rubric check. |
 | `tables/make_tables.py` | Regenerates those tables from the verified records. |
 | `PAPER_CLAIM_EVIDENCE_MAP.md` | Each claim, its value and its source record. |
 | `FINAL_PAPER_QA.md` | Compile status, page-by-page visual check, claim validation and items for the authors. |
@@ -34,4 +35,4 @@ The scripts read `phase3_final_review/evidence/verification/verify_{r1,r4a,dcnn,
 
 ## Submission copy
 
-`CNET_PhaseIV_Research_Paper.pdf` is the final compiled paper. The review ZIP (`CNET_PHASE4_FINAL_PAPER_REVIEW.zip`, built by `package_review.py`) carries the same file at its top level so it can be submitted directly. Author decisions applied to the front matter and declarations are listed in section 5 of `FINAL_PAPER_QA.md`.
+`CNET_PhaseIV_Research_Paper.pdf` is the final compiled paper. The review ZIP (`CNET_PHASE4_UPDATED_FINAL_REVIEW.zip`, built by `package_review.py`) carries the same file at its top level so it can be submitted directly. Author details and declarations, with their sources, are listed in section 4 of `FINAL_PAPER_QA.md`; open items are in section 5.

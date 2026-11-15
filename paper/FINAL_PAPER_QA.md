@@ -1,75 +1,77 @@
-# Final QA: Phase IV paper
+# Final QA: Phase IV paper (revision for the updated rubric)
 
-**Paper:** "How Real Is 99% Accuracy? Auditing Feature Reliance in Network Intrusion Detection".
-**PDF:** `paper/CNET_PhaseIV_Research_Paper.pdf`, 13 pages, SHA-256 `fe370ffb47cc8c64186f4a0dd9a07be5566fc340805e8c9666709b42535d0381`.
-**Checked on:** 2026-11-15.
+- **Paper:** "How Real Is 99% Accuracy? Auditing Feature Reliance in Network Intrusion Detection".
+- **PDF:** `paper/CNET_PhaseIV_Research_Paper.pdf`, 15 pages. The SHA-256 is in `BUILD_LOG.md`.
+- **Checked on:** 2026-11-15.
+- **Corrections:** each change for M1–M9, with its page, is in `CHANGELOG_UPDATED_RUBRIC.md`.
 
 ## 1. Summary
 
 | Check | Result |
 |---|---|
-| Compiles with bibliography (Tectonic 0.17.0, IEEEtran.bst) | yes; no errors, no undefined references, no overfull boxes (`BUILD_LOG.md`) |
-| Sections in the required order | 1 title and authors, 2 abstract, 3 keywords, I introduction, II related work, III methodology, IV setup, V results, VI comparison with base papers, VII ablation, VIII discussion (with reproducibility and threats to validity), IX conclusion, declarations, references, appendix |
-| Abstract | one paragraph, 246 words, real numbers only |
-| Keywords | 6 |
-| Figures | 12: five TikZ diagrams (Figs. 1–5) and seven result plots (Figs. 6–12) |
-| Tables | 13 (Tables I–XIII, including one appendix table) |
-| Numbered equations | 9; one algorithm |
-| References | 20, all cited, none uncited |
-| Placeholders | none in the PDF (`??`, `PENDING` and bracketed author fields absent) |
-| Humanise checker (`--paper`) | 0 kill-list hits; sentence-length SD 11.7 (target ≥ 8); 5.18 characters per word (target ≤ about 5.3) |
+| Compiles with bibliography | Yes. Tectonic 0.17.0 and IEEEtran.bst: no errors, no undefined references or citations, no overfull boxes. |
+| Required parts in order | Title and authors, abstract, keywords, I–IX, declarations, references, then appendices A and B. |
+| Abstract | One paragraph, 248 words. |
+| Keywords | 6. |
+| Figures | 12: five TikZ diagrams (Figs. 1–5) and seven vector plots (Figs. 6–12). |
+| Tables | 14 (I–XIV): XIII and XIV are in the appendix. |
+| Equations and algorithms | 9 numbered equations; one algorithm. |
+| References | 20, all cited; no uncited or missing keys. |
+| Placeholders | None in the PDF. |
+| AI-use declaration | Not included. The updated rubric does not require one, and the authors asked that none appear. |
+| Humanise checker (`--paper`) | 0 kill-list hits. Sentence-length SD 11.9. 5.16 characters per word. |
+| Smallest type | **Figures:** 7 pt. **Tables:** `\footnotesize` (8 pt) or larger. **Body:** 10 pt, unchanged. |
 
 ## 2. Visual QA, page by page
 
-Every page was rendered at 100 dpi with PyMuPDF and inspected.
+Every page was rendered at 100 dpi with PyMuPDF and inspected. Diagrams and plots were also rendered on their own at 150–170 dpi.
 
 | Page | Content | Finding |
 |---|---|---|
-| 1 | Title, authors, abstract, keywords, introduction | clean; footnote with affiliation |
-| 2 | Contributions, roadmap, related work A–E, start of methodology | clean |
-| 3 | Table I, Fig. 1 (framework), preprocessing, partitioning, Eq. (1) | clean; Table I fits the text width after the column fix |
-| 4 | Figs. 2–4 (architecture diagrams), Table II (groups) | labels readable at print size; no crossing lines |
-| 5 | Algorithm 1, ARR and ablation equations, statistics, corrected-data evaluation | clean; equations within the column |
-| 6 | Fig. 5 (protocol), Phase II changes, setup | slightly stretched vertical spacing in the right column (IEEEtran bottom alignment) |
-| 7 | Tables III–V, Fig. 6, MCC equation, start of results | clean |
-| 8 | Table VI, Fig. 7, Table VII, Fig. 8, results text | clean |
-| 9 | Table VIII, Figs. 9–10, attribution, start of comparison | clean |
-| 10 | Table IX, ablation study, start of discussion | author-reported values marked with † |
-| 11 | Table X, Figs. 11–12 | interval labels read 99.5% / 99% (r1) and 98.33% / 96.67% (R4a) |
-| 12 | Tables XI–XII, reproducibility, threats, conclusion, declarations | clean |
-| 13 | Declarations (end), references, Appendix A with Table XIII | clean |
+| 1 | Title, authors, abstract, keywords, introduction | Clean. Two author footnotes (affiliation; e-mail and phone). |
+| 2 | Contributions, related work A–E, hypotheses | Clean. The Geirhos et al. sentence is restored. |
+| 3 | Table I, Fig. 1 (new framework), tracks, preprocessing | Fig. 1 legible at full width. The three strands are clearly separated, and the dashed registry line crosses nothing. |
+| 4 | Figs. 2–4, partitioning, Eq. (1), groups | Labels at 8–9 pt. The Monday sentence continues within the page. |
+| 5 | ARR, ablation estimand, statistics, corrected-data evaluation | Clean. Eqs. (2)–(8) fit the column. |
+| 6 | Table II (both member sets), Fig. 5, Phase II changes, setup | Clean. |
+| 7 | Tables III–IV, Algorithm 1, runs, metrics, Eq. (9) | Clean. |
+| 8 | Figs. 6–7, results V-A to V-C | Fig. 7 prints the 0–87.9% range beside the mean. |
+| 9 | Tables V–VIII, Fig. 8, results V-D and V-E | Clean. |
+| 10 | Figs. 9–10, comparison with base papers | Fig. 9 separates own-base and ensemble rows. |
+| 11 | Table IX, ablation VII-A to VII-D, discussion VIII-A | Author-reported values marked †. |
+| 12 | Table X, Fig. 11, Table XI, discussion VIII-B and VIII-C | Interval levels: 99.5/99% (r1) and 98.33/96.67% (R4a). |
+| 13 | Fig. 12, reproducibility, threats, conclusion | Clean. |
+| 14 | Table XII, conclusion end, declarations, references | Clean. |
+| 15 | Appendix A (Table XIII), Appendix B (Table XIV) | Clean. |
 
-Figures are vector PDFs (plots) or TikZ (diagrams), set in grayscale; groups and series are told apart by marker shape and fill, so the paper prints correctly in black and white. Each plot shows population sizes in its title or caption, and the uncertainty is shown as intervals, ranges or per-seed points.
-
-## 3. Part G claim validation
+## 3. Scientific claim checks
 
 | Item | How the paper handles it | Check |
 |---|---|---|
-| r1 intervals | difference intervals 99.5%, TOST 99%; table header, Table X caption, Fig. 11 caption and §III-H agree; `make_tables.py` asserts the levels read from the CSV | pass |
-| R4a intervals | difference 98.33%, TOST 96.67% (Table XI, Fig. 12, §III-H) | pass |
-| ARR 23 vs group U 20 | §III-F states that "all registered" (23) is not group U (20) | pass |
-| float64 explanation vs float32 inference | §III-F states that the explanations describe the float64 version of the composite model while the runner uses float32 inputs | pass |
-| R4a-i limits | §III-I, §V-B and Table VI call it descriptive; "associated with" only; the confounders (definitions, encodings, segmentation, no test-side intervention) are listed | pass |
-| Class-conditional recall | Table V gives DDoS and benign recall; Table VI gives DDoS recall and benign FPR; Table VII gives DoS recall, precision and Normal-class FPR | pass |
-| Partial R4a preservation (22 of 70) | §VIII-D, using the agreed paragraph; Table XII; not repeated in abstract, introduction or conclusion | pass |
-| 17 capped R4a fits | §VIII-D and Table XII; the r1 cap-200 check is reported in §VII-C (8→9, 14→13, same Holm decision) | pass |
-| MES per network; Wardana scenario naming | Table VIII and Table IX per network; no pooled 85.5% / 0.715; Scenario 2 is the analogue, Scenario 3 has no counterpart, no unseen-network claim | pass |
-| Accuracy vs generalisation | §VIII-A; Monday is described as a false-alarm test only; no claim of generalisation to unseen attacks or networks | pass |
-| Equivalence wording | "equivalent within the pre-declared margin"; §VII-D explains the margin against baselines of about 6 and about 2 errors | pass |
-| Adaptations, not reproductions | stated in §I, §III-J, Table III and §VI; Table IX is described as not a head-to-head benchmark | pass |
-| No "dataset-specific shortcuts" claim | the phrase does not appear; the headline sentence from `CLAUDE.md` is used in the abstract, §I and §IX | pass |
-| No full-reproducibility or causal-mechanism claim | §VIII-D limits reproducibility claims; §VII-B calls the original-vs-corrected difference observational | pass |
+| Same-model vs retrained | **DCNN:** same checkpoints, two populations. **MES-DNN:** separately retrained under two split protocols, with the confounds stated. | Pass |
+| Fang protocol | Published MCC is tied to their Tables 3, 4 and 6. The protocol behind Table 6 is reported as not stated. No claim of the same split. | Pass |
+| Corrected-task difficulty | No difficulty ranking. Both within-capture protocols give near-zero error on independently built populations. | Pass |
+| Registry independence | Fig. 1 separates the branches. §VIII-E states when the flag-count family entered the registry. | Pass |
+| Interval levels | r1: 99.5% difference, 99% TOST. R4a: 98.33% difference, 96.67% TOST. `make_tables.py` asserts both from the CSV. | Pass |
+| ARR set (23) vs group U (20) | §III-F and the Fig. 10 legend. | Pass |
+| float64 explanation vs float32 inference | §III-F. | Pass |
+| R4a-i | Descriptive and "associated with"; confounders listed. All 110 models are shown in Fig. 5 and Table VI. | Pass |
+| MES per network; Wardana Scenario 2; no unseen-network claim | Tables VIII and IX, §VI. | Pass |
+| R4a preservation (22 of 70); 17 capped R4a fits | Stated once in §VIII-D (agreed paragraph) and Table XII. | Pass |
+| Base papers are adaptations, not ranked | §I, §III-J, Table III, §VI. | Pass |
+| Every number traced | `%` source comments in `main.tex`; `PAPER_CLAIM_EVIDENCE_MAP.md`. | Pass |
 
-## 4. Evidence discipline
+## 4. Author details and their sources
 
-- Every number in `main.tex` has a `%` source comment on or beside its line, and `PAPER_CLAIM_EVIDENCE_MAP.md` lists each claim with its record.
-- The result tables are generated by `paper/tables/make_tables.py` from the verification records; no table value was typed by hand.
-- The figures are generated by `paper/figures/make_paper_figures.py` from the same records.
-- No experiment was run, no SHAP was recomputed and no result was changed for this paper.
+- **Names and affiliation:** CLAUDE.md and the Phase II title block. Roll numbers and section are omitted at the authors' request.
+- **E-mail addresses and phone numbers:** supplied by the authors in chat on 2026-11-15. (The Phase II PDF lists university addresses of the form `{i232630, i232562}@isb.nu.edu.pk`. The paper uses the addresses the authors supplied.)
+- **Funding and conflicts:** "no external funding" and "no competing interests". The authors confirmed both in chat on 2026-11-15.
 
-## 5. Author decisions applied (2026-11-15)
+## 5. Items left open
 
-- **Author line:** names only ("Ali Waseem Abbasi" and "Muhammad Mudassir"), without roll numbers or section.
-- **Affiliation:** Department of Artificial Intelligence and Data Science, FAST-NUCES, Islamabad, Pakistan.
-- **Declarations:** data availability, code availability (local repository, available on request) and the Colab acknowledgement. No AI-assistance statement, following the course's professional standard as stated by the authors. No funding or competing-interest statement, since none was confirmed; the paper asserts neither.
-- **Other items accepted as they stand:** reference [8] attributed to Engelen et al.; Lanvin et al. without an LNCS volume number; the standard references [1], [2], [10], [11], [14]–[17] not checked against a local copy; 13 pages including references and the one-table appendix.
+1. **Assignment file.** `CNET_PHASE4_UPDATED_ASSIGNMENT.txt` was not found on this machine. The rubric was taken from the review that quotes it. If the file adds anything that the review does not mention, it has not been checked.
+2. **Reference [8].** Engelen et al.'s online extended documentation is attributed to the paper's authors.
+3. **Reference [9].** Lanvin et al. is cited without an LNCS volume number, because two conflicting numbers were found earlier.
+4. **Standard references.** Eight of these were not checked against local copies: [1], [2], [10], [11] and [14]–[17]. No new references were added; the review allowed this only for verified, relevant work, and none was needed.
+5. **Page count.** The paper is 15 pages, against the brief's guidance of about 8–12. The brief says not to shrink type to reach a page target. The extra pages hold the requested legibility changes and the reproducibility appendix.
+6. **Institutional AI-use policy.** None is applied. The updated rubric does not require a declaration. If a separate university or venue policy applies to the authors, that is theirs to check.

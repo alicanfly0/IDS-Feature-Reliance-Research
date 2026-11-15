@@ -1,4 +1,4 @@
-"""Build CNET_PHASE4_FINAL_PAPER_REVIEW.zip (paper, sources, QA documents and the records the numbers come from).
+"""Build CNET_PHASE4_UPDATED_FINAL_REVIEW.zip (paper, sources, QA documents and the records the numbers come from).
 
     .\.venv\Scripts\python.exe paper\package_review.py
 
@@ -12,7 +12,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "CNET_PHASE4_FINAL_PAPER_REVIEW.zip"
+OUT = ROOT / "CNET_PHASE4_UPDATED_FINAL_REVIEW.zip"
 
 FILES = [
     "paper/CNET_PhaseIV_Research_Paper.pdf",
@@ -22,6 +22,7 @@ FILES = [
     "paper/FINAL_PAPER_QA.md",
     "paper/PAPER_CLAIM_EVIDENCE_MAP.md",
     "paper/BUILD_LOG.md",
+    "paper/CHANGELOG_UPDATED_RUBRIC.md",
     "paper/main.log",
     "paper/main.blg",
     "paper/package_review.py",
@@ -39,6 +40,11 @@ FILES = [
     "results/r4a/stats_r4a.json",
     "results/corrections/milestone2b/corrected_arr_v2.json",
     "docs/evidence/engelen_extended_2026-11-09.md",
+    # frozen protocol files cited in Appendix B
+    "configs/protocol/ablation_groups_3a_r1.yaml",
+    "configs/protocol/r4a_groups_v1.yaml",
+    "configs/experiments/ae_xgb_d008_trackB.yaml",
+    "configs/experiments/ae_xgb_r4a_trackB.yaml",
 ]
 FILES += sorted(str(p.relative_to(ROOT)).replace("\\", "/") for p in (ROOT / "paper/figures").glob("diag_*.tex"))
 FILES += sorted(str(p.relative_to(ROOT)).replace("\\", "/") for p in (ROOT / "paper/figures").glob("fig_*.pdf"))

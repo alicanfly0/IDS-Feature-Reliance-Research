@@ -22,8 +22,8 @@ Main records:
 | R4a-ii all three contrasts equivalent within the margin | Holm p = 1.0; TOST intervals inside ±0.08 ×10⁻³ | CSV, R4a-ii rows | statistical |
 | Original full models' recall on corrected DDoS | mean 0.0884 (0.000 to 0.879) | `verify_r4a.json` → `r4a_i`, kind `full` | descriptive |
 | Recall of models trained without A | mean 0.9575 (0.800 to 0.999) | same, group `A_flag_defects` | descriptive |
-| DCNN MCC, official vs filtered | 0.7836 → 0.7187 (5-seed means) | `verify_dcnn.json` seeds, `official` and `dedup_model_visible` | observed, same-model |
-| MES-DNN N2 own base MCC, random vs duplicate-aware | 0.906 → 0.150 | `verify_mes.json` fits, `N2_ton/base_N2_ton/all` | observed, same-model |
+| DCNN MCC, official vs filtered | 0.7836 → 0.7187 (5-seed means) | `verify_dcnn.json` seeds, `official` and `dedup_model_visible` | observed; same trained models, two test populations |
+| MES-DNN N2 own base MCC, random vs duplicate-aware | 0.906 → 0.150 | `verify_mes.json` fits, `N2_ton/base_N2_ton/all` | observed; separately retrained under each split protocol |
 
 ## 2. Populations and runs
 
@@ -79,7 +79,7 @@ Main records:
 | Paper | Value | Where it comes from |
 |---|---|---|
 | Nezhadsistani et al. | F1 0.9993 on CIC-IDS2017 (their Table 6); 5-fold CV | `PHASE3_BASELINE_COMPARISON.md` §1 (checked against the PDF in earlier milestones) |
-| Fang et al. | MCC 0.9355 (Table 6), AUROC 0.999; 22 of 47 features | same §3; `CNET_COMPLETE_PROJECT_HANDOVER.md` [3] |
+| Fang et al. | MCC 0.9355 for the full model in Table 6 (ablation), Table 3 (held-out test; train 55,998 + 12,264, test 37,000 + 4,089) and Table 4 (nested five-fold CV); stated stratified 70/30 split; protocol of Table 6 not stated; AUROC 0.999; 22 of 47 features | Fang et al. PDF (`../project/paper3.pdf`) pp. 7, 13, 17, 18, 22, read 2026-11-15; `PHASE3_BASELINE_COMPARISON.md` §3 |
 | Wardana et al. | Scenario 2, Table 10: average accuracy 96.67%, F1 95.36%, per-network accuracy 87.92 to 99.84%; Scenario 3 is new-network integration (Table 11) | same §2 (scenario numbering checked from the PDF text on 2026-11-13) |
 | Engelen et al. | 25.9% of flows are TCP appendices | handover [paper7.pdf p.3] |
 | Engelen extended documentation | aggregate flag counters update only on the first packet | `docs/evidence/engelen_extended_2026-11-09.md` |
@@ -101,3 +101,23 @@ Main records:
 | D-021 numbers (8→9, 14→13) | §VII-C |
 | Agreed limitation paragraph | §VIII-D, adapted only for flow |
 | Headline sentence | abstract, §I, §IX |
+
+## 7. Additions in the revision for the updated rubric (2026-11-15)
+
+| Claim | Value | Source |
+|---|---|---|
+| Author contact details | e-mail and phone for both authors | supplied by the authors in chat, 2026-11-15 |
+| Funding; conflicts of interest | no external funding; no competing interests | confirmed by the authors in chat, 2026-11-15 |
+| Corrected R4a group members (Table II) | A: ACK, CWE, ECE, FIN, PSH, RST, SYN Flag Count, Fwd PSH Flags, Bwd PSH Flags (9); B: Bwd Packet Length Mean, Avg Bwd Segment Size, Fwd Header Length and duplicate, Init_Win_bytes_forward, SYN Flag Count, Total Fwd Packets, min_seg_size_forward (8); U: A ∪ B ∪ four C features (20) | `configs/protocol/r4a_groups_v1.yaml` → `groups` |
+| Control-draw rule and seed bases | `RandomState(b + 100g + d)`, b = 3000 (r1, order A, B, C, D, U), b = 7000 (R4a, order A, B, U) | `configs/protocol/ablation_groups_3a_r1.yaml`, `r4a_groups_v1.yaml` → `random_seed_rule` |
+| Control pools | 46 (r1), 52 (R4a) | same files → `control_pool` |
+| Split seed and fractions | seed 42, 70/15/15 by equivalence class, both designs | `configs/experiments/ae_xgb_d008_trackB.yaml`, `ae_xgb_r4a_trackB.yaml` |
+| Split fingerprints | `50bd994880abbe15…` (r1), `acd52bd8295ffe29…` (R4a) | same configs; `verify_r1.json` `split_fingerprint` |
+| Test-population hashes | `2893fd3c5eca6aa5…` (r1), `4804537214604662…` (R4a) | `verify_r1.json` `population_test_sha256`; `verify_r4a.json` `population.sha256` |
+| Dataset archive hashes | `MachineLearningCSV.zip` `c3f26274b36c837c…`; Engelen `dataset.zip` `4d535da19795d853…` | `verify_r1.json` `dataset_sha256`; `results/protocol/r4a/r4a_feasibility_v1.json` |
+| Constant inputs on the corrected training partition | Fwd URG Flags, Bwd URG Flags, URG Flag Count, Subflow Bwd Packets | `r4a_groups_v1.yaml` → `constant_on_train` |
+| Code commits | `659c35d` (r1), `b6297226` (R4a; training path identical) | `verify_r1.json` `git_commit`; `PHASE3_EXPERIMENT_AUDIT.md` line 93; `PHASE3_FINAL_SIGNOFF.md` §3 |
+| Registry chronology (§VIII-E) | flag-count family added after an earlier SHAP pilot ranked ACK Flag Count first; whole documented family added; groups frozen before ablation training | `docs/MILESTONE_2B_CORRECTIONS.md`; `CNET_COMPLETE_PROJECT_HANDOVER.md` §8; `configs/protocol/*.yaml` headers |
+| Fig. 7 annotation | full-model recall range 0–87.9%, mean 8.8% | `verify_r4a.json` → `r4a_i`, kind `full` |
+
+Wording rules from the updated brief, as applied: the DCNN comparison is "same trained models, two populations" (§V-C, §VI, §VIII-C, Fig. 8); the MES-DNN comparison is "separately retrained under two split protocols" (§III-A H4, §V-D, §VI, §VIII-C, Figs. 4 and 9); no difficulty ranking of the two captures (§V-B); Fang's published MCC is not tied to our split (§VI, Table IX).

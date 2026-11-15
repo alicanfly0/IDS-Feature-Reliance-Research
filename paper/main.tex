@@ -30,10 +30,13 @@
 \title{How Real Is 99\% Accuracy? Auditing Feature Reliance in Network Intrusion Detection}
 % Author names and affiliation: CLAUDE.md and the Phase II title block
 % (CNET_COMPLETE_PROJECT_HANDOVER.md lines 79-80). Roll numbers and section omitted at the authors' request.
+% Contact e-mails supplied by the authors in chat on 2026-11-15.
 \author{Ali~Waseem~Abbasi and Muhammad~Mudassir%
 \thanks{The authors are with the Department of Artificial Intelligence and Data Science,
 National University of Computer and Emerging Sciences (FAST-NUCES), Islamabad, Pakistan.
-This paper reports the Computer Networks (CNET) course project, 2026.}}
+This paper reports the Computer Networks (CNET) course project, 2026.}%
+\thanks{A.~W.~Abbasi: e-mail aliwaseemabbasi@gmail.com.
+M.~Mudassir: e-mail mudassir7323@gmail.com.}}
 
 \markboth{CNET Course Project, FAST-NUCES, 2026}{Abbasi and Mudassir: How Real Is 99\% Accuracy?}
 \maketitle
@@ -46,16 +49,16 @@ near-perfect intrusion-detection performance can coexist with strong sensitivity
 feature-extraction changes and with duplicate-driven score inflation. For an
 autoencoder--XGBoost detector on the CICIDS2017 Friday DDoS capture, 110 controlled fits removed
 literature-defined artifact feature groups or size-matched random sets under a duplicate-aware
-split, with exact sign-flip tests, Holm correction and equivalence tests. Full models made 5.8
+split, with exact sign-flip, Holm and equivalence tests. Full models made 5.8
 errors on average on 33,038 test flows (MCC 0.9996). Removing the TCP flag-count group, a two-feature
 metadata group or the 20-feature union cost about 3 to 6 more errors than removing random
 features (Holm $p\le0.047$), inside a pre-declared margin of about 33 errors. Seventy further fits
-on the corrected capture of Engelen et al.\ again reached near-zero error, and every group
+on the corrected capture of Engelen et~al.\ again reached near-zero error, and every group
 contrast was equivalent within the margin. Yet the original-trained models detected 8.8\% of
 corrected DDoS flows on average, against 95.7\% for models trained without the flag-count group.
-Duplicates inflated scores on two other detectors: a DCNN's MCC on UNSW-NB15 fell from 0.784 to
-0.719 once test rows with a training twin were removed, and the NF-ToN-IoT-v2 base model of a
-stacked MES-DNN fell from 0.906 to 0.150 under a duplicate-aware split. SHAP attribution
+Duplicate handling changed the scores of two other detectors: the same five DCNN models fell from
+MCC 0.784 to 0.719 on UNSW-NB15 once test rows with a training twin were removed, and an MES-DNN
+base model retrained under a duplicate-aware split fell from 0.906 to 0.150 on NF-ToN-IoT-v2. SHAP attribution
 concentrated on the flag-count features, although removing them barely changed in-domain error.
 Such scores need leakage controls and cross-extractor tests before they are read as detection
 ability.
@@ -83,10 +86,10 @@ new to the model. Neither condition holds by default.
 
 Forensic audits of CICIDS2017 found defects in how flows were constructed. The CICFlowMeter
 extractor ends a TCP flow at the first FIN packet, so the remainder of the connection becomes a
-separate ``TCP appendix'' flow; Engelen et al.\ counted 25.9\% of all flows as such
-appendices~\cite{engelen2021}. % Engelen et al. 2021 p.3 (project/paper7.pdf); CNET_COMPLETE_PROJECT_HANDOVER.md line 249 Their extended documentation adds that the aggregate TCP
-flag counters update only on the first packet of a flow~\cite{engelen2021ext}, and Lanvin et
-al.\ reported duplicated packets and an unlabelled port scan~\cite{lanvin2023}. A second problem
+separate ``TCP appendix'' flow; Engelen et~al.\ counted 25.9\% of all flows as such
+appendices~\cite{engelen2021}. % Engelen et~al. 2021 p.3 (project/paper7.pdf); CNET_COMPLETE_PROJECT_HANDOVER.md line 249
+Their extended documentation adds that the aggregate TCP
+flag counters update only on the first packet of a flow~\cite{engelen2021ext}, and Lanvin et~al.\ reported duplicated packets and an unlabelled port scan~\cite{lanvin2023}. A second problem
 is exact duplication: many flows share one feature vector, so a random split puts copies of
 training rows in the test set. Both effects can raise a score without saying anything about
 attacks the model has not seen. They are cases of the general risk that a model learns
@@ -118,10 +121,10 @@ predictions.
 et al.\ and a transfer test of all 110 original-data models on the corrected flows. In-domain,
 no documented group carries more than a few errors; across extractors, the original models fail
 unless they were trained without the TCP flag-count features.
-\item Duplicate audits of two further detectors, each a same-model comparison of two
-populations: a DCNN with self-attention~\cite{fang2026} on official versus duplicate-filtered
-UNSW-NB15 test rows, and a stacked MES-DNN~\cite{wardana2026} on NetFlow-v2 data under random
-versus duplicate-aware splits.
+\item Duplicate audits of two further detectors. For a DCNN with self-attention~\cite{fang2026},
+the same trained models are scored on official and on duplicate-filtered UNSW-NB15 test rows.
+For a stacked MES-DNN~\cite{wardana2026} on NetFlow-v2 data, models are retrained under a random
+and under a duplicate-aware split, a comparison of two training protocols.
 \item A direct comparison of attribution and intervention on the same task: SHAP mass is
 concentrated on the flag-count features, their removal changes in-domain error very little, and
 their presence decides cross-extractor transfer.
@@ -140,14 +143,14 @@ and threats to validity, and Section~\ref{sec:conclusion} concludes.
 \label{sec:related}
 
 \subsection{Recent flow-based detectors}
-Nezhadsistani et al.~\cite{nezhadsistani2026} compress flow features with a
+Nezhadsistani et~al.~\cite{nezhadsistani2026} compress flow features with a
 120--80--40--80--120 autoencoder, add Gaussian samples for minority attack classes in the latent
 space and classify the latent codes with XGBoost~\cite{chen2016}. They train on a CICIDS2017 DDoS
-subset jointly with two 5G datasets, report F1 0.9993 on CICIDS2017 under five-fold
-cross-validation and show SHAP plots over raw feature names. Fang et al.~\cite{fang2026} rank
+subset jointly with two 5G datasets, use five-fold cross-validation, report F1 0.9993 on
+CICIDS2017 and show SHAP plots over raw feature names. Fang et~al.~\cite{fang2026} rank
 UNSW-NB15 features by LightGBM~\cite{ke2017} TreeSHAP importance, keep 22 of 47 and classify
 Normal versus DoS traffic with one-dimensional convolutions followed by multi-head
-self-attention; they report MCC 0.9355. Wardana et al.~\cite{wardana2026} train one
+self-attention; they report MCC 0.9355 for the full model. Wardana et~al.~\cite{wardana2026} train one
 39--9--7--5--3--1 network per NetFlow-v2 dataset, freeze these base models and stack them with a
 small meta-model, so that several networks can share detection; their integrated five-network
 stack reaches an average accuracy of 96.67\% (Scenario~2). None of the three tests whether its
@@ -157,31 +160,31 @@ scores depend on features that the dataset literature treats as unreliable.
 
 \subsection{Defects in benchmark data}
 CICIDS2017~\cite{sharafaldin2018} was generated in a testbed and converted to flows with
-CICFlowMeter. Engelen et al.~\cite{engelen2021} rebuilt the flows from the packet captures, found
+CICFlowMeter. Engelen et~al.~\cite{engelen2021} rebuilt the flows from the packet captures, found
 the TCP-appendix problem, wrong handling of RST packets and labelling errors, and released a
 corrected capture with revised labels. Their extended documentation lists further extractor
 faults, including the first-packet-only update of the aggregate flag
-counters~\cite{engelen2021ext}. Lanvin et al.~\cite{lanvin2023} documented duplicated packets and
+counters~\cite{engelen2021ext}. Lanvin et~al.~\cite{lanvin2023} documented duplicated packets and
 unlabelled scanning traffic and showed that correcting such errors changes detection results.
 UNSW-NB15~\cite{moustafa2015} and the NetFlow-v2 datasets~\cite{sarhan2022} were built with other
 tools; we show in Section~\ref{sec:results} that both contain heavy exact duplication at the level
 of model inputs.
 
 \subsection{Generalisation and shortcut learning}
-Catillo et al.~\cite{catillo2023} trained models on CICIDS2017 and tested them on a different
+Catillo et~al.~\cite{catillo2023} trained models on CICIDS2017 and tested them on a different
 capture (USB-IDS-1); recall fell to zero for some combinations of attack and defence.
-% CNET_COMPLETE_PROJECT_HANDOVER.md line 129 (Catillo et al.) Geirhos et
-al.~\cite{geirhos2020} describe shortcut learning: a model exploits a cue that separates the
-classes in the training distribution but not in the intended one. Arp et al.~\cite{arp2022} list
+% CNET_COMPLETE_PROJECT_HANDOVER.md line 129 (Catillo et~al.)
+Geirhos et~al.~\cite{geirhos2020} describe shortcut learning: a model exploits a cue that separates the
+classes in the training distribution but not in the intended one. Arp et~al.~\cite{arp2022} list
 the pitfalls of machine learning in security, among them spurious correlations, data snooping and
 evaluation under laboratory conditions only.
 
 \subsection{Explanations for intrusion detection}
 SHAP~\cite{lundberg2017} assigns each input an additive share of a prediction. Surveys of
 explainable AI in security and in 5G~\cite{kalasampath2025,senevirathna2024} catalogue its uses.
-Arreche et al.~\cite{arreche2024} compared SHAP and LIME over seven models and three datasets,
+Arreche et~al.~\cite{arreche2024} compared SHAP and LIME over seven models and three datasets,
 including CICIDS2017, with six criteria such as descriptive accuracy, sparsity and stability.
-% CNET_COMPLETE_PROJECT_HANDOVER.md line 245 (Arreche et al., paper6.pdf)
+% CNET_COMPLETE_PROJECT_HANDOVER.md line 245 (Arreche et~al., paper6.pdf)
 These criteria judge the explanation; they do not ask whether the model's accuracy depends on the
 features that the explanation ranks first.
 
@@ -198,18 +201,18 @@ equivalence margin for the same detector. Table~\ref{tab:related} summarises the
 \centering
 \caption{Related work and this study. Settings are as reported by the authors.}
 \label{tab:related}
-\footnotesize
+\footnotesize\renewcommand{\arraystretch}{1.18}
 \begin{tabular}{@{}L{2.3cm}L{3.0cm}L{2.5cm}L{2.2cm}L{2.7cm}L{3.0cm}@{}}
 \toprule
 Work & Data & Model & Explanation & Split or leakage control & Test of feature reliance \\
 \midrule
-Nezhadsistani et al.~\cite{nezhadsistani2026} & CICIDS2017 DDoS subset with two 5G datasets & AE, latent augmentation, XGBoost & SHAP (raw feature names) & 5-fold CV & none \\
-Fang et al.~\cite{fang2026} & UNSW-NB15, Normal vs DoS & DCNN with self-attention & LightGBM TreeSHAP (selection) & stratified 70/30; 5-fold CV & component ablation (SHAP selection, attention) \\
-Wardana et al.~\cite{wardana2026} & five NetFlow-v2 datasets & stacked DNNs (MES-DNN) & none & random 70/30 & none \\
-Engelen et al.~\cite{engelen2021} & CICIDS2017, re-extracted & random forest & feature analysis of appendix flows & corrected flows and labels & none \\
-Lanvin et al.~\cite{lanvin2023} & CICIDS2017, corrected & several classifiers & none & corrected labels and duplicates & none \\
-Catillo et al.~\cite{catillo2023} & CICIDS2017 to USB-IDS-1 & several classifiers & none & cross-dataset test & none \\
-Arreche et al.~\cite{arreche2024} & three NIDS datasets & seven models & SHAP, LIME & as published & none (explanation quality) \\
+Nezhadsistani et~al.~\cite{nezhadsistani2026} & CICIDS2017 DDoS subset with two 5G datasets & AE, latent augmentation, XGBoost & SHAP (raw feature names) & 5-fold CV & none \\
+Fang et~al.~\cite{fang2026} & UNSW-NB15, Normal vs DoS & DCNN with self-attention & LightGBM TreeSHAP (selection) & stratified 70/30; 5-fold CV & component ablation (SHAP selection, attention) \\
+Wardana et~al.~\cite{wardana2026} & five NetFlow-v2 datasets & stacked DNNs (MES-DNN) & none & random 70/30 & none \\
+Engelen et~al.~\cite{engelen2021} & CICIDS2017, re-extracted & random forest & feature analysis of appendix flows & corrected flows and labels & none \\
+Lanvin et~al.~\cite{lanvin2023} & CICIDS2017, corrected & several classifiers & none & corrected labels and duplicates & none \\
+Catillo et~al.~\cite{catillo2023} & CICIDS2017 to USB-IDS-1 & several classifiers & none & cross-dataset test & none \\
+Arreche et~al.~\cite{arreche2024} & three NIDS datasets & seven models & SHAP, LIME & as published & none (explanation quality) \\
 This work & CICIDS2017 Fri.\ DDoS, corrected Fri., UNSW-NB15, two NetFlow-v2 sets & AE-XGBoost, DCNN+SA, MES-DNN (adaptations) & permutation SHAP, ARR@$K$ & duplicate-aware splits; twin exclusion & group ablation vs random controls; corrected-capture transfer \\
 \bottomrule
 \end{tabular}
@@ -222,9 +225,13 @@ This work & CICIDS2017 Fri.\ DDoS, corrected Fri., UNSW-NB15, two NetFlow-v2 set
 \begin{figure*}[!t]
 \centering
 \resizebox{\textwidth}{!}{\input{figures/diag_framework.tex}}
-\caption{Research framework. Stages 1--5 build the data and the models; stages 6--10 audit them.
-The dashed arrow marks the retraining of every ablated view with every seed. Conclusions are
-graded by evidence type (statistical, descriptive or literature).}
+\caption{Research framework. Top row: data and model pipeline. Middle left (white boxes): the
+literature branch, in which documented extractor defects define the evidence registry and the
+frozen groups and random controls before any ablation model is trained; SHAP ranks play no part
+in it. Right (dark boxes): the explanation branch, in which SHAP and ARR@$K$ describe one trained
+model; the registry only supplies the feature set that ARR@$K$ measures. The two branches meet
+only when attribution is compared with the intervention results (stage~7). Conclusions are graded
+by evidence type (statistical, descriptive or literature).}
 \label{fig:framework}
 \end{figure*}
 
@@ -239,14 +246,15 @@ raises the test error rate more than removing a size-matched random set of featu
 traffic from another day. \textit{H3 (corrected capture).} Within the corrected capture, the
 contrasts for the re-derived groups follow H1 (R4a-ii, primary); as a secondary, descriptive
 question, models trained on the original capture are scored on corrected flows (R4a-i).
-\textit{H4 (duplicate inflation).} For the DCNN and MES-DNN adaptations, scores fall when test rows
-whose model input repeats a training row are removed or when whole duplicate groups are held out.
-H1--H3 have pre-declared tests; H4 is a descriptive same-model comparison.
+\textit{H4 (duplicate sensitivity).} For the DCNN adaptation, scores of the same trained models fall
+when test rows whose model input repeats a training row are removed; for the MES-DNN adaptation,
+scores of models retrained under a duplicate-aware split differ from those under a random split.
+H1--H3 have pre-declared tests; H4 is descriptive.
 
 \subsection{Evaluation tracks}
 Four tracks are kept separate throughout. Track 1 is the original CICIDS2017 Friday afternoon
 DDoS file with AE-XGBoost (design r1, 110 fits) and the Monday benign day. Track 2 is the
-corrected Friday capture of Engelen et al.\ with the same detector (R4a-ii, 70 fits; R4a-i, 110
+corrected Friday capture of Engelen et~al.\ with the same detector (R4a-ii, 70 fits; R4a-i, 110
 transfer scorings). Track 3 is UNSW-NB15 Normal versus DoS with the DCNN (5 fits). Track 4 is
 two NetFlow-v2 networks with the MES-DNN (10 fits). The tracks use different datasets, so no
 number is pooled across them. % run counts: PHASE3_EXECUTIVE_RESULTS.md section 1
@@ -272,9 +280,10 @@ fitted on the training partition only.}
 \begin{figure}[!t]
 \centering
 \resizebox{0.95\columnwidth}{!}{\input{figures/diag_mes.tex}}
-\caption{Two-network MES-DNN adaptation. Each base model is trained on its own network and frozen;
-every flow, from either network, is scored by both bases before the meta-model combines the two
-outputs.}
+\caption{Two-network MES-DNN adaptation. Each base model is trained on its own network's base
+partition and frozen; every meta sample, from either network, is scored by both bases before the
+meta-model combines the two outputs. The whole pipeline is trained separately under each split
+protocol, so random and duplicate-aware results come from different models.}
 \label{fig:mes}
 \end{figure}
 
@@ -312,7 +321,7 @@ and 34,526 duplicated a training input in some view, leaving 494,940 flows.
 \label{sec:groups}
 Groups come from the literature and were generated on the training partition before any ablation
 model was trained (Table~\ref{tab:groups}). Group A holds the TCP flag fields with the documented
-counting defect~\cite{engelen2021ext}. Group B holds the features that Engelen et al.\ found to
+counting defect~\cite{engelen2021ext}. Group B holds the features that Engelen et~al.\ found to
 separate TCP-appendix flows~\cite{engelen2021}. Group C holds the timing features affected by
 duplicated packets~\cite{lanvin2023}. Group D holds two metadata features that we listed as a
 hypothesis only (destination port and backward initial window). Group U is the union of the
@@ -324,24 +333,26 @@ registered ones. % configs/protocol/ablation_groups_3a_r1.yaml (proxy_rule, cont
 For the corrected capture the same algorithm re-derived A, B and U on the corrected training
 partition; groups C and D were not part of that design.
 
-\begin{table}[!t]
+\begin{table*}[!t]
 \centering
-\caption{Feature groups. $k$: inputs removed. r1: original capture; R4a: corrected capture
-(re-derived on its own training partition).}
+\caption{Frozen feature groups. $k$: inputs removed. r1: original capture; R4a: corrected capture,
+groups re-derived by the same algorithm on the corrected training partition. Groups C and D were
+not part of the R4a design.}
 \label{tab:groups}
-\footnotesize
-\begin{tabular}{@{}lL{4.6cm}rr@{}}
+\small
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}lL{7.4cm}rL{6.6cm}r@{}}
 \toprule
-Group & Members (r1) & $k$ r1 & $k$ R4a \\
+Group & Members, original capture (r1) & $k$ & Members, corrected capture (R4a) & $k$ \\
 \midrule
-A & ACK, ECE, FIN, PSH, RST, SYN, URG Flag Count; Fwd PSH Flags & 8 & 9 \\
-B & Bwd Packet Length Mean, Avg Bwd Segment Size, Fwd Header Length (and duplicate column), Fwd PSH Flags, Init\_Win\_bytes\_forward, SYN Flag Count, Subflow Fwd Packets, Total Fwd Packets, min\_seg\_size\_forward & 10 & 8 \\
-C & Bwd Packets/s, Flow IAT Mean, Flow IAT Min, Flow Packets/s & 4 & -- \\
-D & Destination Port, Init\_Win\_bytes\_backward & 2 & -- \\
-U & A $\cup$ B $\cup$ C (Fwd PSH Flags and SYN Flag Count shared by A and B) & 20 & 20 \\
+A & ACK, ECE, FIN, PSH, RST, SYN and URG Flag Count; Fwd PSH Flags & 8 & ACK, CWE, ECE, FIN, PSH, RST and SYN Flag Count; Fwd PSH Flags; Bwd PSH Flags & 9 \\
+B & Bwd Packet Length Mean, Avg Bwd Segment Size, Fwd Header Length and its duplicate column, Fwd PSH Flags, Init\_Win\_bytes\_forward, SYN Flag Count, Subflow Fwd Packets, Total Fwd Packets, min\_seg\_size\_forward & 10 & Bwd Packet Length Mean, Avg Bwd Segment Size, Fwd Header Length and its duplicate column, Init\_Win\_bytes\_forward, SYN Flag Count, Total Fwd Packets, min\_seg\_size\_forward & 8 \\
+C & Bwd Packets/s, Flow IAT Mean, Flow IAT Min, Flow Packets/s & 4 & (not run; its four members are part of U) & -- \\
+D & Destination Port, Init\_Win\_bytes\_backward & 2 & (not run) & -- \\
+U & A $\cup$ B $\cup$ C; Fwd PSH Flags and SYN Flag Count belong to both A and B & 20 & A $\cup$ B $\cup$ the four C features; SYN Flag Count belongs to both A and B & 20 \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 % configs/protocol/ablation_groups_3a_r1.yaml; configs/protocol/r4a_groups_v1.yaml.
 % R4a A = ACK, Bwd PSH, CWE, ECE, FIN, Fwd PSH, PSH, RST, SYN (URG constant on corrected train);
 % R4a B lacks the proxies Fwd PSH<->SYN and Subflow Fwd Packets<->Total Fwd Packets (PHASE3_R4A_COMPARISON.md).
@@ -408,7 +419,8 @@ TOST~\cite{schuirmann1987} with the interval $\bar d\pm t_{1-\alpha/m,\,n-1}\,s_
 99\% for r1 and 96.67\% for R4a-ii, and is declared when this interval lies inside $(-\delta,\delta)$.
 The smallest effect size of interest is $\delta=0.001$, fixed before training. It equals about 33
 errors on the original test population, about 22 on the corrected one and 0.1 percentage points
-of FPR. % PHASE3_STATISTICAL_FINDINGS.csv sesoi 0.001; 0.001 x 33,038 = 33.0; 0.001 x 22,049 = 22.0 The pre-declared readings are: Holm-significant with the interval inside the margin,
+of FPR. % PHASE3_STATISTICAL_FINDINGS.csv sesoi 0.001; 0.001 x 33,038 = 33.0; 0.001 x 22,049 = 22.0
+The pre-declared readings are: Holm-significant with the interval inside the margin,
 ``difference below the SESOI''; TOST interval inside the margin, ``equivalent within the
 pre-declared margin''; otherwise ``inconclusive''.
 
@@ -484,7 +496,7 @@ corrected-capture evaluation and left cross-dataset transfer for future work.
 \caption{Published designs and our adaptations. Values of the published designs are as reported
 by their authors.}
 \label{tab:arch}
-\footnotesize
+\footnotesize\renewcommand{\arraystretch}{1.18}
 \begin{tabular}{@{}L{1.9cm}L{5.0cm}L{5.5cm}L{4.4cm}@{}}
 \toprule
 Model & Published design & Our adaptation & Main differences \\
@@ -505,7 +517,7 @@ MES-DNN~\cite{wardana2026} & five frozen 39--9--7--5--3--1 base DNNs; meta-model
 \subsection{Datasets and populations}
 Table~\ref{tab:data} lists every population. CICIDS2017~\cite{sharafaldin2018} is restricted to the
 Friday afternoon DDoS file (DDoS versus BENIGN). The corrected capture is the Friday file of
-Engelen et al.~\cite{engelen2021}, restricted to the aligned DDoS window, in which only DDoS and
+Engelen et~al.~\cite{engelen2021}, restricted to the aligned DDoS window, in which only DDoS and
 benign flows occur. UNSW-NB15~\cite{moustafa2015} uses the publisher's training and test partitions,
 restricted to Normal and DoS. The MES-DNN track uses NF-UNSW-NB15-v2 in full (N1) and a fixed
 uniform subsample of NF-ToN-IoT-v2 of equal size (N2), with the 39 NetFlow features that remain
@@ -589,14 +601,14 @@ same models raised 334 to 966 false alarms (FPR 0.068\% to 0.195\%, mean 0.108\%
 This day tests false alarms only; it contains no attack, so it says nothing about recall on new
 attacks.
 
-\begin{table}[!t]
+\begin{table*}[!t]
 \centering
 \caption{AE-XGBoost full models, mean [min, max] over ten seeds. Benign recall is $1-\mathrm{FPR}$.}
 \label{tab:full}
-\scriptsize
-\setlength{\tabcolsep}{4pt}
+\small
+
 \input{tables/tab_full.tex}
-\end{table}
+\end{table*}
 
 \begin{figure}[!t]
 \centering
@@ -611,8 +623,10 @@ duplicate-filtered ($n=37{,}759$) UNSW-NB15 test rows, log scale.}
 \subsection{Corrected capture: in-domain and transfer}
 Trained and tested within the corrected capture (R4a-ii), the full models made 1 to 3 errors on
 22,049 flows (mean 1.8), with MCC 0.999822 and AUROC of at least 0.999998
-(Table~\ref{tab:full} and Fig.~\ref{fig:errors}a). The corrected task is at least as easy as the
-original one. % verify_r4a.json runs_r4a_ii r4a_full_s*
+(Table~\ref{tab:full} and Fig.~\ref{fig:errors}a). Both within-capture protocols therefore give
+near-zero error. Their test populations were built independently, with different segmentation,
+class mix and input definitions, so the error counts do not rank the difficulty of the two tasks.
+% verify_r4a.json runs_r4a_ii r4a_full_s*
 
 Transfer between the extractors is a different matter (Table~\ref{tab:transfer},
 Fig.~\ref{fig:transfer}). The ten original full models, scored on the corrected rows, recalled
@@ -633,7 +647,7 @@ controlled intervention.
 \caption{R4a-i: the 110 original-data models scored on the corrected population $T'^\star$
 (22,049 flows, 14,168 DDoS). Mean [min, max] over ten models per view. Descriptive.}
 \label{tab:transfer}
-\scriptsize
+\footnotesize\setlength{\tabcolsep}{3.5pt}
 \input{tables/tab_transfer.tex}
 \end{table}
 
@@ -645,7 +659,7 @@ view, fifty for the pooled random controls) on the corrected flows; diamonds are
 \label{fig:transfer}
 \end{figure}
 
-\subsection{Duplicate inflation on UNSW-NB15}
+\subsection{Duplicated test rows on UNSW-NB15}
 Of the 41,089 official UNSW-NB15 test rows, 3,330 (1,862 Normal and 1,468 DoS) have a model-visible
 twin in the training partition after preprocessing and feature selection.
 % verify_dcnn.json populations.model_visible
@@ -669,14 +683,15 @@ not show that the model learned from leaked rows.
 \caption{DCNN+SA on UNSW-NB15 (DoS positive), same five models on two populations. Mean [min, max].
 Filtered: test rows with a model-visible training twin removed.}
 \label{tab:dcnn}
-\scriptsize
+\footnotesize\setlength{\tabcolsep}{3.5pt}
 \input{tables/tab_dcnn.tex}
 \end{table}
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\columnwidth]{figures/fig_dcnn.pdf}
-\caption{DCNN+SA, official versus duplicate-filtered test rows. Lines join the same seed.}
+\caption{DCNN+SA: the same five trained models scored on the official test rows ($n=41{,}089$;
+4,089 DoS) and on the duplicate-filtered rows ($n=37{,}759$; 2,621 DoS). Lines join the same seed.}
 \label{fig:dcnn-res}
 \end{figure}
 
@@ -689,12 +704,16 @@ Table~\ref{tab:mes} and Fig.~\ref{fig:mes-res} report MCC on each network's test
 differs between the networks (4.0\% and 64.0\% attacks), so results are given per network and never
 pooled.
 
-Each base model is accurate on its own network under the random split (MCC 0.939 on N1 and 0.906 on
-N2). Under the duplicate-aware split, the N1 base model is unchanged (0.940), but the N2 base model
-falls to 0.150: it flags 88.8\% of benign flows and its AUROC falls from 0.979 to 0.711. Its
-training benign class is dominated by the single repeated vector, and its test partition now holds
-whole duplicate groups that it never saw. Only this drop is tied directly to holding out duplicate
-groups. % verify_mes.json dup_aware N2_ton/base_N2_ton/all fpr 0.888, roc_auc 0.711
+Unlike the DCNN audit, this comparison does not hold the models fixed. Each split mode has its own
+partitions, so the base models, the meta samples and the meta-model are all retrained, and the
+training data change together with the test data. Each base model is accurate on its own network
+under the random split (MCC 0.939 on N1 and 0.906 on N2). Under the duplicate-aware split, the N1
+base model is unchanged (0.940), but the N2 base model falls to 0.150: it flags 88.8\% of benign
+flows and its AUROC falls from 0.979 to 0.711. A likely reason is that its training benign class is
+dominated by the single repeated vector, while its test partition now holds whole duplicate groups
+that it never saw. Of the observed changes, only this drop is tied to holding out duplicate groups,
+and even here the split change and the retraining are measured together, not duplicates alone.
+% verify_mes.json dup_aware N2_ton/base_N2_ton/all fpr 0.888, roc_auc 0.711
 The ensemble behaves differently. Its MCC varies widely across seeds under the random split
 (0.166 to 0.938 on N1), and under the duplicate-aware split it falls to 0.001 on N1 and 0.242 on N2.
 Because the N1 base model keeps its MCC of about 0.94 in both modes, the N1 ensemble collapse cannot
@@ -707,16 +726,17 @@ duplicate-aware partitioning also changes the composition of the meta samples.
 \caption{MES-DNN on each network's test partition (645,374 flows), MCC mean [min, max] over five
 seeds. ``Other base'': the base model trained on the other network.}
 \label{tab:mes}
-\scriptsize
+\footnotesize\setlength{\tabcolsep}{3.5pt}
 \input{tables/tab_mes.tex}
 \end{table}
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\columnwidth]{figures/fig_mes.pdf}
-\caption{MES-DNN MCC per network and split mode; each marker is one seed. The own base model of N1
-is unaffected by the split, whereas the N2 base model and both ensembles lose most of their skill
-under the duplicate-aware split.}
+\caption{MES-DNN MCC per network and split protocol; each marker is one seed, and the two
+protocols use separately trained models. The own base model of N1 keeps MCC near 0.94 under both
+protocols, whereas the N2 base model and both ensembles score far lower under the duplicate-aware
+protocol.}
 \label{fig:mes-res}
 \end{figure}
 
@@ -764,13 +784,13 @@ of our implementations is a reproduction, so no row supports a ranking.
 benchmark: the protocol columns list the differences that we know of. Ours: mean [min, max] over
 seeds.}
 \label{tab:compare}
-\footnotesize
+\footnotesize\renewcommand{\arraystretch}{1.18}
 \begin{tabular}{@{}L{2.1cm}L{3.1cm}L{3.2cm}L{3.3cm}L{4.6cm}@{}}
 \toprule
 Model & Source data and protocol & Source result$^{\dagger}$ & Our data and protocol & Our result \\
 \midrule
 AE-XGBoost~\cite{nezhadsistani2026} & CICIDS2017 DDoS subset with two 5G datasets; 5-fold CV & F1 0.9993 on CICIDS2017$^{\dagger}$ (Table 6) & Friday DDoS file only; duplicate-aware split; $\Tstar$; 10 seeds & F1 0.999849 [0.999792, 0.999922]; MCC 0.999639; 5.8 errors per 33,038 \\
-DCNN+SA~\cite{fang2026} & UNSW-NB15 Normal vs DoS; Normal positive; stratified split; seed 42 & MCC 0.9355 (Table 6), AUROC 0.999$^{\dagger}$ & official partition; DoS positive; $K=22$; 5 seeds & official: MCC 0.784 [0.763, 0.801], AUROC 0.995; filtered: MCC 0.719 [0.696, 0.740] \\
+DCNN+SA~\cite{fang2026} & UNSW-NB15 Normal vs DoS; Normal positive; stated stratified 70/30 split, also nested 5-fold CV; seed 42 & MCC 0.9355 (Tables 3, 4 and 6; protocol of Table 6 not stated), AUROC 0.999$^{\dagger}$ & official train and test files; DoS positive; $K=22$; 5 seeds & official: MCC 0.784 [0.763, 0.801], AUROC 0.995; filtered: MCC 0.719 [0.696, 0.740] \\
 MES-DNN~\cite{wardana2026} & five NetFlow-v2 networks; random 70/30; Scenario~2 integrated stack (Table 10) & average accuracy 96.67\%, F1 95.36\%; per-network accuracy 87.92--99.84\%$^{\dagger}$ & two networks; N2 subsampled; random and duplicate-aware splits; 5 seeds each & ensemble, random split: N1 accuracy 0.941 [0.771, 0.995], F1 0.665; N2 accuracy 0.769 [0.611, 0.946], F1 0.764. Duplicate-aware: N1 0.536, F1 0.087; N2 0.699, F1 0.804 \\
 \bottomrule
 \end{tabular}
@@ -784,23 +804,33 @@ datasets and evaluated by cross-validation. The higher value shows that the sing
 saturated under our split; it is not an improvement over the published model.
 
 \textit{DCNN+SA.} MCC and AUROC do not depend on which class is called positive, so these two
-numbers are the most comparable ones. Our adaptation stays well below the reported MCC on the same
-official partition. The cause is not established; framework, preprocessing and tuning differ, and
-our feature count was fixed at 22 although the stated 95\% rule selects 30 on our training data.
+numbers are the most comparable ones. The evaluation protocols are not the same. Fang et~al.\
+describe a stratified 70/30 split and report MCC 0.9355 for the full model in three places: the
+component ablation (their Table~6), a held-out test comparison whose stated sizes are close to the
+official partition (Table~3) and nested five-fold cross-validation on the whole dataset (Table~4).
+Their paper does not state which protocol produced the Table~6 value. We train on the official
+training file and test on the official test file. Our adaptation stays well below the published
+MCC; the cause is not established, because protocol, framework, preprocessing and tuning differ,
+and our feature count was fixed at 22 although the stated 95\% rule selects 30 on our training data.
+% Fang et~al. PDF (project/paper3.pdf): p.7 stratified 70/30; p.13 Table 3, p.17 Table 4 (outer 5-fold CV),
+% p.18 Table 6, all MCC 93.55%; p.22 partition 55,998+12,264 / 37,000+4,089.
 % verify_dcnn.json selection_check (rule95_count 30; cumulative share at 22 = 0.905)
 The gap is not evidence that the published number is wrong.
 
-\textit{MES-DNN.} Our two-network setting is the analogue of Wardana et al.'s Scenario~2, the
+\textit{MES-DNN.} Our two-network setting is the analogue of Wardana et~al.'s Scenario~2, the
 integrated stack tested on each network; their Scenario~3, integration of a new network, has no
 counterpart here, so we make no claim about unseen networks. Their Table~10 reports per-network
 accuracies, so per-network description is possible, but a ranking is not: we use two of the five
 networks, a subsample of NF-ToN-IoT-v2 and a fixed input transform. The instability of our
 ensemble and its collapse under duplicate-aware splitting are findings about our adaptation and
-about duplication, not about the five-network model.
+its sensitivity to the split protocol, not about the five-network model.
 
-The defensible quantitative statements in this section are the two same-model contrasts:
-official versus filtered rows for the DCNN, and random versus duplicate-aware splits for the
-MES-DNN. In both, model and data are held fixed and only the population or the split changes.
+The quantitative statements that this section can support come from our own controlled
+comparisons, and the two duplicate audits differ in kind. For the DCNN, the same five trained
+models are scored on two test populations, so only the population changes. For the MES-DNN, the
+random and duplicate-aware results come from separately trained models; partition composition,
+base-model training, meta samples and the stacking step change with the split, so the comparison
+shows how sensitive the reported scores are to the split protocol, not an isolated duplicate effect.
 
 % ===================================================================== 10. Ablation
 \section{Ablation Study}
@@ -828,7 +858,7 @@ control; $\bar d$: mean paired contrast; all $\times10^{-3}$ (SESOI $\delta=1$).
 are at 99.5\% and TOST intervals at 99\% (Bonferroni-consistent for $m=10$). $p_{\mathrm{Holm}}$: exact
 sign-flip $p$, Holm-adjusted over the family.}
 \label{tab:r1}
-\footnotesize
+\footnotesize\renewcommand{\arraystretch}{1.18}
 \input{tables/tab_r1.tex}
 \end{table*}
 
@@ -863,7 +893,7 @@ window, prevalence (64.3\% against 58.2\%), at least 16 input definitions and gr
 intervals at 98.33\%, TOST at 96.67\%. (b) Comparison of the mean contrasts with r1; the Welch
 interval is descriptive. Units $10^{-3}$.}
 \label{tab:r4a}
-\scriptsize
+\footnotesize\setlength{\tabcolsep}{3.5pt}
 \input{tables/tab_r4a.tex}
 \end{table}
 
@@ -917,13 +947,16 @@ ablation reports whether the task can be solved without them; a cross-extractor 
 the model's rules survive a change in the inputs' meaning. A claim that a detector relies on a
 feature needs evidence of the second or third type, not a SHAP plot alone.
 
-\subsection{Duplicates inflate reported scores}
+\subsection{Duplicate handling changes reported scores}
 On UNSW-NB15 the duplicated test rows were all detected by every model, and removing them lowered MCC
 by 0.065 on the same models. % PHASE3_EXECUTIVE_RESULTS.md section 4 (paired MCC difference -0.065)
-On NetFlow-v2, one base model that looked accurate under a random split failed once whole duplicate
-groups were held out. Exact duplication at the level of model inputs is easy to measure, and in
-both detectors it moved the reported score by more than the spread between seeds (DCNN MCC range
-0.763 to 0.801; N2 base-model range 0.778 to 0.945 under the random split).
+Because the models are fixed, this change is a direct measurement of how much the duplicated rows
+add to the score, although it does not show that the models learned from leaked rows. On NetFlow-v2,
+a base model that looked accurate under a random split scored far lower when it was retrained under
+a duplicate-aware split. That comparison mixes the duplicate hold-out with changed training
+partitions and a retrained meta-model, so it shows sensitivity to the split protocol, not an
+isolated duplicate effect. In both detectors the change exceeded the spread between seeds (DCNN MCC
+range 0.763 to 0.801; N2 base-model range 0.778 to 0.945 under the random split).
 % verify_dcnn.json official mcc; verify_mes.json random N2_ton/base_N2_ton/all mcc
 Reports on these datasets should state how duplicates were handled and
 whether the check was made on raw records or on model inputs; on UNSW-NB15 the raw check found fewer
@@ -950,7 +983,12 @@ recorded comparisons.
 Table~\ref{tab:limits} lists the threats and how far each limits the conclusions. Three deserve a
 remark. First, the r1 test population was inspected while the protocol was designed, so H1 is a
 pre-declared estimate on a known population, not a confirmatory test on fresh data; the Monday day
-had not been scored before the protocol was frozen. Second, the sign-flip $p$-values are exact only
+had not been scored before the protocol was frozen. The same applies to the registry: the
+flag-count family entered it after an earlier SHAP pilot had ranked ACK Flag Count first, when we
+found that the documented defect was missing. Its members are the whole documented family, not
+the top-ranked features, and all groups were frozen before any ablation model was trained.
+% docs/MILESTONE_2B_CORRECTIONS.md; CNET_COMPLETE_PROJECT_HANDOVER.md section 8
+Second, the sign-flip $p$-values are exact only
 under exchangeability of group and control within a seed, and with ten seeds the smallest attainable
 $p$ is $2/1024$; seeds capture training variability, not sampling variability of the capture. Third,
 the margin $\delta=0.001$ was fixed before training but is a judgement; a smaller margin would turn
@@ -960,7 +998,7 @@ some equivalence verdicts into inconclusive ones without changing any $p$-value.
 \centering
 \caption{Threats to validity and their effect on the conclusions.}
 \label{tab:limits}
-\scriptsize
+\footnotesize\setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{@{}L{2.5cm}L{5.6cm}@{}}
 \toprule
 Threat & Effect on the conclusions \\
@@ -989,9 +1027,9 @@ two-feature metadata group or the 20-feature union costs about 3 to 6 errors in 
 pre-declared margin, and 70 fits on the corrected capture found no group effect beyond that margin.
 Across extractors the picture changes. Models trained on the original features failed on the
 corrected flows unless they had been trained without the flag-count group, and SHAP had ranked those
-same features first. On two other detectors, duplicated inputs inflated reported scores: the DCNN
-lost 0.065 MCC once training twins were removed from the test rows, and an MES-DNN base model fell
-from MCC 0.906 to 0.150 under a duplicate-aware split. Near-perfect intrusion-detection performance
+same features first. On two other detectors, duplicate handling changed the reported scores: the
+same DCNN models lost 0.065 MCC once training twins were removed from the test rows, and an MES-DNN
+base model retrained under a duplicate-aware split fell from MCC 0.906 to 0.150. Near-perfect intrusion-detection performance
 can therefore coexist with strong sensitivity to feature-extraction changes and with
 duplicate-driven score inflation, and an explanation alone cannot tell which of these applies.
 % Sources as for the abstract; DCNN paired MCC difference -0.065 (PHASE3_EXECUTIVE_RESULTS.md section 4).
@@ -1006,13 +1044,19 @@ for the MES-DNN; and the DCNN with the 30 features that the 95\% rule selects.
 % ===================================================================== 13. Declarations
 \section*{Declarations}
 \textit{Data availability.} All datasets are public and were obtained from their official sources:
-CICIDS2017~\cite{sharafaldin2018}, the corrected capture of Engelen et al.~\cite{engelen2021},
+CICIDS2017~\cite{sharafaldin2018}, the corrected capture of Engelen et~al.~\cite{engelen2021},
 UNSW-NB15~\cite{moustafa2015} and the NetFlow-v2 datasets~\cite{sarhan2022}. They are not
 redistributed with this work; SHA-256 checksums of the files used are recorded in the run records.
 
 \textit{Code availability.} The code, configurations, frozen protocols, run records and verification
 scripts are held in a local version-controlled repository; no public repository exists at the time of
-writing. They are available from the authors on request.
+writing. They are available from the authors on request; Appendix~\ref{app:repro} lists the
+identifiers needed to check a rebuilt pipeline against the records.
+
+\textit{Funding.} This work received no external funding.
+
+\textit{Conflicts of interest.} The authors declare no competing interests.
+% Funding and conflict statements confirmed by the authors in chat on 2026-11-15.
 
 \textit{Acknowledgement.} Experiments used the free tier of Google Colab.
 
@@ -1027,13 +1071,54 @@ Table~\ref{tab:seeds} gives the confusion matrices of the AE-XGBoost full models
 population $\Tstar$, their false positives on the Monday benign day, and the confusion matrices of the
 corrected-data full models on $T'^\star$.
 
-\begin{table}[!h]
+\begin{table}[!ht]
 \centering
 \caption{AE-XGBoost full models per seed. Positive class: DDoS.}
 \label{tab:seeds}
-\scriptsize
-\setlength{\tabcolsep}{4pt}
+\footnotesize\setlength{\tabcolsep}{2.6pt}
 \input{tables/tab_seeds.tex}
 \end{table}
+
+\section{Reproducibility record}
+\label{app:repro}
+The protocol files, code and run records are held in the authors' local repository and are
+available on request. Table~\ref{tab:repro} lists the identifiers that a rebuilt pipeline must
+reproduce. The frozen views are the full model, one view per group with all group members removed,
+and one view per control draw with $|G|$ randomly drawn inputs removed. Draw $d$ of group $G$ is
+generated with \texttt{RandomState}$(b+100g+d)$, where $g$ is the index of $G$ in the stated group
+order and $d=0,\dots,9$; the model with seed $s$ uses draw $d=s$. Controls are drawn only from the
+control pool, the inputs that are neither registered nor proxies of registered inputs. Every model
+of a design is scored on the family-common test population of Eq.~\eqref{eq:tstar}, whose row set
+is fixed by the population hash in the table. Any rebuilt split must reproduce the split
+fingerprint before a model is trained.
+
+\begin{table}[!ht]
+\centering
+\caption{Frozen identifiers of the two AE-XGBoost designs. Hashes are SHA-256 (first 16 hex
+digits); full values are in the run records.}
+\label{tab:repro}
+\footnotesize\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{@{}L{1.75cm}L{3.05cm}L{3.05cm}@{}}
+\toprule
+Item & Original (r1) & Corrected (R4a-ii, R4a-i) \\
+\midrule
+Source archive & \texttt{MachineLearning-} \texttt{CSV.zip}, \texttt{c3f26274b36c837c} & Engelen \texttt{dataset.zip} \texttt{4d535da19795d853}; Friday file, 15:30--17:03 shifted by $+5{:}00$ \\
+Split (70/15/15 by class, seed 42) & \texttt{50bd994880abbe15}; 157,998 / 33,834 / 33,877 rows & \texttt{acd52bd8295ffe29}; 102,496 / 22,033 / 22,111 rows \\
+Test population & 33,038 rows; \texttt{2893fd3c5eca6aa5} & 22,049 rows; \texttt{4804537214604662} \\
+Inputs & 68 of 78 & 74; URG fields and Subflow Bwd Packets constant \\
+Group order; seed base $b$ & A, B, C, D, U; $b=3000$ & A, B, U; $b=7000$ \\
+Control pool & 46 inputs & 52 inputs \\
+Proxy rule & equality or $|r|\ge0.999$ on train & same \\
+Fits & 10 full, 50 group, 50 control & 10 full, 30 group, 30 control \\
+Environment & Colab, NVIDIA T4; \texttt{be81b4d6da06489e} & same \\
+Code commit & \texttt{659c35d} & \texttt{b6297226} (same training path) \\
+Group file & \nolinkurl{configs/protocol/ablation_groups_3a_r1.yaml} & \nolinkurl{configs/protocol/r4a_groups_v1.yaml} \\
+\bottomrule
+\end{tabular}
+\end{table}
+% Sources: configs/experiments/ae_xgb_d008_trackB.yaml (split seed 42, fractions); configs/protocol/*.yaml
+% (random_seed_rule, control_pool, proxy_rule, split_fingerprint); verify_r1.json (population_test_sha256,
+% dataset_sha256, env_fingerprint, git_commit); verify_r4a.json population.sha256; PHASE3_R4A_COMPARISON.md
+% section A (split sizes, constant inputs); PHASE3_FINAL_SIGNOFF.md section 3 (commit b6297226).
 
 \end{document}

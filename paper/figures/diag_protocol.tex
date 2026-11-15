@@ -1,31 +1,32 @@
 % Figure 5: evaluation and artifact-reliance protocol (design D; R4a-ii; R4a-i). Editable TikZ source.
 % The two pipelines are compared only through their mean contrasts: no flow-level pairing exists.
+% R4a-i scores all 110 r1 models (full, group-removed and control-removed views) on T'*.
 \begin{tikzpicture}[
-  font=\scriptsize, >=Stealth, node distance=3mm and 4mm,
-  box/.style={draw, rounded corners=1pt, align=center, inner sep=2pt, text width=24mm},
+  font=\footnotesize, >=Stealth, node distance=3mm and 4mm,
+  box/.style={draw, rounded corners=1pt, align=center, inner sep=2.2pt, text width=29mm},
   mdl/.style={box, fill=black!6},
   arr/.style={->, thick}]
 % original pipeline
-\node[box, text width=33mm] (o0) {\textbf{Original pipeline}\\CICFlowMeter flows, Fri.\ DDoS file (225,745)};
-\node[mdl, below left=4mm and -14mm of o0] (of) {$f_{\text{full},s}$\\all 68 inputs};
+\node[box, text width=40mm] (o0) {\textbf{Original pipeline (r1, 110 fits)}\\CICFlowMeter flows, Fri.\ DDoS file (225,745)};
+\node[mdl, below left=5mm and -17mm of o0] (of) {$f_{\text{full},s}$\\all 68 inputs};
 \node[mdl, below=of of] (og) {$f_{-G,s}$\\group $G\in\{$A,B,C,D,U$\}$ removed};
 \node[mdl, below=of og] (oc) {$f_{-R_{G,s},s}$\\random draw $s$, $|R|=|G|$};
-\node[box, right=6mm of og, text width=21mm] (ot) {common test $T^\star$ (33,038) + Monday $B$ (494,940)};
+\node[box, right=7mm of og, text width=25mm] (ot) {common test $\Tstar$ (33,038) + Monday $B$ (494,940)};
 \draw[arr] (o0) -- (of); \draw[arr] (of) -- (ot); \draw[arr] (og) -- (ot); \draw[arr] (oc) -- (ot);
-\node[box, below=of ot, text width=21mm, fill=black!16] (os) {$d_s=\Delta_G-\Delta_R$\\sign-flip, Holm (10), TOST};
+\node[box, below=of ot, text width=25mm, fill=black!16] (os) {paired $d_s=\Delta_G-\Delta_R$\\sign-flip, Holm (10), TOST};
 \draw[arr] (ot) -- (os);
 % corrected pipeline
-\node[box, right=22mm of o0, text width=33mm] (c0) {\textbf{Corrected pipeline}\\Engelen extractor, aligned window (146,643)};
-\node[mdl, below right=4mm and -14mm of c0] (cf) {$f'_{\text{full},s}$\\74 inputs};
-\node[mdl, below=of cf] (cg) {$f'_{-G,s}$, $G\in\{$A,B,U$\}$\\groups re-frozen};
+\node[box, right=26mm of o0, text width=40mm] (c0) {\textbf{Corrected pipeline (R4a-ii, 70 fits)}\\Engelen extractor, aligned window (146,643)};
+\node[mdl, below right=5mm and -17mm of c0] (cf) {$f'_{\text{full},s}$\\74 inputs};
+\node[mdl, below=of cf] (cg) {$f'_{-G,s}$, $G\in\{$A,B,U$\}$\\groups re-derived};
 \node[mdl, below=of cg] (cc) {$f'_{-R_{G,s},s}$\\random draw $s$, $|R|=|G|$};
-\node[box, left=6mm of cg, text width=21mm] (ct) {common test $T'^\star$ (22,049)};
+\node[box, left=7mm of cg, text width=25mm] (ct) {common test $T'^\star$ (22,049)};
 \draw[arr] (c0) -- (cf); \draw[arr] (cf) -- (ct); \draw[arr] (cg) -- (ct); \draw[arr] (cc) -- (ct);
-\node[box, below=of ct, text width=21mm, fill=black!16] (cs) {$d'_s$; sign-flip, Holm (3), TOST};
+\node[box, below=of ct, text width=25mm, fill=black!16] (cs) {paired $d'_s$\\sign-flip, Holm (3), TOST};
 \draw[arr] (ct) -- (cs);
 % links
-\draw[arr, dashed] (of.north east) to[bend left=12] node[font=\tiny, above=1pt, align=center, fill=white, inner sep=1pt]{R4a-i: all 110 r1 models\\scored on $T'^\star$ (descriptive)} (ct.north);
-\node[box, dashed, text width=46mm] (cmp) at ($(os.south)!0.5!(cs.south)+(0,-9mm)$) {compare mean contrasts $\bar d$ and $\bar d'$ only\\(no row pairing; Welch interval, descriptive)};
+\draw[arr, dashed] (of.north east) to[bend left=12] node[font=\scriptsize, above=1pt, align=center, fill=white, inner sep=1pt]{R4a-i: all 110 r1 models (every view)\\scored on $T'^\star$ (descriptive)} (ct.north);
+\node[box, dashed, text width=62mm] (cmp) at ($(os.south)!0.5!(cs.south)+(0,-10mm)$) {between captures: compare mean contrasts $\bar d$ and $\bar d'$ only\\(no row pairing; Welch interval, descriptive)};
 \draw[arr, dotted] (os.south) -- (os.south |- cmp.north);
 \draw[arr, dotted] (cs.south) -- (cs.south |- cmp.north);
 \end{tikzpicture}

@@ -1,6 +1,6 @@
 # Build log: Phase IV paper
 
-**Date:** 2026-11-15. **Machine:** the project laptop (Windows 11). **Engine:** Tectonic 0.17.0 (XeTeX-based), run from the repository copy at `tools/tectonic/tectonic.exe`. BibTeX 0.99d with `IEEEtran.bst` 1.14 was run automatically by Tectonic.
+**Date:** 2026-11-15 (revision for the updated rubric; see `CHANGELOG_UPDATED_RUBRIC.md`). **Machine:** the project laptop (Windows 11). **Engine:** Tectonic 0.17.0 (XeTeX-based), run from the repository copy at `tools/tectonic/tectonic.exe`. BibTeX 0.99d with `IEEEtran.bst` 1.14 was run automatically by Tectonic.
 
 ## Commands
 
@@ -20,9 +20,9 @@ The two Python scripts read only the verified Phase III records and rewrite `pap
 | Item | Value |
 |---|---|
 | Output | `paper/CNET_PhaseIV_Research_Paper.pdf` (copy of `main.pdf`) |
-| Pages | 13 (the end of the declarations, the references and a one-table appendix are on page 13) |
-| Size | 293,176 bytes |
-| SHA-256 | `fe370ffb47cc8c64186f4a0dd9a07be5566fc340805e8c9666709b42535d0381` |
+| Pages | 15 (references on page 14; appendices A and B on page 15) |
+| Size | 314,493 bytes |
+| SHA-256 | `b250462b435ac22a30ae76396a6d46d5a680d67b1d5e02d4323bc13c001a589a` |
 | Errors | none |
 | Undefined references or citations | none |
 | Overfull boxes | none |
@@ -34,7 +34,9 @@ Full log: `paper/main.log`; BibTeX log: `paper/main.blg`.
 
 - `Fontconfig error: Cannot load default config file` (stderr): Tectonic looks for a system font configuration that Windows lacks. No system font is used, so the PDF is unaffected.
 - `LaTeX Font Warning: Font shape TU/ptm/... undefined` (four lines, plus a summary line): raised while the class loads, before `fontenc` switches to T1. The body text is set in T1 Times (Nimbus Roman), which the font list of the PDF confirms.
-- `Underfull \vbox ... while \output is active` (two): IEEEtran balances columns to the bottom of the page; two pages have slightly stretched vertical space.
+- `Underfull \vbox ... while \output is active` (one): IEEEtran balances columns to the bottom of the page; one page has slightly stretched vertical space.
+- `Underfull \hbox` at input line 43 of a table file: loose spacing inside a narrow table cell, no visible defect.
+- `Text page 12 contains only floats`: issued during float placement; the rendered page 12 of the final PDF holds Table X, Fig. 11, Table XI and a full column of text, checked visually.
 - `Underfull \hbox` in `main.bbl` lines 64–68: the long URL of reference [8] breaks with loose spacing.
 
 ## History of fixes made during the build
@@ -46,3 +48,11 @@ Full log: `paper/main.log`; BibTeX log: `paper/main.blg`.
 - Figure order: the three architecture diagrams were moved into Section III so that Figs. 1–5 are the framework, AE-XGBoost, DCNN, MES-DNN and protocol diagrams.
 - The R4a figure legend covered a data point; it was moved to the middle right of panel (b).
 - A hyperref bookmark warning for the math in a subsection title was removed with `\texorpdfstring`.
+
+## Revision for the updated rubric (2026-11-15)
+
+- Fig. 1 redrawn with separate literature and explanation branches; Figs. 2–5 redrawn with 8–9 pt labels.
+- Plots regenerated at 7.5–8.5 pt (script unchanged in its data sources).
+- Tables moved from `\scriptsize` to `\footnotesize` or `\small`; Tables II and V made full width.
+- Three source comments from the previous build had absorbed the prose that followed them on the same line; the text was restored and every inline comment rechecked.
+- Appendix B (Table XIV) added; a 35 pt overfull line in it fixed by allowing a break in a file name.

@@ -1,30 +1,50 @@
-% Figure 1: complete research framework (editable TikZ source; \input by main.tex).
+% Figure 1: research framework (editable TikZ source; \input by main.tex).
+% Three strands: the data-and-model pipeline (top row), the literature branch that fixes the
+% registry and frozen groups before any ablation model is trained (middle row, left), and the
+% explanation branch (SHAP, ARR; right column). SHAP never feeds group selection.
 \begin{tikzpicture}[
-  font=\scriptsize, >=Stealth, node distance=3.2mm and 3.6mm,
-  stage/.style={draw, rounded corners=1.5pt, fill=black!6, align=center, text width=21mm, minimum height=11mm, inner sep=2pt},
-  src/.style={draw, dashed, rounded corners=1.5pt, align=center, text width=21mm, minimum height=8mm, inner sep=2pt},
-  concl/.style={draw, very thick, rounded corners=1.5pt, align=center, text width=21mm, minimum height=11mm, inner sep=2pt},
-  arr/.style={->, thick}, lab/.style={font=\tiny, fill=white, inner sep=1pt}]
-% row 1: data to models
-\node[stage] (sel) {\textbf{1 Dataset selection}\\four tracks: CICIDS2017, corrected CICIDS2017, UNSW-NB15, NetFlow-v2};
-\node[stage, right=of sel] (val) {\textbf{2 Data validation}\\checksums, invalid-row rules, label map};
-\node[stage, right=of val] (pre) {\textbf{3 Train-only preprocessing}\\impute, scale, drop constants (fitted on train)};
-\node[stage, right=of pre] (part) {\textbf{4 Leakage-aware partitioning}\\duplicate-aware split, twin exclusion};
-\node[stage, right=of part] (train) {\textbf{5 Model training}\\AE-XGBoost 110\,+\,70 fits; DCNN 5; MES-DNN 10};
-% row 2: audit
-\node[stage, below=9mm of train] (attr) {\textbf{6 Original-feature attribution}\\permutation SHAP, ARR@$K$};
-\node[stage, left=of attr] (reg) {\textbf{7 Evidence registry}\\documented defects, shortcuts, hypotheses};
-\node[stage, left=of reg] (abl) {\textbf{8 Feature-group ablations}\\groups vs size-matched random controls};
-\node[stage, left=of abl] (rob) {\textbf{9 Robustness evaluation}\\Monday benign, corrected capture, filtered tests};
-\node[stage, left=of rob] (stat) {\textbf{10 Statistical analysis}\\paired contrasts, sign-flip, Holm, TOST};
-\node[concl, below=6mm of stat] (con) {\textbf{11 Conclusions}\\bounded by evidence type};
-\node[src, below=6mm of reg] (lit) {forensic literature\\Engelen, Lanvin};
-% flow
-\draw[arr] (sel) -- (val); \draw[arr] (val) -- (pre); \draw[arr] (pre) -- (part); \draw[arr] (part) -- (train);
-\draw[arr] (train) -- (attr);
-\draw[arr] (attr) -- node[lab, above]{compare} (reg);
-\draw[arr] (lit) -- (reg);
-\draw[arr] (reg) -- node[lab, above]{groups} (abl);
-\draw[arr] (abl) -- (rob); \draw[arr] (rob) -- (stat); \draw[arr] (stat) -- (con);
-\draw[arr, dashed] (train.south west) ++(2mm,0) |- ++(-6mm,-4mm) -| node[lab, pos=0.25, above]{retrain per view and seed} (abl.north);
+  font=\footnotesize, >=Stealth,
+  stage/.style={draw, rounded corners=2pt, fill=black!6, align=center, text width=31mm, minimum height=15mm, inner sep=2.5pt},
+  lit/.style={stage, fill=white},
+  expl/.style={stage, fill=black!14},
+  concl/.style={stage, fill=white, very thick},
+  arr/.style={->, thick},
+  lab/.style={font=\scriptsize, fill=white, inner sep=1pt, align=center},
+  band/.style={draw, dashed, rounded corners=4pt, inner sep=2.2mm}]
+\def\dx{3.75}
+% row 0: data and models
+\node[stage] (d1) at (0*\dx,0) {\textbf{1 Data selection and validation}\\four tracks; checksums; row rules};
+\node[stage] (d2) at (1*\dx,0) {\textbf{2 Train-only preprocessing}\\impute, drop constants, scale};
+\node[stage] (d3) at (2*\dx,0) {\textbf{3 Duplicate-aware split}\\model-visible twins removed in every view};
+\node[stage] (d4) at (3*\dx,0) {\textbf{4 Model training}\\AE-XGBoost r1 110, R4a-ii 70;\\DCNN 5; MES-DNN 10};
+\node[expl]  (sh) at (4*\dx,0) {\textbf{Explanation}\\permutation SHAP, one AE-XGBoost model};
+% row 1: literature branch, evaluation, ARR
+\node[lit]   (li) at (0*\dx,-2.6) {\textbf{A Forensic literature}\\Engelen et al.; extended documentation; Lanvin et al.};
+\node[lit]   (rg) at (1*\dx,-2.6) {\textbf{B Evidence registry}\\23 features, three tiers};
+\node[lit]   (gr) at (2*\dx,-2.6) {\textbf{C Frozen groups}\\A--D, U; proxy closure; 10 random controls each};
+\node[stage] (ev) at (3*\dx,-2.6) {\textbf{5 Evaluation}\\$\Tstar$, Monday, corrected $T'^\star$, filtered tests};
+\node[expl]  (ar) at (4*\dx,-2.6) {\textbf{ARR@$K$}\\share of SHAP mass on registry features};
+% row 2: inference and conclusions
+\node[concl] (co) at (2*\dx,-5.2) {\textbf{8 Conclusions}\\graded by evidence type};
+\node[stage] (st) at (3*\dx,-5.2) {\textbf{6 Statistics}\\paired $d_s$, sign-flip, Holm, TOST; Welch (descriptive)};
+\node[expl]  (cm) at (4*\dx,-5.2) {\textbf{7 Attribution vs intervention}\\ARR, ablation effect, transfer};
+% bands
+\begin{scope}[on background layer]
+\node[band, fit=(li)(rg)(gr), label={[font=\scriptsize\itshape, anchor=south west]north west:literature branch: membership from documented defects, not SHAP ranks; frozen before ablation training}] {};
+\node[band, fit=(sh)(ar), label={[font=\scriptsize\itshape]north:explanation branch}] {};
+\end{scope}
+% pipeline
+\draw[arr] (d1) -- (d2); \draw[arr] (d2) -- (d3); \draw[arr] (d3) -- (d4); \draw[arr] (d4) -- (sh);
+\draw[arr] (li) -- (rg); \draw[arr] (rg) -- (gr);
+\draw[arr] (gr.north east) -- node[lab, sloped, above, pos=0.42]{views to retrain} ([xshift=-6mm]d4.south);
+\draw[arr] ([xshift=6mm]d4.south) -- ([xshift=6mm]ev.north);
+\draw[arr] (ev) -- (st);
+\draw[arr] (st) -- (co);
+\draw[arr] (sh) -- (ar);
+\draw[arr] (ar) -- (cm);
+\draw[arr] (st) -- (cm);
+% registry membership used by ARR: routed below the figure so it crosses no other line
+\coordinate (low) at (0,-6.85);
+\coordinate (rgt) at (4*\dx+2.25,0);
+\draw[arr, dashed] (rg.south) -- (rg.south |- low) -- node[lab, below, pos=0.45]{registry tiers define the feature set used by ARR@$K$} (rgt |- low) -- (rgt |- ar.east) -- (ar.east);
 \end{tikzpicture}

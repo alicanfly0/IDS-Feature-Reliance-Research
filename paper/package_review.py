@@ -51,6 +51,10 @@ with zipfile.ZipFile(OUT, "w", compression=zipfile.ZIP_DEFLATED) as z:
         data = (ROOT / rel).read_bytes()
         z.writestr(rel, data)
         manifest.append(f"{sha(data)}  {rel}")
+    # Submission copy at the top level, identical to paper/CNET_PhaseIV_Research_Paper.pdf.
+    pdf = (ROOT / "paper/CNET_PhaseIV_Research_Paper.pdf").read_bytes()
+    z.writestr("CNET_PhaseIV_Research_Paper.pdf", pdf)
+    manifest.append(f"{sha(pdf)}  CNET_PhaseIV_Research_Paper.pdf")
     z.writestr("MANIFEST.sha256", "\n".join(manifest) + "\n")
 
 with zipfile.ZipFile(OUT) as z:

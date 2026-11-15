@@ -32,6 +32,6 @@ Set-Location paper; ..\tools\tectonic\tectonic.exe --keep-logs main.tex
 
 The scripts read `phase3_final_review/evidence/verification/verify_{r1,r4a,dcnn,mes}.json`, `phase3_final_review/PHASE3_STATISTICAL_FINDINGS.csv`, `results/r4a/stats_r4a.json` and `results/corrections/milestone2b/corrected_arr_v2.json`. They need numpy and matplotlib from the project's virtual environment and do not train or score any model.
 
-## Before submission
+## Submission copy
 
-See section 5 of `FINAL_PAPER_QA.md`: the author line, affiliation, funding and competing-interest statements, the code-availability sentence and two citation details need the authors' confirmation.
+`CNET_PhaseIV_Research_Paper.pdf` is the final compiled paper. The review ZIP (`CNET_PHASE4_FINAL_PAPER_REVIEW.zip`, built by `package_review.py`) carries the same file at its top level so it can be submitted directly. Author decisions applied to the front matter and declarations are listed in section 5 of `FINAL_PAPER_QA.md`.

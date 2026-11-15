@@ -1,0 +1,17 @@
+% Source: verify_r1.json runs r1_full_s0..9; verify_r4a.json runs_r4a_ii r4a_full_s0..9. Mean [min, max] over 10 seeds.
+\begin{tabular}{@{}lll@{}}
+\toprule
+Metric & Original (r1), $T^\star$ & Corrected (R4a-ii), $T'^\star$ \\
+\midrule
+Test flows (DDoS) & 33,038 (19,233) & 22,049 (14,168) \\
+Errors & 5.8 [3, 8] & 1.8 [1, 3] \\
+False positives & 3.4 [1, 6] & 1.5 [1, 2] \\
+False negatives & 2.4 [2, 3] & 0.3 [0, 1] \\
+Accuracy & 0.999824 [0.999758, 0.999909] & 0.999918 [0.999864, 0.999955] \\
+DDoS recall & 0.999875 [0.999844, 0.999896] & 0.999979 [0.999929, 1.000000] \\
+Benign recall & 0.999754 [0.999565, 0.999928] & 0.999810 [0.999746, 0.999873] \\
+F1 (DDoS) & 0.999849 [0.999792, 0.999922] & 0.999936 [0.999894, 0.999965] \\
+MCC & 0.999639 [0.999502, 0.999813] & 0.999822 [0.999704, 0.999901] \\
+AUROC & 0.999996 [0.999994, 0.999998] & 1.000000 [0.999998, 1.000000] \\
+\bottomrule
+\end{tabular}

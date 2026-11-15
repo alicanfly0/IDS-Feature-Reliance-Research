@@ -1,0 +1,22 @@
+% Figure 3: DCNN with self-attention as ported (src/models/dcnn.py, src/experiments/dcnn_fang.py).
+% Editable TikZ source.
+\begin{tikzpicture}[
+  font=\footnotesize, >=Stealth, node distance=2.2mm,
+  blk/.style={draw, fill=black!6, rounded corners=1pt, align=center, text width=56mm, inner sep=2pt},
+  pre/.style={draw, dashed, rounded corners=1pt, align=center, text width=56mm, inner sep=2pt},
+  arr/.style={->, thick}]
+\node[pre] (p) {train-only preprocessing (median, winsorise 1/99\%, min--max, one-hot): 194 columns};
+\node[pre, below=of p] (s) {LightGBM + TreeSHAP ranking on train only; keep $K=22$};
+\node[blk, below=of s] (in) {input $22\times1$};
+\node[blk, below=of in] (c1) {Conv1D 32, $k{=}3$, same; BN; ReLU};
+\node[blk, below=of c1] (c2) {Conv1D 64, $k{=}3$, same; BN; ReLU ($22\times64$)};
+\node[blk, below=of c2, fill=black!16] (sa) {4-head self-attention ($d_k=16$)};
+\node[blk, below=of sa] (ln) {residual add $+$ LayerNorm};
+\node[blk, below=of ln] (fl) {flatten (1408)};
+\node[blk, below=of fl] (d1) {Dense 128, ReLU; Dropout 0.3};
+\node[blk, below=of d1] (d2) {Dense 64, ReLU};
+\node[blk, below=of d2] (o) {Dense 1, sigmoid: $p(\text{DoS})$};
+\foreach \a/\b in {p/s, s/in, in/c1, c1/c2, c2/sa, sa/ln, ln/fl, fl/d1, d1/d2, d2/o} \draw[arr] (\a) -- (\b);
+\draw[arr] (c2.east) -- ++(3.5mm,0) |- (ln.east);
+\node[font=\scriptsize, anchor=west] at ([xshift=4.5mm]sa.east) {skip};
+\end{tikzpicture}

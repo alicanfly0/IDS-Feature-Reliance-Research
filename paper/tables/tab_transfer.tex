@@ -1,0 +1,14 @@
+% Source: phase3_final_review/evidence/verification/verify_r4a.json -> r4a_i (110 r1 models on 22,049 corrected rows). Mean [min, max] over 10 models per view.
+\begin{tabular}{@{}lllr@{}}
+\toprule
+r1 view & DDoS recall & Benign FPR & MCC \\
+\midrule
+Full model & 0.088 [0.000, 0.879] & 0.023 [0.000, 0.093] & 0.017 \\
+Without A & 0.957 [0.800, 0.999] & 0.048 [0.000, 0.381] & 0.909 \\
+Without B & 0.000 [0.000, 0.000] & 0.000 [0.000, 0.002] & $-$0.007 \\
+Without C & 0.158 [0.000, 0.830] & 0.041 [0.000, 0.236] & 0.068 \\
+Without D & 0.132 [0.000, 0.736] & 0.030 [0.000, 0.205] & 0.082 \\
+Without U & 0.994 [0.981, 1.000] & 0.001 [0.000, 0.002] & 0.991 \\
+Random controls (50) & 0.050 [0.000, 1.000] & 0.047 [0.000, 0.600] & $-$0.031 \\
+\bottomrule
+\end{tabular}

@@ -1,0 +1,30 @@
+% Figure 1: complete research framework (editable TikZ source; \input by main.tex).
+\begin{tikzpicture}[
+  font=\scriptsize, >=Stealth, node distance=3.2mm and 3.6mm,
+  stage/.style={draw, rounded corners=1.5pt, fill=black!6, align=center, text width=21mm, minimum height=11mm, inner sep=2pt},
+  src/.style={draw, dashed, rounded corners=1.5pt, align=center, text width=21mm, minimum height=8mm, inner sep=2pt},
+  concl/.style={draw, very thick, rounded corners=1.5pt, align=center, text width=21mm, minimum height=11mm, inner sep=2pt},
+  arr/.style={->, thick}, lab/.style={font=\tiny, fill=white, inner sep=1pt}]
+% row 1: data to models
+\node[stage] (sel) {\textbf{1 Dataset selection}\\four tracks: CICIDS2017, corrected CICIDS2017, UNSW-NB15, NetFlow-v2};
+\node[stage, right=of sel] (val) {\textbf{2 Data validation}\\checksums, invalid-row rules, label map};
+\node[stage, right=of val] (pre) {\textbf{3 Train-only preprocessing}\\impute, scale, drop constants (fitted on train)};
+\node[stage, right=of pre] (part) {\textbf{4 Leakage-aware partitioning}\\duplicate-aware split, twin exclusion};
+\node[stage, right=of part] (train) {\textbf{5 Model training}\\AE-XGBoost 110\,+\,70 fits; DCNN 5; MES-DNN 10};
+% row 2: audit
+\node[stage, below=9mm of train] (attr) {\textbf{6 Original-feature attribution}\\permutation SHAP, ARR@$K$};
+\node[stage, left=of attr] (reg) {\textbf{7 Evidence registry}\\documented defects, shortcuts, hypotheses};
+\node[stage, left=of reg] (abl) {\textbf{8 Feature-group ablations}\\groups vs size-matched random controls};
+\node[stage, left=of abl] (rob) {\textbf{9 Robustness evaluation}\\Monday benign, corrected capture, filtered tests};
+\node[stage, left=of rob] (stat) {\textbf{10 Statistical analysis}\\paired contrasts, sign-flip, Holm, TOST};
+\node[concl, below=6mm of stat] (con) {\textbf{11 Conclusions}\\bounded by evidence type};
+\node[src, below=6mm of reg] (lit) {forensic literature\\Engelen, Lanvin};
+% flow
+\draw[arr] (sel) -- (val); \draw[arr] (val) -- (pre); \draw[arr] (pre) -- (part); \draw[arr] (part) -- (train);
+\draw[arr] (train) -- (attr);
+\draw[arr] (attr) -- node[lab, above]{compare} (reg);
+\draw[arr] (lit) -- (reg);
+\draw[arr] (reg) -- node[lab, above]{groups} (abl);
+\draw[arr] (abl) -- (rob); \draw[arr] (rob) -- (stat); \draw[arr] (stat) -- (con);
+\draw[arr, dashed] (train.south west) ++(2mm,0) |- ++(-6mm,-4mm) -| node[lab, pos=0.25, above]{retrain per view and seed} (abl.north);
+\end{tikzpicture}

@@ -1,0 +1,24 @@
+% Figure 2: AE-XGBoost as implemented (src/models/autoencoder.py, src/models/xgb.py,
+% configs/experiments/ae_xgb_d008_trackB.yaml). Editable TikZ source.
+\begin{tikzpicture}[
+  font=\scriptsize, >=Stealth,
+  lay/.style={draw, fill=black!6, align=center, minimum width=7mm, inner sep=1.5pt},
+  box/.style={draw, rounded corners=1.5pt, align=center, inner sep=2.5pt},
+  arr/.style={->, thick}]
+\node[lay, minimum height=24mm] (x) at (0,0) {$\mathbf{x}$\\68};
+\node[lay, minimum height=16mm] (h1) at (1.3,0) {80\\ReLU};
+\node[lay, minimum height=10mm, fill=black!18] (z) at (2.6,0) {$\mathbf{z}$\\40\\ReLU};
+\node[lay, minimum height=16mm] (h2) at (3.9,0) {80\\ReLU};
+\node[lay, minimum height=24mm] (xh) at (5.2,0) {$\hat{\mathbf{x}}$\\68\\linear};
+\draw[arr] (x) -- (h1); \draw[arr] (h1) -- (z); \draw[arr] (z) -- (h2); \draw[arr] (h2) -- (xh);
+\node[font=\tiny, above=0.5mm of h1] {encoder};
+\node[font=\tiny, above=0.5mm of h2] {decoder};
+\node[box, below=6mm of xh, text width=18mm] (loss) {training loss\\$\|\mathbf{x}-\hat{\mathbf{x}}\|_2^2$\\Adam, lr $10^{-3}$\\batch 256\\patience 10\\cap 100 epochs};
+\draw[arr, dashed] (xh) -- (loss);
+\node[box, below=6mm of z, text width=21mm] (xgb) {XGBoost on $\mathbf{z}$\\depth 6, $\eta=0.11$\\${\le}\,2000$ trees\\early stop 50};
+\node[box, below=3.5mm of xgb, text width=21mm] (out) {$p(\text{DDoS}\mid\mathbf{x})$\\$\hat y=1$ if $p\ge0.5$};
+\draw[arr] (z) -- (xgb); \draw[arr] (xgb) -- (out);
+\node[box, dashed, below=6mm of x, text width=17mm] (aud) {audit branch:\\SHAP on the composite margin over the 68 inputs;\\ablation drops input columns and retrains};
+\draw[arr, dashed] (x) -- (aud);
+\draw[arr, dashed] (out.west) -- (out.west -| aud.east);
+\end{tikzpicture}

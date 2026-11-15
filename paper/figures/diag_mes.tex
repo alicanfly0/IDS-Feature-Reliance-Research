@@ -1,0 +1,23 @@
+% Figure 4: two-network MES-DNN adaptation (src/experiments/mes_dnn.py). Every flow passes through
+% BOTH frozen base networks; the meta-model sees their two sigmoid outputs. Editable TikZ source.
+\begin{tikzpicture}[
+  font=\scriptsize, >=Stealth, node distance=3mm and 4mm,
+  box/.style={draw, rounded corners=1pt, align=center, inner sep=2pt},
+  base/.style={box, fill=black!6, text width=21mm},
+  arr/.style={->, thick}]
+\node[box, text width=21mm] (n1) {N1: NF-UNSW-NB15-v2\\2,390,275 flows};
+\node[box, text width=21mm, right=8mm of n1] (n2) {N2: NF-ToN-IoT-v2\\fixed subsample, 2,390,275};
+\node[box, text width=21mm, below=of n1] (p1) {39 inputs, $\log(1+x)$\\split: base 63\,/ meta 7\,/ val 3\,/ test 27\%};
+\node[box, text width=21mm, below=of n2] (p2) {39 inputs, $\log(1+x)$\\split: base 63\,/ meta 7\,/ val 3\,/ test 27\%};
+\node[base, below=of p1] (b1) {base DNN 1\\own $z$-score\\39-9-7-5-3-1};
+\node[base, below=of p2] (b2) {base DNN 2\\own $z$-score\\39-9-7-5-3-1};
+\draw[arr] (n1) -- (p1); \draw[arr] (n2) -- (p2);
+\draw[arr] (p1) -- node[font=\tiny, left]{base} (b1); \draw[arr] (p2) -- node[font=\tiny, right]{base} (b2);
+\node[box, fill=black!16, text width=30mm, below=9mm of $(b1.south)!0.5!(b2.south)$] (meta) {meta-model on $[\sigma_1(\mathbf{x}),\sigma_2(\mathbf{x})]$\\Dense 10 ReLU, Dense 1 sigmoid};
+\node[font=\tiny, align=center] at ($(b1.south)!0.5!(b2.south)+(0,-3.5mm)$) {bases frozen};
+\draw[arr] (b1.south) -- (meta.north west); \draw[arr] (b2.south) -- (meta.north east);
+\node[box, text width=30mm, below=4mm of meta] (ev) {evaluated on each network's test partition (ensemble and both bases); split = random or duplicate-aware};
+\draw[arr] (meta) -- (ev);
+\node[box, dashed, text width=17mm, left=3mm of meta] (ms) {meta samples of N1\,$\cup$\,N2, each scored by both bases};
+\draw[arr, dashed] (ms) -- (meta);
+\end{tikzpicture}
